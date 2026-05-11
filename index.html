@@ -10,188 +10,2146 @@ body { font-family: 'Segoe UI', 'Roboto', -apple-system, sans-serif; background:
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #F0F0F0; }
 ::-webkit-scrollbar-thumb { background: #CCC; border-radius: 3px; }
-#error-display { padding: 20px; color: red; font-family: monospace; white-space: pre-wrap; display: none; }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 </head>
 <body>
-<div id="error-display"></div>
 <div id="root"></div>
-<script type="text/babel" data-type="module">
-const { useState } = React;
-
-const C = { bg:"#F5F6FA",white:"#FFFFFF",red:"#CC092F",redLight:"#FDE8EC",purple:"#7B2D8E",purpleLight:"#F3E8F7",blue:"#1565C0",blueLight:"#E3F2FD",green:"#2E7D32",greenLight:"#E8F5E9",amber:"#F57F17",amberLight:"#FFF8E1",text:"#1a1a2e",textSec:"#5f6368",textMuted:"#9AA0A6",border:"#E8EAED",shadow:"0 1px 3px rgba(0,0,0,0.08)" };
+<script>
+const {
+  useState
+} = React;
+const C = {
+  bg: "#F5F6FA",
+  white: "#FFFFFF",
+  red: "#CC092F",
+  redLight: "#FDE8EC",
+  purple: "#7B2D8E",
+  purpleLight: "#F3E8F7",
+  blue: "#1565C0",
+  blueLight: "#E3F2FD",
+  green: "#2E7D32",
+  greenLight: "#E8F5E9",
+  amber: "#F57F17",
+  amberLight: "#FFF8E1",
+  text: "#1a1a2e",
+  textSec: "#5f6368",
+  textMuted: "#9AA0A6",
+  border: "#E8EAED",
+  shadow: "0 1px 3px rgba(0,0,0,0.08)"
+};
 const font = "'Segoe UI','Roboto',-apple-system,sans-serif";
-
-const SectionTitle = ({title}) => (<div style={{display:"flex",alignItems:"stretch",gap:10,marginBottom:16}}><div style={{width:4,background:C.red,borderRadius:2,flexShrink:0}} /><h3 style={{margin:0,fontSize:15,fontWeight:700,color:C.text}}>{title}</h3></div>);
-const CardStat = ({label,value,sub,icon,iconBg=C.redLight,iconColor=C.red}) => (<div style={{background:C.white,borderRadius:10,padding:"18px 20px",border:"1px solid "+C.border,display:"flex",justifyContent:"space-between",alignItems:"center",boxShadow:C.shadow}}><div><div style={{fontSize:12,color:C.textSec,marginBottom:4}}>{label}</div><div style={{fontSize:28,fontWeight:800,color:C.text,lineHeight:1.1}}>{value}</div>{sub&&<div style={{fontSize:11,color:iconColor,marginTop:2}}>{sub}</div>}</div><div style={{width:44,height:44,borderRadius:10,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>{icon}</div></div>);
-const Badge = ({children,color=C.red,bg=C.redLight}) => (<span style={{display:"inline-flex",padding:"3px 10px",borderRadius:4,fontSize:11,fontWeight:700,background:bg,color,letterSpacing:0.3}}>{children}</span>);
-const MiniBar = ({value,max,color=C.red,h=6}) => (<div style={{width:"100%",height:h,background:"#F0F0F0",borderRadius:3,overflow:"hidden"}}><div style={{width:Math.min((value/max)*100,100)+"%",height:"100%",background:color,borderRadius:3}} /></div>);
-const Spark = ({data,color=C.red,w=100,h=28}) => {const mx=Math.max(...data),mn=Math.min(...data),r=mx-mn||1;const pts=data.map((v,i)=>(i/(data.length-1))*w+","+(h-2-((v-mn)/r)*(h-4))).join(" ");return(<svg width={w} height={h} viewBox={"0 0 "+w+" "+h}><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>);};
-const Card = ({children,style}) => (<div style={{background:C.white,borderRadius:10,border:"1px solid "+C.border,padding:20,boxShadow:C.shadow,...style}}>{children}</div>);
-const FilterBar = ({filters}) => (<div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap",marginBottom:20}}><div style={{position:"relative",flex:"0 0 200px"}}><span style={{position:"absolute",left:12,top:"50%",transform:"translateY(-50%)",fontSize:14,color:C.textMuted}}>🔍</span><input type="text" placeholder="Buscar" style={{width:"100%",padding:"9px 14px 9px 36px",borderRadius:8,border:"1px solid "+C.border,fontSize:12,fontFamily:font,color:C.text,background:C.white,outline:"none",boxSizing:"border-box"}} /></div>{filters.map(f=>(<div key={f.label} style={{position:"relative"}}><select style={{appearance:"none",padding:"9px 32px 9px 14px",borderRadius:8,border:"1px solid "+C.border,background:C.white,fontSize:12,color:C.textSec,fontFamily:font,cursor:"pointer",minWidth:150}}>{f.options.map(o=><option key={o}>{o}</option>)}</select><span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:10,color:C.textMuted,pointerEvents:"none"}}>▼</span></div>))}</div>);
-
-const peritosData = [
-  {nome:"Dr. Carlos A. Mendes",crm:"CRM/SP 82.431",comarca:"São Paulo",proc:187,fav:42,desfav:58,spark:[45,52,48,55,60,58,62,65,60,58,55,52],tend:"estável",tempoMedio:34,consistencia:72,cids:[{cid:"F32 — Episódio Depressivo",fav:38},{cid:"M54 — Dorsalgia (Dor na Coluna)",fav:45},{cid:"G56 — Síndrome do Túnel do Carpo",fav:50}],submotivos:[{sub:"Doença Ocupacional",fav:40,desfav:60},{sub:"Doença Momento Dispensa",fav:48,desfav:52},{sub:"Doença Estigmatizante",fav:35,desfav:65},{sub:"Acidente de Trabalho",fav:52,desfav:48}],regional:[{comarca:"São Paulo",peritoFav:42,mediaComarca:55,delta:-13,proc:120},{comarca:"Osasco",peritoFav:38,mediaComarca:48,delta:-10,proc:42},{comarca:"Guarulhos",peritoFav:50,mediaComarca:52,delta:-2,proc:25}],advogados:[{nome:"João Silva Martins",oab:"OAB/SP 123.456",proc:28,favCom:55,favSem:38},{nome:"Maria C. Ferreira",oab:"OAB/SP 98.765",proc:22,favCom:48,favSem:40},{nome:"Pedro A. Santos",oab:"OAB/SP 111.222",proc:15,favCom:35,favSem:43}],varas:[{vara:"1ª VT de São Paulo",juiz:"Dr. Roberto Lima",proc:45,fav:38},{vara:"3ª VT de São Paulo",juiz:"Dra. Ana Souza",proc:38,fav:52},{vara:"2ª VT de Osasco",juiz:"Dr. Marcos Pinto",proc:28,fav:35}],estrategia:{rec:"assistente",score:62,texto:"Perito com taxa favorável abaixo da média da comarca, mas com viés contra CID F32. Recomenda-se nomear assistente técnico com expertise em psiquiatria ocupacional.",quesitos:["Focar quesitos na diferenciação entre depressão endógena e ocupacional","Solicitar análise do histórico médico pré-admissional","Questionar nexo temporal entre dispensa e agravamento"]}},
-  {nome:"Dra. Fernanda R. Lima",crm:"CRM/SP 94.112",comarca:"Campinas",proc:143,fav:68,desfav:32,spark:[30,35,40,45,55,60,65,68,70,72,68,65],tend:"alta",tempoMedio:22,consistencia:88,cids:[{cid:"F32 — Episódio Depressivo",fav:72},{cid:"M54 — Dorsalgia (Dor na Coluna)",fav:65},{cid:"F41 — Transtornos Ansiosos",fav:70}],submotivos:[{sub:"Doença Ocupacional",fav:70,desfav:30},{sub:"Doença Momento Dispensa",fav:68,desfav:32},{sub:"Doença Estigmatizante",fav:62,desfav:38},{sub:"Acidente de Trabalho",fav:75,desfav:25}],regional:[{comarca:"Campinas",peritoFav:70,mediaComarca:50,delta:20,proc:110},{comarca:"Jundiaí",peritoFav:62,mediaComarca:47,delta:15,proc:33}],advogados:[{nome:"Carlos R. Oliveira",oab:"OAB/SP 87.654",proc:20,favCom:78,favSem:62},{nome:"Ana Paula Costa",oab:"OAB/SP 76.543",proc:16,favCom:72,favSem:65}],varas:[{vara:"2ª VT de Campinas",juiz:"Dr. Felipe Ramos",proc:55,fav:72},{vara:"1ª VT de Campinas",juiz:"Dra. Lucia Mendes",proc:40,fav:62},{vara:"1ª VT de Jundiaí",juiz:"Dr. André Costa",proc:33,fav:65}],estrategia:{rec:"impugnar",score:82,texto:"Taxa favorável ao reclamante em alta contínua (30%→68%) e +20pp acima da média da comarca. Forte viés pró-reclamante. Recomenda-se impugnação.",quesitos:["Documentar padrão estatístico de viés para fundamentar impugnação","Preparar perito assistente como contingência"]}},
-  {nome:"Dr. Roberto S. Oliveira",crm:"CRM/SP 71.209",comarca:"Santos",proc:121,fav:35,desfav:65,spark:[65,60,55,50,48,45,40,38,35,33,35,38],tend:"baixa",tempoMedio:48,consistencia:65,cids:[{cid:"F32 — Episódio Depressivo",fav:30},{cid:"M75 — Lesões do Ombro",fav:38},{cid:"F43 — Estresse Pós-Traumático",fav:28}],submotivos:[{sub:"Doença Ocupacional",fav:32,desfav:68},{sub:"Doença Momento Dispensa",fav:38,desfav:62},{sub:"Doença Estigmatizante",fav:28,desfav:72},{sub:"Acidente de Trabalho",fav:42,desfav:58}],regional:[{comarca:"Santos",peritoFav:34,mediaComarca:45,delta:-11,proc:65},{comarca:"São Vicente",peritoFav:38,mediaComarca:42,delta:-4,proc:35},{comarca:"Praia Grande",peritoFav:32,mediaComarca:40,delta:-8,proc:21}],advogados:[{nome:"Ricardo M. Alves",oab:"OAB/SP 65.432",proc:18,favCom:42,favSem:32},{nome:"Fernanda S. Lima",oab:"OAB/SP 54.321",proc:14,favCom:30,favSem:36}],varas:[{vara:"1ª VT de Santos",juiz:"Dr. Paulo Vieira",proc:40,fav:30},{vara:"2ª VT de Santos",juiz:"Dra. Marta Reis",proc:35,fav:40}],estrategia:{rec:"aceitar",score:35,texto:"Taxa favorável ao reclamante em queda e abaixo da média regional. Perfil favorável ao banco. Atenção ao tempo de emissão (48d).",quesitos:["Manter quesitos padrão","Monitorar prazo de entrega do laudo"]}},
-  {nome:"Dra. Patrícia M. Costa",crm:"CRM/SP 88.756",comarca:"Ribeirão Preto",proc:98,fav:51,desfav:49,spark:[50,48,52,49,51,50,53,51,48,50,52,51],tend:"estável",tempoMedio:30,consistencia:91,cids:[{cid:"F32 — Episódio Depressivo",fav:50},{cid:"M54 — Dorsalgia (Dor na Coluna)",fav:55},{cid:"G56 — Síndrome do Túnel do Carpo",fav:48}],submotivos:[{sub:"Doença Ocupacional",fav:52,desfav:48},{sub:"Doença Momento Dispensa",fav:50,desfav:50},{sub:"Doença Estigmatizante",fav:48,desfav:52},{sub:"Acidente de Trabalho",fav:55,desfav:45}],regional:[{comarca:"Ribeirão Preto",peritoFav:51,mediaComarca:50,delta:1,proc:98}],advogados:[{nome:"Luiz F. Barbosa",oab:"OAB/SP 43.210",proc:12,favCom:55,favSem:49}],varas:[{vara:"1ª VT de Ribeirão Preto",juiz:"Dr. Henrique Moura",proc:52,fav:50},{vara:"2ª VT de Ribeirão Preto",juiz:"Dra. Beatriz Campos",proc:46,fav:52}],estrategia:{rec:"aceitar",score:50,texto:"Perito neutro e altamente previsível (91%). Taxas equilibradas sem viés. Aceitar nomeação.",quesitos:["Quesitos padrão suficientes","Perito responde bem a perguntas técnicas detalhadas"]}},
-  {nome:"Dr. Antônio J. Ferreira",crm:"CRM/RJ 65.890",comarca:"Rio de Janeiro",proc:156,fav:29,desfav:71,spark:[40,38,35,33,30,28,29,27,30,29,28,29],tend:"baixa",tempoMedio:52,consistencia:82,cids:[{cid:"F32 — Episódio Depressivo",fav:25},{cid:"F41 — Transtornos Ansiosos",fav:30},{cid:"M54 — Dorsalgia (Dor na Coluna)",fav:32}],submotivos:[{sub:"Doença Ocupacional",fav:28,desfav:72},{sub:"Doença Momento Dispensa",fav:32,desfav:68},{sub:"Doença Estigmatizante",fav:22,desfav:78},{sub:"Acidente de Trabalho",fav:35,desfav:65}],regional:[{comarca:"Rio de Janeiro",peritoFav:28,mediaComarca:48,delta:-20,proc:80},{comarca:"Niterói",peritoFav:30,mediaComarca:45,delta:-15,proc:35},{comarca:"São Gonçalo",peritoFav:32,mediaComarca:50,delta:-18,proc:25},{comarca:"Duque de Caxias",peritoFav:25,mediaComarca:42,delta:-17,proc:16}],advogados:[{nome:"Marcos V. Pereira",oab:"OAB/RJ 21.098",proc:25,favCom:35,favSem:26},{nome:"Tatiana A. Gomes",oab:"OAB/RJ 10.987",proc:20,favCom:28,favSem:30}],varas:[{vara:"5ª VT do Rio",juiz:"Dr. Alexandre Nunes",proc:35,fav:25},{vara:"12ª VT do Rio",juiz:"Dra. Renata Braga",proc:30,fav:32},{vara:"1ª VT de Niterói",juiz:"Dr. Gustavo Pires",proc:22,fav:28}],estrategia:{rec:"aceitar",score:29,texto:"Perito fortemente favorável ao banco (-20pp vs. média do RJ). Consistente e previsível. Aceitar. Atenção ao tempo (52d).",quesitos:["Quesitos padrão — não alterar estratégia favorável","Focar em agilizar o processo"]}},
-];
-
-const mediasGerais={fav:45,desfav:55,consistencia:80,tempoMedio:37};
-const conColor=v=>v>=85?C.green:v>=70?C.amber:C.red;
-const estColor={aceitar:{c:C.green,bg:C.greenLight,icon:"✅",label:"Aceitar Nomeação"},assistente:{c:C.amber,bg:C.amberLight,icon:"⚠️",label:"Nomear Assistente"},impugnar:{c:C.red,bg:C.redLight,icon:"🔴",label:"Impugnar Perito"}};
-const alertColor={danger:{c:C.red,bg:C.redLight,icon:"🔴"},warning:{c:C.amber,bg:C.amberLight,icon:"⚠️"},success:{c:C.green,bg:C.greenLight,icon:"✅"},info:{c:C.blue,bg:C.blueLight,icon:"ℹ️"}};
-const alertas={0:[{tipo:"warning",msg:"Viés contra CID F32: 38% favorável, 7pp abaixo da média da comarca"},{tipo:"danger",msg:"Queda na taxa favorável para Doenças Estigmatizantes nos últimos 6 meses"},{tipo:"info",msg:"Advogado João Silva eleva a taxa favorável em +17pp"}],1:[{tipo:"danger",msg:"Taxa favorável em alta contínua: 30%→68% em 12 meses"},{tipo:"danger",msg:"+20pp acima da média de Campinas. Outlier estatístico"},{tipo:"info",msg:"Advogado Carlos Oliveira eleva taxa em +16pp"}],2:[{tipo:"success",msg:"Taxa favorável em queda contínua (65%→35%). Positivo para o banco"},{tipo:"warning",msg:"Tempo de emissão (48d) acima da média"},{tipo:"danger",msg:"Consistência baixa (65%) — comportamento volátil"}],3:[{tipo:"success",msg:"Consistência mais alta do painel (91%). Altamente previsível"},{tipo:"info",msg:"Atua só em Ribeirão Preto — sem variação regional"},{tipo:"info",msg:"Perfil neutro (51/49). Sem viés identificável"}],4:[{tipo:"success",msg:"Menor taxa favorável ao reclamante: 29%. -20pp vs. média do RJ"},{tipo:"success",msg:"Perito mais rigoroso da região"},{tipo:"warning",msg:"Tempo de emissão mais lento (52d)"}]};
-const historicos={0:[{cnj:"0003695-45.2026.8.26.0100",data:"02/05/2026",cid:"F32 — Episódio Depressivo",sub:"Doença Ocupacional",res:"Desfavorável",com:"São Paulo",val:"R$ 320.000"},{cnj:"0007281-90.2026.8.26.0100",data:"18/04/2026",cid:"M54 — Dorsalgia",sub:"Acidente de Trabalho",res:"Favorável",com:"Osasco",val:"R$ 185.000"},{cnj:"0009480-85.2026.8.26.0100",data:"05/04/2026",cid:"G56 — Sínd. Túnel do Carpo",sub:"Doença Ocupacional",res:"Desfavorável",com:"São Paulo",val:"R$ 210.000"}],1:[{cnj:"0004512-33.2026.8.26.0114",data:"25/04/2026",cid:"F32 — Episódio Depressivo",sub:"Doença Ocupacional",res:"Favorável",com:"Campinas",val:"R$ 195.000"}],2:[{cnj:"0005678-90.2026.8.26.0562",data:"20/04/2026",cid:"F32 — Episódio Depressivo",sub:"Doença Ocupacional",res:"Desfavorável",com:"Santos",val:"R$ 165.000"}],3:[{cnj:"0007890-34.2026.8.26.0506",data:"28/04/2026",cid:"F32 — Episódio Depressivo",sub:"Doença Ocupacional",res:"Favorável",com:"Ribeirão Preto",val:"R$ 155.000"}],4:[{cnj:"0006543-21.2026.8.19.0001",data:"30/04/2026",cid:"F32 — Episódio Depressivo",sub:"Doença Ocupacional",res:"Desfavorável",com:"Rio de Janeiro",val:"R$ 310.000"},{cnj:"0004321-09.2026.8.19.0001",data:"15/04/2026",cid:"F41 — Transtornos Ansiosos",sub:"Doença Estigmatizante",res:"Desfavorável",com:"Niterói",val:"R$ 245.000"}]};
+const SectionTitle = ({
+  title
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: "flex",
+    alignItems: "stretch",
+    gap: 10,
+    marginBottom: 16
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    width: 4,
+    background: C.red,
+    borderRadius: 2,
+    flexShrink: 0
+  }
+}), /*#__PURE__*/React.createElement("h3", {
+  style: {
+    margin: 0,
+    fontSize: 15,
+    fontWeight: 700,
+    color: C.text
+  }
+}, title));
+const CardStat = ({
+  label,
+  value,
+  sub,
+  icon,
+  iconBg = C.redLight,
+  iconColor = C.red
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    background: C.white,
+    borderRadius: 10,
+    padding: "18px 20px",
+    border: "1px solid " + C.border,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    boxShadow: C.shadow
+  }
+}, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 12,
+    color: C.textSec,
+    marginBottom: 4
+  }
+}, label), /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 28,
+    fontWeight: 800,
+    color: C.text,
+    lineHeight: 1.1
+  }
+}, value), sub && /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 11,
+    color: iconColor,
+    marginTop: 2
+  }
+}, sub)), /*#__PURE__*/React.createElement("div", {
+  style: {
+    width: 44,
+    height: 44,
+    borderRadius: 10,
+    background: iconBg,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 20
+  }
+}, icon));
+const Badge = ({
+  children,
+  color = C.red,
+  bg = C.redLight
+}) => /*#__PURE__*/React.createElement("span", {
+  style: {
+    display: "inline-flex",
+    padding: "3px 10px",
+    borderRadius: 4,
+    fontSize: 11,
+    fontWeight: 700,
+    background: bg,
+    color,
+    letterSpacing: 0.3
+  }
+}, children);
+const MiniBar = ({
+  value,
+  max,
+  color = C.red,
+  h = 6
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    width: "100%",
+    height: h,
+    background: "#F0F0F0",
+    borderRadius: 3,
+    overflow: "hidden"
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    width: Math.min(value / max * 100, 100) + "%",
+    height: "100%",
+    background: color,
+    borderRadius: 3
+  }
+}));
+const Spark = ({
+  data,
+  color = C.red,
+  w = 100,
+  h = 28
+}) => {
+  const mx = Math.max(...data),
+    mn = Math.min(...data),
+    r = mx - mn || 1;
+  const pts = data.map((v, i) => i / (data.length - 1) * w + "," + (h - 2 - (v - mn) / r * (h - 4))).join(" ");
+  return /*#__PURE__*/React.createElement("svg", {
+    width: w,
+    height: h,
+    viewBox: "0 0 " + w + " " + h
+  }, /*#__PURE__*/React.createElement("polyline", {
+    points: pts,
+    fill: "none",
+    stroke: color,
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }));
+};
+const Card = ({
+  children,
+  style
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    background: C.white,
+    borderRadius: 10,
+    border: "1px solid " + C.border,
+    padding: 20,
+    boxShadow: C.shadow,
+    ...style
+  }
+}, children);
+const FilterBar = ({
+  filters
+}) => {
+  const [periodo, setPeriodo] = useState("Últimos 12 meses");
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      alignItems: "center",
+      flexWrap: "wrap",
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "relative",
+      flex: "0 0 200px"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      left: 12,
+      top: "50%",
+      transform: "translateY(-50%)",
+      fontSize: 14,
+      color: C.textMuted
+    }
+  }, "\uD83D\uDD0D"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    placeholder: "Buscar",
+    style: {
+      width: "100%",
+      padding: "9px 14px 9px 36px",
+      borderRadius: 8,
+      border: "1px solid " + C.border,
+      fontSize: 12,
+      fontFamily: font,
+      color: C.text,
+      background: C.white,
+      outline: "none",
+      boxSizing: "border-box"
+    }
+  })), filters.map(f => /*#__PURE__*/React.createElement("div", {
+    key: f.label,
+    style: {
+      position: "relative"
+    }
+  }, /*#__PURE__*/React.createElement("select", {
+    onChange: e => {
+      if (f.label === "Período") setPeriodo(e.target.value);
+    },
+    style: {
+      appearance: "none",
+      padding: "9px 32px 9px 14px",
+      borderRadius: 8,
+      border: "1px solid " + C.border,
+      background: C.white,
+      fontSize: 12,
+      color: C.textSec,
+      fontFamily: font,
+      cursor: "pointer",
+      minWidth: 150
+    }
+  }, f.options.map(o => /*#__PURE__*/React.createElement("option", {
+    key: o
+  }, o))), /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      right: 10,
+      top: "50%",
+      transform: "translateY(-50%)",
+      fontSize: 10,
+      color: C.textMuted,
+      pointerEvents: "none"
+    }
+  }, "\u25BC"))), periodo === "Personalizado" && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textSec,
+      fontWeight: 600
+    }
+  }, "De:"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    style: {
+      padding: "7px 10px",
+      borderRadius: 8,
+      border: "1px solid " + C.border,
+      fontSize: 12,
+      fontFamily: font,
+      color: C.textSec,
+      background: C.white,
+      outline: "none"
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textSec,
+      fontWeight: 600
+    }
+  }, "At\xE9:"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    style: {
+      padding: "7px 10px",
+      borderRadius: 8,
+      border: "1px solid " + C.border,
+      fontSize: 12,
+      fontFamily: font,
+      color: C.textSec,
+      background: C.white,
+      outline: "none"
+    }
+  }))));
+};
+const peritosData = [{
+  nome: "Dr. Carlos A. Mendes",
+  crm: "CRM/SP 82.431",
+  comarca: "São Paulo",
+  proc: 187,
+  fav: 42,
+  desfav: 58,
+  spark: [45, 52, 48, 55, 60, 58, 62, 65, 60, 58, 55, 52],
+  tend: "estável",
+  tempoMedio: 34,
+  consistencia: 72,
+  cids: [{
+    cid: "F32 — Episódio Depressivo",
+    fav: 38
+  }, {
+    cid: "M54 — Dorsalgia (Dor na Coluna)",
+    fav: 45
+  }, {
+    cid: "G56 — Síndrome do Túnel do Carpo",
+    fav: 50
+  }],
+  submotivos: [{
+    sub: "Doença Ocupacional",
+    fav: 40,
+    desfav: 60
+  }, {
+    sub: "Doença Momento Dispensa",
+    fav: 48,
+    desfav: 52
+  }, {
+    sub: "Doença Estigmatizante",
+    fav: 35,
+    desfav: 65
+  }, {
+    sub: "Acidente de Trabalho",
+    fav: 52,
+    desfav: 48
+  }],
+  regional: [{
+    comarca: "São Paulo",
+    peritoFav: 42,
+    mediaComarca: 55,
+    delta: -13,
+    proc: 120
+  }, {
+    comarca: "Osasco",
+    peritoFav: 38,
+    mediaComarca: 48,
+    delta: -10,
+    proc: 42
+  }, {
+    comarca: "Guarulhos",
+    peritoFav: 50,
+    mediaComarca: 52,
+    delta: -2,
+    proc: 25
+  }],
+  advogados: [{
+    nome: "João Silva Martins",
+    oab: "OAB/SP 123.456",
+    proc: 28,
+    favCom: 55,
+    favSem: 38
+  }, {
+    nome: "Maria C. Ferreira",
+    oab: "OAB/SP 98.765",
+    proc: 22,
+    favCom: 48,
+    favSem: 40
+  }, {
+    nome: "Pedro A. Santos",
+    oab: "OAB/SP 111.222",
+    proc: 15,
+    favCom: 35,
+    favSem: 43
+  }],
+  varas: [{
+    vara: "1ª VT de São Paulo",
+    juiz: "Dr. Roberto Lima",
+    proc: 45,
+    fav: 38
+  }, {
+    vara: "3ª VT de São Paulo",
+    juiz: "Dra. Ana Souza",
+    proc: 38,
+    fav: 52
+  }, {
+    vara: "2ª VT de Osasco",
+    juiz: "Dr. Marcos Pinto",
+    proc: 28,
+    fav: 35
+  }],
+  estrategia: {
+    rec: "assistente",
+    score: 62,
+    texto: "Perito com taxa favorável abaixo da média da comarca, mas com viés contra CID F32. Recomenda-se nomear assistente técnico com expertise em psiquiatria ocupacional.",
+    quesitos: ["Focar quesitos na diferenciação entre depressão endógena e ocupacional", "Solicitar análise do histórico médico pré-admissional", "Questionar nexo temporal entre dispensa e agravamento"]
+  }
+}, {
+  nome: "Dra. Fernanda R. Lima",
+  crm: "CRM/SP 94.112",
+  comarca: "Campinas",
+  proc: 143,
+  fav: 68,
+  desfav: 32,
+  spark: [30, 35, 40, 45, 55, 60, 65, 68, 70, 72, 68, 65],
+  tend: "alta",
+  tempoMedio: 22,
+  consistencia: 88,
+  cids: [{
+    cid: "F32 — Episódio Depressivo",
+    fav: 72
+  }, {
+    cid: "M54 — Dorsalgia (Dor na Coluna)",
+    fav: 65
+  }, {
+    cid: "F41 — Transtornos Ansiosos",
+    fav: 70
+  }],
+  submotivos: [{
+    sub: "Doença Ocupacional",
+    fav: 70,
+    desfav: 30
+  }, {
+    sub: "Doença Momento Dispensa",
+    fav: 68,
+    desfav: 32
+  }, {
+    sub: "Doença Estigmatizante",
+    fav: 62,
+    desfav: 38
+  }, {
+    sub: "Acidente de Trabalho",
+    fav: 75,
+    desfav: 25
+  }],
+  regional: [{
+    comarca: "Campinas",
+    peritoFav: 70,
+    mediaComarca: 50,
+    delta: 20,
+    proc: 110
+  }, {
+    comarca: "Jundiaí",
+    peritoFav: 62,
+    mediaComarca: 47,
+    delta: 15,
+    proc: 33
+  }],
+  advogados: [{
+    nome: "Carlos R. Oliveira",
+    oab: "OAB/SP 87.654",
+    proc: 20,
+    favCom: 78,
+    favSem: 62
+  }, {
+    nome: "Ana Paula Costa",
+    oab: "OAB/SP 76.543",
+    proc: 16,
+    favCom: 72,
+    favSem: 65
+  }],
+  varas: [{
+    vara: "2ª VT de Campinas",
+    juiz: "Dr. Felipe Ramos",
+    proc: 55,
+    fav: 72
+  }, {
+    vara: "1ª VT de Campinas",
+    juiz: "Dra. Lucia Mendes",
+    proc: 40,
+    fav: 62
+  }, {
+    vara: "1ª VT de Jundiaí",
+    juiz: "Dr. André Costa",
+    proc: 33,
+    fav: 65
+  }],
+  estrategia: {
+    rec: "impugnar",
+    score: 82,
+    texto: "Taxa favorável ao reclamante em alta contínua (30%→68%) e +20pp acima da média da comarca. Forte viés pró-reclamante. Recomenda-se impugnação.",
+    quesitos: ["Documentar padrão estatístico de viés para fundamentar impugnação", "Preparar perito assistente como contingência"]
+  }
+}, {
+  nome: "Dr. Roberto S. Oliveira",
+  crm: "CRM/SP 71.209",
+  comarca: "Santos",
+  proc: 121,
+  fav: 35,
+  desfav: 65,
+  spark: [65, 60, 55, 50, 48, 45, 40, 38, 35, 33, 35, 38],
+  tend: "baixa",
+  tempoMedio: 48,
+  consistencia: 65,
+  cids: [{
+    cid: "F32 — Episódio Depressivo",
+    fav: 30
+  }, {
+    cid: "M75 — Lesões do Ombro",
+    fav: 38
+  }, {
+    cid: "F43 — Estresse Pós-Traumático",
+    fav: 28
+  }],
+  submotivos: [{
+    sub: "Doença Ocupacional",
+    fav: 32,
+    desfav: 68
+  }, {
+    sub: "Doença Momento Dispensa",
+    fav: 38,
+    desfav: 62
+  }, {
+    sub: "Doença Estigmatizante",
+    fav: 28,
+    desfav: 72
+  }, {
+    sub: "Acidente de Trabalho",
+    fav: 42,
+    desfav: 58
+  }],
+  regional: [{
+    comarca: "Santos",
+    peritoFav: 34,
+    mediaComarca: 45,
+    delta: -11,
+    proc: 65
+  }, {
+    comarca: "São Vicente",
+    peritoFav: 38,
+    mediaComarca: 42,
+    delta: -4,
+    proc: 35
+  }, {
+    comarca: "Praia Grande",
+    peritoFav: 32,
+    mediaComarca: 40,
+    delta: -8,
+    proc: 21
+  }],
+  advogados: [{
+    nome: "Ricardo M. Alves",
+    oab: "OAB/SP 65.432",
+    proc: 18,
+    favCom: 42,
+    favSem: 32
+  }, {
+    nome: "Fernanda S. Lima",
+    oab: "OAB/SP 54.321",
+    proc: 14,
+    favCom: 30,
+    favSem: 36
+  }],
+  varas: [{
+    vara: "1ª VT de Santos",
+    juiz: "Dr. Paulo Vieira",
+    proc: 40,
+    fav: 30
+  }, {
+    vara: "2ª VT de Santos",
+    juiz: "Dra. Marta Reis",
+    proc: 35,
+    fav: 40
+  }],
+  estrategia: {
+    rec: "aceitar",
+    score: 35,
+    texto: "Taxa favorável ao reclamante em queda e abaixo da média regional. Perfil favorável ao banco. Atenção ao tempo de emissão (48d).",
+    quesitos: ["Manter quesitos padrão", "Monitorar prazo de entrega do laudo"]
+  }
+}, {
+  nome: "Dra. Patrícia M. Costa",
+  crm: "CRM/SP 88.756",
+  comarca: "Ribeirão Preto",
+  proc: 98,
+  fav: 51,
+  desfav: 49,
+  spark: [50, 48, 52, 49, 51, 50, 53, 51, 48, 50, 52, 51],
+  tend: "estável",
+  tempoMedio: 30,
+  consistencia: 91,
+  cids: [{
+    cid: "F32 — Episódio Depressivo",
+    fav: 50
+  }, {
+    cid: "M54 — Dorsalgia (Dor na Coluna)",
+    fav: 55
+  }, {
+    cid: "G56 — Síndrome do Túnel do Carpo",
+    fav: 48
+  }],
+  submotivos: [{
+    sub: "Doença Ocupacional",
+    fav: 52,
+    desfav: 48
+  }, {
+    sub: "Doença Momento Dispensa",
+    fav: 50,
+    desfav: 50
+  }, {
+    sub: "Doença Estigmatizante",
+    fav: 48,
+    desfav: 52
+  }, {
+    sub: "Acidente de Trabalho",
+    fav: 55,
+    desfav: 45
+  }],
+  regional: [{
+    comarca: "Ribeirão Preto",
+    peritoFav: 51,
+    mediaComarca: 50,
+    delta: 1,
+    proc: 98
+  }],
+  advogados: [{
+    nome: "Luiz F. Barbosa",
+    oab: "OAB/SP 43.210",
+    proc: 12,
+    favCom: 55,
+    favSem: 49
+  }],
+  varas: [{
+    vara: "1ª VT de Ribeirão Preto",
+    juiz: "Dr. Henrique Moura",
+    proc: 52,
+    fav: 50
+  }, {
+    vara: "2ª VT de Ribeirão Preto",
+    juiz: "Dra. Beatriz Campos",
+    proc: 46,
+    fav: 52
+  }],
+  estrategia: {
+    rec: "aceitar",
+    score: 50,
+    texto: "Perito neutro e altamente previsível (91%). Taxas equilibradas sem viés. Aceitar nomeação.",
+    quesitos: ["Quesitos padrão suficientes", "Perito responde bem a perguntas técnicas detalhadas"]
+  }
+}, {
+  nome: "Dr. Antônio J. Ferreira",
+  crm: "CRM/RJ 65.890",
+  comarca: "Rio de Janeiro",
+  proc: 156,
+  fav: 29,
+  desfav: 71,
+  spark: [40, 38, 35, 33, 30, 28, 29, 27, 30, 29, 28, 29],
+  tend: "baixa",
+  tempoMedio: 52,
+  consistencia: 82,
+  cids: [{
+    cid: "F32 — Episódio Depressivo",
+    fav: 25
+  }, {
+    cid: "F41 — Transtornos Ansiosos",
+    fav: 30
+  }, {
+    cid: "M54 — Dorsalgia (Dor na Coluna)",
+    fav: 32
+  }],
+  submotivos: [{
+    sub: "Doença Ocupacional",
+    fav: 28,
+    desfav: 72
+  }, {
+    sub: "Doença Momento Dispensa",
+    fav: 32,
+    desfav: 68
+  }, {
+    sub: "Doença Estigmatizante",
+    fav: 22,
+    desfav: 78
+  }, {
+    sub: "Acidente de Trabalho",
+    fav: 35,
+    desfav: 65
+  }],
+  regional: [{
+    comarca: "Rio de Janeiro",
+    peritoFav: 28,
+    mediaComarca: 48,
+    delta: -20,
+    proc: 80
+  }, {
+    comarca: "Niterói",
+    peritoFav: 30,
+    mediaComarca: 45,
+    delta: -15,
+    proc: 35
+  }, {
+    comarca: "São Gonçalo",
+    peritoFav: 32,
+    mediaComarca: 50,
+    delta: -18,
+    proc: 25
+  }, {
+    comarca: "Duque de Caxias",
+    peritoFav: 25,
+    mediaComarca: 42,
+    delta: -17,
+    proc: 16
+  }],
+  advogados: [{
+    nome: "Marcos V. Pereira",
+    oab: "OAB/RJ 21.098",
+    proc: 25,
+    favCom: 35,
+    favSem: 26
+  }, {
+    nome: "Tatiana A. Gomes",
+    oab: "OAB/RJ 10.987",
+    proc: 20,
+    favCom: 28,
+    favSem: 30
+  }],
+  varas: [{
+    vara: "5ª VT do Rio",
+    juiz: "Dr. Alexandre Nunes",
+    proc: 35,
+    fav: 25
+  }, {
+    vara: "12ª VT do Rio",
+    juiz: "Dra. Renata Braga",
+    proc: 30,
+    fav: 32
+  }, {
+    vara: "1ª VT de Niterói",
+    juiz: "Dr. Gustavo Pires",
+    proc: 22,
+    fav: 28
+  }],
+  estrategia: {
+    rec: "aceitar",
+    score: 29,
+    texto: "Perito fortemente favorável ao banco (-20pp vs. média do RJ). Consistente e previsível. Aceitar. Atenção ao tempo (52d).",
+    quesitos: ["Quesitos padrão — não alterar estratégia favorável", "Focar em agilizar o processo"]
+  }
+}];
+const mediasGerais = {
+  fav: 45,
+  desfav: 55,
+  consistencia: 80,
+  tempoMedio: 37
+};
+const conColor = v => v >= 85 ? C.green : v >= 70 ? C.amber : C.red;
+const estColor = {
+  aceitar: {
+    c: C.green,
+    bg: C.greenLight,
+    icon: "✅",
+    label: "Aceitar Nomeação"
+  },
+  assistente: {
+    c: C.amber,
+    bg: C.amberLight,
+    icon: "⚠️",
+    label: "Nomear Assistente"
+  },
+  impugnar: {
+    c: C.red,
+    bg: C.redLight,
+    icon: "🔴",
+    label: "Impugnar Perito"
+  }
+};
+const alertColor = {
+  danger: {
+    c: C.red,
+    bg: C.redLight,
+    icon: "🔴"
+  },
+  warning: {
+    c: C.amber,
+    bg: C.amberLight,
+    icon: "⚠️"
+  },
+  success: {
+    c: C.green,
+    bg: C.greenLight,
+    icon: "✅"
+  },
+  info: {
+    c: C.blue,
+    bg: C.blueLight,
+    icon: "ℹ️"
+  }
+};
+const alertas = {
+  0: [{
+    tipo: "warning",
+    msg: "Viés contra CID F32: 38% favorável, 7pp abaixo da média da comarca"
+  }, {
+    tipo: "danger",
+    msg: "Queda na taxa favorável para Doenças Estigmatizantes nos últimos 6 meses"
+  }, {
+    tipo: "info",
+    msg: "Advogado João Silva eleva a taxa favorável em +17pp"
+  }],
+  1: [{
+    tipo: "danger",
+    msg: "Taxa favorável em alta contínua: 30%→68% em 12 meses"
+  }, {
+    tipo: "danger",
+    msg: "+20pp acima da média de Campinas. Outlier estatístico"
+  }, {
+    tipo: "info",
+    msg: "Advogado Carlos Oliveira eleva taxa em +16pp"
+  }],
+  2: [{
+    tipo: "success",
+    msg: "Taxa favorável em queda contínua (65%→35%). Positivo para o banco"
+  }, {
+    tipo: "warning",
+    msg: "Tempo de emissão (48d) acima da média"
+  }, {
+    tipo: "danger",
+    msg: "Consistência baixa (65%) — comportamento volátil"
+  }],
+  3: [{
+    tipo: "success",
+    msg: "Consistência mais alta do painel (91%). Altamente previsível"
+  }, {
+    tipo: "info",
+    msg: "Atua só em Ribeirão Preto — sem variação regional"
+  }, {
+    tipo: "info",
+    msg: "Perfil neutro (51/49). Sem viés identificável"
+  }],
+  4: [{
+    tipo: "success",
+    msg: "Menor taxa favorável ao reclamante: 29%. -20pp vs. média do RJ"
+  }, {
+    tipo: "success",
+    msg: "Perito mais rigoroso da região"
+  }, {
+    tipo: "warning",
+    msg: "Tempo de emissão mais lento (52d)"
+  }]
+};
+const historicos = {
+  0: [{
+    cnj: "0003695-45.2026.8.26.0100",
+    data: "02/05/2026",
+    cid: "F32 — Episódio Depressivo",
+    sub: "Doença Ocupacional",
+    res: "Desfavorável",
+    com: "São Paulo",
+    val: "R$ 320.000"
+  }, {
+    cnj: "0007281-90.2026.8.26.0100",
+    data: "18/04/2026",
+    cid: "M54 — Dorsalgia",
+    sub: "Acidente de Trabalho",
+    res: "Favorável",
+    com: "Osasco",
+    val: "R$ 185.000"
+  }, {
+    cnj: "0009480-85.2026.8.26.0100",
+    data: "05/04/2026",
+    cid: "G56 — Sínd. Túnel do Carpo",
+    sub: "Doença Ocupacional",
+    res: "Desfavorável",
+    com: "São Paulo",
+    val: "R$ 210.000"
+  }],
+  1: [{
+    cnj: "0004512-33.2026.8.26.0114",
+    data: "25/04/2026",
+    cid: "F32 — Episódio Depressivo",
+    sub: "Doença Ocupacional",
+    res: "Favorável",
+    com: "Campinas",
+    val: "R$ 195.000"
+  }],
+  2: [{
+    cnj: "0005678-90.2026.8.26.0562",
+    data: "20/04/2026",
+    cid: "F32 — Episódio Depressivo",
+    sub: "Doença Ocupacional",
+    res: "Desfavorável",
+    com: "Santos",
+    val: "R$ 165.000"
+  }],
+  3: [{
+    cnj: "0007890-34.2026.8.26.0506",
+    data: "28/04/2026",
+    cid: "F32 — Episódio Depressivo",
+    sub: "Doença Ocupacional",
+    res: "Favorável",
+    com: "Ribeirão Preto",
+    val: "R$ 155.000"
+  }],
+  4: [{
+    cnj: "0006543-21.2026.8.19.0001",
+    data: "30/04/2026",
+    cid: "F32 — Episódio Depressivo",
+    sub: "Doença Ocupacional",
+    res: "Desfavorável",
+    com: "Rio de Janeiro",
+    val: "R$ 310.000"
+  }, {
+    cnj: "0004321-09.2026.8.19.0001",
+    data: "15/04/2026",
+    cid: "F41 — Transtornos Ansiosos",
+    sub: "Doença Estigmatizante",
+    res: "Desfavorável",
+    com: "Niterói",
+    val: "R$ 245.000"
+  }]
+};
 
 // ═══ MODAL DETAIL ═══
-const DetailModal = ({idx, onClose}) => {
-  const dp=peritosData[idx]; const dtc=dp.tend==="alta"?C.green:dp.tend==="baixa"?C.red:C.amber; const hist=historicos[idx]||[]; const alts=alertas[idx]||[]; const est=estColor[dp.estrategia.rec];
-  return (<div style={{position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,0.5)",zIndex:1000,display:"flex",justifyContent:"center",alignItems:"flex-start",paddingTop:20,overflowY:"auto"}} onClick={onClose}>
-    <div style={{background:C.bg,borderRadius:14,width:"90%",maxWidth:1100,maxHeight:"95vh",overflowY:"auto",boxShadow:"0 20px 60px rgba(0,0,0,0.3)",padding:24}} onClick={e=>e.stopPropagation()}>
-      {/* Header */}
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
-        <div style={{display:"flex",gap:14,alignItems:"center"}}><div style={{width:48,height:48,borderRadius:"50%",background:C.redLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🩺</div><div><h2 style={{margin:0,fontSize:18,fontWeight:800,color:C.text}}>{dp.nome}</h2><div style={{fontSize:11,color:C.textMuted}}>{dp.crm} · {dp.comarca}</div><div style={{display:"flex",gap:6,marginTop:6}}><Badge color={dtc} bg={dtc===C.green?C.greenLight:dtc===C.red?C.redLight:C.amberLight}>Tendência {dp.tend==="alta"?"Alta":dp.tend==="baixa"?"Queda":"Estável"}</Badge><Badge color={conColor(dp.consistencia)} bg={conColor(dp.consistencia)===C.green?C.greenLight:conColor(dp.consistencia)===C.amber?C.amberLight:C.redLight}>Consist. {dp.consistencia}%</Badge></div></div></div>
-        <button onClick={onClose} style={{width:36,height:36,borderRadius:"50%",border:"1px solid "+C.border,background:C.white,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",color:C.textMuted}}>✕</button>
-      </div>
-
-      {/* Estratégia */}
-      <div style={{background:C.white,borderRadius:10,border:"2px solid "+est.c+"33",padding:18,marginBottom:16}}>
-        <SectionTitle title="Sugestão de Estratégia Pericial" />
-        <div style={{display:"flex",gap:16,alignItems:"flex-start"}}>
-          <div style={{padding:"12px 20px",background:est.bg,borderRadius:10,textAlign:"center",minWidth:140}}><div style={{fontSize:28}}>{est.icon}</div><div style={{fontSize:13,fontWeight:800,color:est.c,marginTop:4}}>{est.label}</div><div style={{fontSize:10,color:C.textMuted,marginTop:2}}>Score: {dp.estrategia.score}%</div></div>
-          <div style={{flex:1}}><div style={{fontSize:12,color:C.text,lineHeight:1.7,marginBottom:10}}>{dp.estrategia.texto}</div><div style={{fontSize:10,fontWeight:700,color:C.textSec,textTransform:"uppercase",letterSpacing:0.8,marginBottom:6}}>📋 Quesitos Recomendados</div>{dp.estrategia.quesitos.map((q,i)=>(<div key={i} style={{display:"flex",gap:6,marginBottom:4}}><span style={{color:est.c,fontWeight:700,fontSize:11}}>•</span><span style={{fontSize:11,color:C.textSec,lineHeight:1.5}}>{q}</span></div>))}</div>
-        </div>
-      </div>
-
-      {/* KPIs */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12,marginBottom:16}}>
-        <CardStat label="Processos" value={String(dp.proc)} sub="Passivos" icon="📋" iconBg={C.redLight} iconColor={C.red} />
-        <CardStat label="Favorável" value={dp.fav+"%"} sub={"Média: "+mediasGerais.fav+"%"} icon="✅" iconBg={C.greenLight} iconColor={C.green} />
-        <CardStat label="Consistência" value={dp.consistencia+"%"} sub={"Média: "+mediasGerais.consistencia+"%"} icon="🎯" iconBg={C.purpleLight} iconColor={C.purple} />
-        <CardStat label="Tempo Médio" value={dp.tempoMedio+"d"} sub={"Média: "+mediasGerais.tempoMedio+"d"} icon="⏱️" iconBg={C.amberLight} iconColor={C.amber} />
-      </div>
-
-      {/* Alertas */}
-      <div style={{background:C.white,borderRadius:10,border:"1px solid "+C.border,padding:16,marginBottom:16}}>
-        <SectionTitle title="Alertas Estratégicos" />
-        <div style={{display:"flex",flexDirection:"column",gap:6}}>{alts.map((a,i)=>{const ac=alertColor[a.tipo];return(<div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 12px",background:ac.bg,borderRadius:6}}><span style={{fontSize:13}}>{ac.icon}</span><span style={{fontSize:12,color:C.text,lineHeight:1.4}}>{a.msg}</span></div>);})}</div>
-      </div>
-
-      {/* Regional + Advogados */}
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,marginBottom:16}}>
-        <div style={{background:C.white,borderRadius:10,border:"1px solid "+C.border,padding:16}}><SectionTitle title="Comparativo Regional" />{dp.regional.map((r,i)=>{const m=r.delta<=0;return(<div key={i} style={{marginBottom:12,padding:10,background:C.bg,borderRadius:8}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}><span style={{fontSize:12,fontWeight:700,color:C.text}}>{r.comarca}</span><Badge color={m?C.green:C.red} bg={m?C.greenLight:C.redLight}>{r.delta>0?"+":""}{r.delta}pp</Badge></div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}><div><div style={{fontSize:10,color:C.textMuted}}>Perito: <strong style={{color:m?C.green:C.red}}>{r.peritoFav}%</strong></div><MiniBar value={r.peritoFav} max={100} color={m?C.green:C.red} h={5} /></div><div><div style={{fontSize:10,color:C.textMuted}}>Média: <strong>{r.mediaComarca}%</strong></div><MiniBar value={r.mediaComarca} max={100} color={C.textMuted} h={5} /></div></div></div>);})}</div>
-
-        <div style={{background:C.white,borderRadius:10,border:"1px solid "+C.border,padding:16}}><SectionTitle title="Perito × Advogado Reclamante" />{dp.advogados.map((a,i)=>{const d=a.favCom-a.favSem;return(<div key={i} style={{marginBottom:12,padding:10,background:C.bg,borderRadius:8}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><span style={{fontSize:12,fontWeight:600,color:C.text}}>{a.nome}</span><span style={{fontSize:10,color:C.textMuted}}>{a.proc} proc.</span></div><div style={{display:"flex",gap:16,alignItems:"center",marginTop:4}}><div><div style={{fontSize:10,color:C.textMuted}}>Com advogado</div><div style={{fontSize:16,fontWeight:800,color:d>0?C.red:C.green}}>{a.favCom}%</div></div><div><div style={{fontSize:10,color:C.textMuted}}>Sem advogado</div><div style={{fontSize:16,fontWeight:800,color:C.textSec}}>{a.favSem}%</div></div><Badge color={d>0?C.red:C.green} bg={d>0?C.redLight:C.greenLight}>{d>0?"+":""}{d}pp</Badge></div></div>);})}</div>
-      </div>
-
-      {/* Vara + CID */}
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,marginBottom:16}}>
-        <div style={{background:C.white,borderRadius:10,border:"1px solid "+C.border,padding:16}}><SectionTitle title="Perito × Vara / Juiz" />{dp.varas.map((v,i)=>(<div key={i} style={{display:"flex",alignItems:"center",gap:10,marginBottom:8,padding:"8px 10px",background:C.bg,borderRadius:6}}><div style={{width:36,textAlign:"center"}}><div style={{fontSize:16,fontWeight:800,color:v.fav>=50?C.red:C.green}}>{v.fav}%</div></div><div style={{flex:1}}><div style={{fontSize:11,fontWeight:600,color:C.text}}>{v.vara}</div><div style={{fontSize:10,color:C.textMuted}}>{v.juiz} · {v.proc} proc.</div><MiniBar value={v.fav} max={100} color={v.fav>=50?C.red:C.green} h={4} /></div></div>))}</div>
-
-        <div style={{background:C.white,borderRadius:10,border:"1px solid "+C.border,padding:16}}><SectionTitle title="Taxa Favorável por CID" />{dp.cids.map(c=>(<div key={c.cid} style={{marginBottom:12}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}><span style={{fontSize:11,color:C.textSec}}>{c.cid}</span><span style={{fontSize:11,fontWeight:700,color:c.fav>=50?C.red:C.green}}>{c.fav}%</span></div><div style={{display:"flex",height:8,borderRadius:4,overflow:"hidden",background:"#F0F0F0"}}><div style={{width:c.fav+"%",background:C.purple}} /><div style={{width:(100-c.fav)+"%",background:C.red}} /></div></div>))}<div style={{borderTop:"1px solid "+C.border,paddingTop:12,marginTop:6}}><div style={{fontSize:11,fontWeight:700,color:C.textSec,marginBottom:8}}>Por Submotivo</div>{dp.submotivos.map(s=>(<div key={s.sub} style={{marginBottom:8}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontSize:10,color:C.textSec}}>{s.sub}</span><span style={{fontSize:10,color:C.purple}}>{s.fav}% | <span style={{color:C.red}}>{s.desfav}%</span></span></div><div style={{display:"flex",height:6,borderRadius:3,overflow:"hidden",background:"#F0F0F0"}}><div style={{width:s.fav+"%",background:C.purple}} /><div style={{width:s.desfav+"%",background:C.red}} /></div></div>))}</div></div>
-      </div>
-
-      {/* Histórico */}
-      <div style={{background:C.white,borderRadius:10,border:"1px solid "+C.border,overflow:"hidden"}}>
-        <div style={{padding:"14px 16px 0"}}><SectionTitle title="Histórico de Processos" /></div>
-        <table style={{width:"100%",borderCollapse:"collapse"}}><thead><tr style={{borderBottom:"2px solid "+C.border}}>{["CNJ","Data","CID","Submotivo","Resultado","Comarca","Valor"].map(h=>(<th key={h} style={{padding:"8px 12px",fontSize:10,fontWeight:700,color:C.textSec,textAlign:"left",textTransform:"uppercase"}}>{h}</th>))}</tr></thead><tbody>{hist.map((h,i)=>(<tr key={i} style={{borderBottom:"1px solid "+C.border}}><td style={{padding:"8px 12px",fontSize:11,fontWeight:600,color:C.blue,fontFamily:"monospace"}}>{h.cnj}</td><td style={{padding:"8px 12px",fontSize:11,color:C.textSec}}>{h.data}</td><td style={{padding:"8px 12px",fontSize:10,color:C.textSec}}>{h.cid}</td><td style={{padding:"8px 12px",fontSize:10,color:C.textSec}}>{h.sub}</td><td style={{padding:"8px 12px"}}><Badge color={h.res==="Favorável"?C.green:C.red} bg={h.res==="Favorável"?C.greenLight:C.redLight}>{h.res}</Badge></td><td style={{padding:"8px 12px",fontSize:11,color:C.textSec}}>{h.com}</td><td style={{padding:"8px 12px",fontSize:11,color:C.textSec}}>{h.val}</td></tr>))}</tbody></table>
-      </div>
-    </div>
-  </div>);
+const DetailModal = ({
+  idx,
+  onClose
+}) => {
+  const dp = peritosData[idx];
+  const dtc = dp.tend === "alta" ? C.green : dp.tend === "baixa" ? C.red : C.amber;
+  const hist = historicos[idx] || [];
+  const alts = alertas[idx] || [];
+  const est = estColor[dp.estrategia.rec];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: "rgba(0,0,0,0.5)",
+      zIndex: 1000,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      paddingTop: 20,
+      overflowY: "auto"
+    },
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.bg,
+      borderRadius: 14,
+      width: "90%",
+      maxWidth: 1100,
+      maxHeight: "95vh",
+      overflowY: "auto",
+      boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+      padding: 24
+    },
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 14,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 48,
+      height: 48,
+      borderRadius: "50%",
+      background: C.redLight,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 22
+    }
+  }, "\uD83E\uDE7A"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+    style: {
+      margin: 0,
+      fontSize: 18,
+      fontWeight: 800,
+      color: C.text
+    }
+  }, dp.nome), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted
+    }
+  }, dp.crm, " \xB7 ", dp.comarca), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      marginTop: 6
+    }
+  }, /*#__PURE__*/React.createElement(Badge, {
+    color: dtc,
+    bg: dtc === C.green ? C.greenLight : dtc === C.red ? C.redLight : C.amberLight
+  }, "Tend\xEAncia ", dp.tend === "alta" ? "Alta" : dp.tend === "baixa" ? "Queda" : "Estável"), /*#__PURE__*/React.createElement(Badge, {
+    color: conColor(dp.consistencia),
+    bg: conColor(dp.consistencia) === C.green ? C.greenLight : conColor(dp.consistencia) === C.amber ? C.amberLight : C.redLight
+  }, "Consist. ", dp.consistencia, "%")))), /*#__PURE__*/React.createElement("button", {
+    onClick: onClose,
+    style: {
+      width: 36,
+      height: 36,
+      borderRadius: "50%",
+      border: "1px solid " + C.border,
+      background: C.white,
+      cursor: "pointer",
+      fontSize: 16,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: C.textMuted
+    }
+  }, "\u2715")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.white,
+      borderRadius: 10,
+      border: "2px solid " + est.c + "33",
+      padding: 18,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Sugest\xE3o de Estrat\xE9gia Pericial"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 16,
+      alignItems: "flex-start"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 20px",
+      background: est.bg,
+      borderRadius: 10,
+      textAlign: "center",
+      minWidth: 140
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 28
+    }
+  }, est.icon), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 800,
+      color: est.c,
+      marginTop: 4
+    }
+  }, est.label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted,
+      marginTop: 2
+    }
+  }, "Score: ", dp.estrategia.score, "%")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: C.text,
+      lineHeight: 1.7,
+      marginBottom: 10
+    }
+  }, dp.estrategia.texto), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      fontWeight: 700,
+      color: C.textSec,
+      textTransform: "uppercase",
+      letterSpacing: 0.8,
+      marginBottom: 6
+    }
+  }, "\uD83D\uDCCB Quesitos Recomendados"), dp.estrategia.quesitos.map((q, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: "flex",
+      gap: 6,
+      marginBottom: 4
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: est.c,
+      fontWeight: 700,
+      fontSize: 11
+    }
+  }, "\u2022"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textSec,
+      lineHeight: 1.5
+    }
+  }, q)))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(4,1fr)",
+      gap: 12,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement(CardStat, {
+    label: "Processos",
+    value: String(dp.proc),
+    sub: "Passivos",
+    icon: "\uD83D\uDCCB",
+    iconBg: C.redLight,
+    iconColor: C.red
+  }), /*#__PURE__*/React.createElement(CardStat, {
+    label: "Favor\xE1vel",
+    value: dp.fav + "%",
+    sub: "Média: " + mediasGerais.fav + "%",
+    icon: "\u2705",
+    iconBg: C.greenLight,
+    iconColor: C.green
+  }), /*#__PURE__*/React.createElement(CardStat, {
+    label: "Consist\xEAncia",
+    value: dp.consistencia + "%",
+    sub: "Média: " + mediasGerais.consistencia + "%",
+    icon: "\uD83C\uDFAF",
+    iconBg: C.purpleLight,
+    iconColor: C.purple
+  }), /*#__PURE__*/React.createElement(CardStat, {
+    label: "Tempo M\xE9dio",
+    value: dp.tempoMedio + "d",
+    sub: "Média: " + mediasGerais.tempoMedio + "d",
+    icon: "\u23F1\uFE0F",
+    iconBg: C.amberLight,
+    iconColor: C.amber
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.white,
+      borderRadius: 10,
+      border: "1px solid " + C.border,
+      padding: 16,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Alertas Estrat\xE9gicos"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 6
+    }
+  }, alts.map((a, i) => {
+    const ac = alertColor[a.tipo];
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "8px 12px",
+        background: ac.bg,
+        borderRadius: 6
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13
+      }
+    }, ac.icon), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        color: C.text,
+        lineHeight: 1.4
+      }
+    }, a.msg));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 14,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.white,
+      borderRadius: 10,
+      border: "1px solid " + C.border,
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Comparativo Regional"
+  }), dp.regional.map((r, i) => {
+    const m = r.delta <= 0;
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        marginBottom: 12,
+        padding: 10,
+        background: C.bg,
+        borderRadius: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        marginBottom: 6
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        color: C.text
+      }
+    }, r.comarca), /*#__PURE__*/React.createElement(Badge, {
+      color: m ? C.green : C.red,
+      bg: m ? C.greenLight : C.redLight
+    }, r.delta > 0 ? "+" : "", r.delta, "pp")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: C.textMuted
+      }
+    }, "Perito: ", /*#__PURE__*/React.createElement("strong", {
+      style: {
+        color: m ? C.green : C.red
+      }
+    }, r.peritoFav, "%")), /*#__PURE__*/React.createElement(MiniBar, {
+      value: r.peritoFav,
+      max: 100,
+      color: m ? C.green : C.red,
+      h: 5
+    })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: C.textMuted
+      }
+    }, "M\xE9dia: ", /*#__PURE__*/React.createElement("strong", null, r.mediaComarca, "%")), /*#__PURE__*/React.createElement(MiniBar, {
+      value: r.mediaComarca,
+      max: 100,
+      color: C.textMuted,
+      h: 5
+    }))));
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.white,
+      borderRadius: 10,
+      border: "1px solid " + C.border,
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Perito \xD7 Advogado Reclamante"
+  }), dp.advogados.map((a, i) => {
+    const d = a.favCom - a.favSem;
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        marginBottom: 12,
+        padding: 10,
+        background: C.bg,
+        borderRadius: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        marginBottom: 4
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        fontWeight: 600,
+        color: C.text
+      }
+    }, a.nome), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        color: C.textMuted
+      }
+    }, a.proc, " proc.")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 16,
+        alignItems: "center",
+        marginTop: 4
+      }
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: C.textMuted
+      }
+    }, "Com advogado"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 16,
+        fontWeight: 800,
+        color: d > 0 ? C.red : C.green
+      }
+    }, a.favCom, "%")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: C.textMuted
+      }
+    }, "Sem advogado"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 16,
+        fontWeight: 800,
+        color: C.textSec
+      }
+    }, a.favSem, "%")), /*#__PURE__*/React.createElement(Badge, {
+      color: d > 0 ? C.red : C.green,
+      bg: d > 0 ? C.redLight : C.greenLight
+    }, d > 0 ? "+" : "", d, "pp")));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 14,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.white,
+      borderRadius: 10,
+      border: "1px solid " + C.border,
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Perito \xD7 Vara / Juiz"
+  }), dp.varas.map((v, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      marginBottom: 8,
+      padding: "8px 10px",
+      background: C.bg,
+      borderRadius: 6
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 36,
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 800,
+      color: v.fav >= 50 ? C.red : C.green
+    }
+  }, v.fav, "%")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 600,
+      color: C.text
+    }
+  }, v.vara), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, v.juiz, " \xB7 ", v.proc, " proc."), /*#__PURE__*/React.createElement(MiniBar, {
+    value: v.fav,
+    max: 100,
+    color: v.fav >= 50 ? C.red : C.green,
+    h: 4
+  }))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.white,
+      borderRadius: 10,
+      border: "1px solid " + C.border,
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Taxa Favor\xE1vel por CID"
+  }), dp.cids.map(c => /*#__PURE__*/React.createElement("div", {
+    key: c.cid,
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 3
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textSec
+    }
+  }, c.cid), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      color: c.fav >= 50 ? C.red : C.green
+    }
+  }, c.fav, "%")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      height: 8,
+      borderRadius: 4,
+      overflow: "hidden",
+      background: "#F0F0F0"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: c.fav + "%",
+      background: C.purple
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 100 - c.fav + "%",
+      background: C.red
+    }
+  })))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: "1px solid " + C.border,
+      paddingTop: 12,
+      marginTop: 6
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      color: C.textSec,
+      marginBottom: 8
+    }
+  }, "Por Submotivo"), dp.submotivos.map(s => /*#__PURE__*/React.createElement("div", {
+    key: s.sub,
+    style: {
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 2
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: C.textSec
+    }
+  }, s.sub), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: C.purple
+    }
+  }, s.fav, "% | ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.red
+    }
+  }, s.desfav, "%"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      height: 6,
+      borderRadius: 3,
+      overflow: "hidden",
+      background: "#F0F0F0"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: s.fav + "%",
+      background: C.purple
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: s.desfav + "%",
+      background: C.red
+    }
+  }))))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.white,
+      borderRadius: 10,
+      border: "1px solid " + C.border,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "14px 16px 0"
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Hist\xF3rico de Processos"
+  })), /*#__PURE__*/React.createElement("table", {
+    style: {
+      width: "100%",
+      borderCollapse: "collapse"
+    }
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+    style: {
+      borderBottom: "2px solid " + C.border
+    }
+  }, ["CNJ", "Data", "CID", "Submotivo", "Resultado", "Comarca", "Valor"].map(h => /*#__PURE__*/React.createElement("th", {
+    key: h,
+    style: {
+      padding: "8px 12px",
+      fontSize: 10,
+      fontWeight: 700,
+      color: C.textSec,
+      textAlign: "left",
+      textTransform: "uppercase"
+    }
+  }, h)))), /*#__PURE__*/React.createElement("tbody", null, hist.map((h, i) => /*#__PURE__*/React.createElement("tr", {
+    key: i,
+    style: {
+      borderBottom: "1px solid " + C.border
+    }
+  }, /*#__PURE__*/React.createElement("td", {
+    style: {
+      padding: "8px 12px",
+      fontSize: 11,
+      fontWeight: 600,
+      color: C.blue,
+      fontFamily: "monospace"
+    }
+  }, h.cnj), /*#__PURE__*/React.createElement("td", {
+    style: {
+      padding: "8px 12px",
+      fontSize: 11,
+      color: C.textSec
+    }
+  }, h.data), /*#__PURE__*/React.createElement("td", {
+    style: {
+      padding: "8px 12px",
+      fontSize: 10,
+      color: C.textSec
+    }
+  }, h.cid), /*#__PURE__*/React.createElement("td", {
+    style: {
+      padding: "8px 12px",
+      fontSize: 10,
+      color: C.textSec
+    }
+  }, h.sub), /*#__PURE__*/React.createElement("td", {
+    style: {
+      padding: "8px 12px"
+    }
+  }, /*#__PURE__*/React.createElement(Badge, {
+    color: h.res === "Favorável" ? C.green : C.red,
+    bg: h.res === "Favorável" ? C.greenLight : C.redLight
+  }, h.res)), /*#__PURE__*/React.createElement("td", {
+    style: {
+      padding: "8px 12px",
+      fontSize: 11,
+      color: C.textSec
+    }
+  }, h.com), /*#__PURE__*/React.createElement("td", {
+    style: {
+      padding: "8px 12px",
+      fontSize: 11,
+      color: C.textSec
+    }
+  }, h.val))))))));
 };
 
 // ═══ MAIN SCREEN ═══
 const PeritosScreen = () => {
-  const [sel,setSel] = useState(0);
-  const [modal,setModal] = useState(null);
+  const [sel, setSel] = useState(0);
+  const [modal, setModal] = useState(null);
 
   // Consolidated data
-  const distEstrategia = {aceitar:peritosData.filter(p=>p.estrategia.rec==="aceitar").length,assistente:peritosData.filter(p=>p.estrategia.rec==="assistente").length,impugnar:peritosData.filter(p=>p.estrategia.rec==="impugnar").length};
-  const cidConsolidado = [{cid:"F32 — Episódio Depressivo",fav:43},{cid:"M54 — Dorsalgia",fav:49},{cid:"F41 — Transtornos Ansiosos",fav:50},{cid:"G56 — Sínd. Túnel do Carpo",fav:49},{cid:"M75 — Lesões do Ombro",fav:38},{cid:"F43 — Estresse Pós-Traumático",fav:28}];
-  const trtData = [{trt:"TRT-2",nome:"SP Capital / Metropolitana",fav:42,comarcas:[{comarca:"São Paulo",fav:42,delta:"-13pp",proc:187},{comarca:"Osasco",fav:38,delta:"-10pp",proc:42},{comarca:"Guarulhos",fav:50,delta:"-2pp",proc:25},{comarca:"Santos",fav:35,delta:"-10pp",proc:121},{comarca:"São Vicente",fav:38,delta:"-4pp",proc:35},{comarca:"Praia Grande",fav:32,delta:"-8pp",proc:21}]},{trt:"TRT-15",nome:"SP Interior",fav:60,comarcas:[{comarca:"Campinas",fav:68,delta:"+18pp",proc:143},{comarca:"Jundiaí",fav:62,delta:"+15pp",proc:33},{comarca:"Ribeirão Preto",fav:51,delta:"+1pp",proc:98}]},{trt:"TRT-1",nome:"Rio de Janeiro",fav:29,comarcas:[{comarca:"Rio de Janeiro",fav:28,delta:"-20pp",proc:80},{comarca:"Niterói",fav:30,delta:"-15pp",proc:35},{comarca:"São Gonçalo",fav:32,delta:"-18pp",proc:25},{comarca:"Duque de Caxias",fav:25,delta:"-17pp",proc:16}]}];
+  const distEstrategia = {
+    aceitar: peritosData.filter(p => p.estrategia.rec === "aceitar").length,
+    assistente: peritosData.filter(p => p.estrategia.rec === "assistente").length,
+    impugnar: peritosData.filter(p => p.estrategia.rec === "impugnar").length
+  };
+  const cidConsolidado = [{
+    cid: "F32 — Episódio Depressivo",
+    fav: 43
+  }, {
+    cid: "M54 — Dorsalgia",
+    fav: 49
+  }, {
+    cid: "F41 — Transtornos Ansiosos",
+    fav: 50
+  }, {
+    cid: "G56 — Sínd. Túnel do Carpo",
+    fav: 49
+  }, {
+    cid: "M75 — Lesões do Ombro",
+    fav: 38
+  }, {
+    cid: "F43 — Estresse Pós-Traumático",
+    fav: 28
+  }];
+  const trtData = [{
+    trt: "TRT-2",
+    nome: "SP Capital / Metropolitana",
+    fav: 42,
+    comarcas: [{
+      comarca: "São Paulo",
+      fav: 42,
+      delta: "-13pp",
+      proc: 187
+    }, {
+      comarca: "Osasco",
+      fav: 38,
+      delta: "-10pp",
+      proc: 42
+    }, {
+      comarca: "Guarulhos",
+      fav: 50,
+      delta: "-2pp",
+      proc: 25
+    }, {
+      comarca: "Santos",
+      fav: 35,
+      delta: "-10pp",
+      proc: 121
+    }, {
+      comarca: "São Vicente",
+      fav: 38,
+      delta: "-4pp",
+      proc: 35
+    }, {
+      comarca: "Praia Grande",
+      fav: 32,
+      delta: "-8pp",
+      proc: 21
+    }]
+  }, {
+    trt: "TRT-15",
+    nome: "SP Interior",
+    fav: 60,
+    comarcas: [{
+      comarca: "Campinas",
+      fav: 68,
+      delta: "+18pp",
+      proc: 143
+    }, {
+      comarca: "Jundiaí",
+      fav: 62,
+      delta: "+15pp",
+      proc: 33
+    }, {
+      comarca: "Ribeirão Preto",
+      fav: 51,
+      delta: "+1pp",
+      proc: 98
+    }]
+  }, {
+    trt: "TRT-1",
+    nome: "Rio de Janeiro",
+    fav: 29,
+    comarcas: [{
+      comarca: "Rio de Janeiro",
+      fav: 28,
+      delta: "-20pp",
+      proc: 80
+    }, {
+      comarca: "Niterói",
+      fav: 30,
+      delta: "-15pp",
+      proc: 35
+    }, {
+      comarca: "São Gonçalo",
+      fav: 32,
+      delta: "-18pp",
+      proc: 25
+    }, {
+      comarca: "Duque de Caxias",
+      fav: 25,
+      delta: "-17pp",
+      proc: 16
+    }]
+  }];
   const [expandedTrt, setExpandedTrt] = useState(null);
-
-  return (<div>
-    {modal!==null && <DetailModal idx={modal} onClose={()=>setModal(null)} />}
-
-    <FilterBar filters={[{label:"Comarca",options:["Todas as Comarcas","São Paulo","Campinas","Santos","Ribeirão Preto","Rio de Janeiro"]},{label:"Especialidade",options:["Todas","Ortopedia","Psiquiatria","Clínica Geral","Neurologia"]},{label:"Tendência",options:["Todas","Alta","Estável","Baixa"]},{label:"CID",options:["Todos os CIDs","F32 — Episódio Depressivo","F41 — Transtornos Ansiosos","F43 — Estresse Pós-Traumático","M54 — Dorsalgia","M75 — Lesões do Ombro","G56 — Sínd. Túnel do Carpo"]}]} />
-
-    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:14,marginBottom:20}}>
-      <CardStat label="Total de Peritos" value="5" sub="Monitorados" icon="🩺" iconBg={C.purpleLight} iconColor={C.purple} />
-      <CardStat label="Volume de Processos" value="705" sub="Com perícia" icon="📋" iconBg={C.redLight} iconColor={C.red} />
-      <CardStat label="Tx. Favorável Média" value="45%" sub="dos laudos" icon="✅" iconBg={C.greenLight} iconColor={C.green} />
-      <CardStat label="Comarcas Cobertas" value="12" sub="SP, RJ" icon="📍" iconBg={C.amberLight} iconColor={C.amber} />
-    </div>
-
-    {/* Table */}
-    <Card style={{marginBottom:20,overflow:"hidden",padding:0}}>
-      <div style={{padding:"18px 20px 0"}}><SectionTitle title="Análise Pericial — Peritos / Médicos do Juízo" /></div>
-      <table style={{width:"100%",borderCollapse:"collapse"}}><thead><tr style={{borderBottom:"2px solid "+C.border}}>{["Perito","Comarca","Processos","Favorável","Desfavorável","Consist.","Tempo","Estratégia","Tendência","Ações"].map(h=>(<th key={h} style={{padding:"10px 12px",fontSize:10,fontWeight:700,color:C.textSec,textAlign:"left",textTransform:"uppercase"}}>{h}</th>))}</tr></thead>
-      <tbody>{peritosData.map((per,i)=>{const e2=estColor[per.estrategia.rec];return(<tr key={i} onClick={()=>setSel(i)} style={{borderBottom:"1px solid "+C.border,cursor:"pointer",background:sel===i?"#FFF5F6":"transparent"}}><td style={{padding:"12px"}}><div style={{fontSize:13,fontWeight:600,color:C.text}}>{per.nome}</div><div style={{fontSize:10,color:C.textMuted}}>{per.crm}</div></td><td style={{padding:"12px",fontSize:12,color:C.textSec}}>{per.comarca}</td><td style={{padding:"12px",fontSize:14,fontWeight:700}}>{per.proc}</td><td style={{padding:"12px"}}><Badge color={C.green} bg={C.greenLight}>{per.fav}%</Badge></td><td style={{padding:"12px"}}><Badge color={C.red} bg={C.redLight}>{per.desfav}%</Badge></td><td style={{padding:"12px"}}><Badge color={conColor(per.consistencia)} bg={conColor(per.consistencia)===C.green?C.greenLight:conColor(per.consistencia)===C.amber?C.amberLight:C.redLight}>{per.consistencia}%</Badge></td><td style={{padding:"12px",fontSize:12,color:C.textSec}}>{per.tempoMedio}d</td><td style={{padding:"12px"}}><Badge color={e2.c} bg={e2.bg}>{e2.label.split(" ")[0]}</Badge></td><td style={{padding:"12px"}}><Spark data={per.spark} color={per.tend==="alta"?C.green:per.tend==="baixa"?C.red:C.amber} /></td><td style={{padding:"12px"}}><button onClick={e=>{e.stopPropagation();setModal(i)}} style={{display:"flex",alignItems:"center",gap:4,padding:"6px 12px",border:"1px solid "+C.border,borderRadius:6,background:C.white,cursor:"pointer",fontSize:11,color:C.textSec,fontFamily:font,whiteSpace:"nowrap"}}>👁 Ver Detalhes</button></td></tr>);})}</tbody></table>
-    </Card>
-
-    {/* EXECUTIVE CONSOLIDATED VIEWS */}
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
-      {/* Distribuição Estratégia */}
-      <Card><SectionTitle title="Distribuição por Recomendação" />
-        {[{label:"Aceitar Nomeação",count:distEstrategia.aceitar,color:C.green,bg:C.greenLight,icon:"✅"},{label:"Nomear Assistente",count:distEstrategia.assistente,color:C.amber,bg:C.amberLight,icon:"⚠️"},{label:"Impugnar Perito",count:distEstrategia.impugnar,color:C.red,bg:C.redLight,icon:"🔴"}].map(d=>(<div key={d.label} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 12px",background:d.bg,borderRadius:8,marginBottom:8,border:"1px solid "+d.color+"22"}}><div style={{display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:16}}>{d.icon}</span><span style={{fontSize:12,fontWeight:600,color:C.text}}>{d.label}</span></div><span style={{fontSize:20,fontWeight:800,color:d.color}}>{d.count}</span></div>))}
-        <div style={{fontSize:10,color:C.textMuted,marginTop:8,textAlign:"center"}}>De {peritosData.length} peritos monitorados</div>
-      </Card>
-
-      {/* CIDs Consolidado */}
-      <Card><SectionTitle title="CIDs com Maior Risco Pericial" /><div style={{fontSize:11,color:C.textMuted,marginBottom:12,marginTop:-8}}>Taxa favorável ao reclamante consolidada por CID</div>
-        {cidConsolidado.sort((a,b)=>b.fav-a.fav).map(c=>(<div key={c.cid} style={{marginBottom:10}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}><span style={{fontSize:11,color:C.textSec}}>{c.cid}</span><span style={{fontSize:11,fontWeight:700,color:c.fav>=50?C.red:C.green}}>{c.fav}%</span></div><MiniBar value={c.fav} max={100} color={c.fav>=50?C.red:C.green} h={6} /></div>))}
-      </Card>
-
-      {/* Comarcas Exposição */}
-      <Card><SectionTitle title="Exposição Pericial por TRT / Comarca" /><div style={{fontSize:11,color:C.textMuted,marginBottom:12,marginTop:-8}}>Taxa favorável consolidada por tribunal regional — clique para expandir comarcas</div>
-        {trtData.sort((a,b)=>b.fav-a.fav).map(t=>{const risk=t.fav>=50;const isOpen=expandedTrt===t.trt;return(<div key={t.trt} style={{marginBottom:8}}>
-          <div onClick={()=>setExpandedTrt(isOpen?null:t.trt)} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 12px",background:risk?C.redLight:C.greenLight,borderRadius:isOpen?"8px 8px 0 0":"8px",border:"1px solid "+(risk?C.red:C.green)+"22",cursor:"pointer",transition:"all 0.2s"}}>
-            <div style={{width:40,textAlign:"center"}}><div style={{fontSize:18,fontWeight:800,color:risk?C.red:C.green}}>{t.fav}%</div></div>
-            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:C.text}}>{t.trt}</div><div style={{fontSize:10,color:C.textMuted}}>{t.nome} · {t.comarcas.length} comarcas</div></div>
-            <span style={{fontSize:11,color:C.textMuted,transform:isOpen?"rotate(180deg)":"rotate(0)",transition:"transform 0.2s",display:"inline-block"}}>▼</span>
-          </div>
-          {isOpen&&<div style={{border:"1px solid "+C.border,borderTop:"none",borderRadius:"0 0 8px 8px",padding:8,background:C.white}}>
-            {t.comarcas.sort((a,b)=>b.fav-a.fav).map(c=>{const cr=c.fav>=50;return(<div key={c.comarca} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 8px",marginBottom:4,background:C.bg,borderRadius:6}}>
-              <div style={{width:32,textAlign:"center"}}><div style={{fontSize:14,fontWeight:800,color:cr?C.red:C.green}}>{c.fav}%</div></div>
-              <div style={{flex:1}}><div style={{fontSize:11,fontWeight:600,color:C.text}}>{c.comarca}</div><div style={{fontSize:9,color:C.textMuted}}>{c.proc} processos</div><MiniBar value={c.fav} max={100} color={cr?C.red:C.green} h={3} /></div>
-              <Badge color={cr?C.red:C.green} bg={cr?C.redLight:C.greenLight}>{c.delta}</Badge>
-            </div>);})}
-          </div>}
-        </div>);})}
-      </Card>
-      </Card>
-    </div>
-  </div>);
+  return /*#__PURE__*/React.createElement("div", null, modal !== null && /*#__PURE__*/React.createElement(DetailModal, {
+    idx: modal,
+    onClose: () => setModal(null)
+  }), /*#__PURE__*/React.createElement(FilterBar, {
+    filters: [{
+      label: "Comarca",
+      options: ["Todas as Comarcas", "São Paulo", "Campinas", "Santos", "Ribeirão Preto", "Rio de Janeiro", "Osasco", "Guarulhos", "Niterói"]
+    }, {
+      label: "Recomendação",
+      options: ["Todas as Recomendações", "Aceitar Nomeação", "Nomear Assistente", "Impugnar Perito"]
+    }, {
+      label: "Período",
+      options: ["Últimos 12 meses", "Últimos 3 meses", "Últimos 6 meses", "Este ano", "Ano anterior", "Personalizado"]
+    }]
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(4,1fr)",
+      gap: 14,
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement(CardStat, {
+    label: "Total de Peritos",
+    value: "5",
+    sub: "Monitorados",
+    icon: "\uD83E\uDE7A",
+    iconBg: C.purpleLight,
+    iconColor: C.purple
+  }), /*#__PURE__*/React.createElement(CardStat, {
+    label: "Volume de Processos",
+    value: "705",
+    sub: "Com per\xEDcia",
+    icon: "\uD83D\uDCCB",
+    iconBg: C.redLight,
+    iconColor: C.red
+  }), /*#__PURE__*/React.createElement(CardStat, {
+    label: "Tx. Favor\xE1vel M\xE9dia",
+    value: "45%",
+    sub: "dos laudos",
+    icon: "\u2705",
+    iconBg: C.greenLight,
+    iconColor: C.green
+  }), /*#__PURE__*/React.createElement(CardStat, {
+    label: "Comarcas Cobertas",
+    value: "12",
+    sub: "SP, RJ",
+    icon: "\uD83D\uDCCD",
+    iconBg: C.amberLight,
+    iconColor: C.amber
+  })), /*#__PURE__*/React.createElement(Card, {
+    style: {
+      marginBottom: 20,
+      overflow: "hidden",
+      padding: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "18px 20px 0"
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "An\xE1lise Pericial \u2014 Peritos / M\xE9dicos do Ju\xEDzo"
+  })), /*#__PURE__*/React.createElement("table", {
+    style: {
+      width: "100%",
+      borderCollapse: "collapse"
+    }
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+    style: {
+      borderBottom: "2px solid " + C.border
+    }
+  }, ["Perito", "Comarca", "Processos", "Favorável", "Desfavorável", "Consist.", "Tempo", "Estratégia", "Tendência", "Ações"].map(h => /*#__PURE__*/React.createElement("th", {
+    key: h,
+    style: {
+      padding: "10px 12px",
+      fontSize: 10,
+      fontWeight: 700,
+      color: C.textSec,
+      textAlign: "left",
+      textTransform: "uppercase"
+    }
+  }, h)))), /*#__PURE__*/React.createElement("tbody", null, peritosData.map((per, i) => {
+    const e2 = estColor[per.estrategia.rec];
+    return /*#__PURE__*/React.createElement("tr", {
+      key: i,
+      onClick: () => setSel(i),
+      style: {
+        borderBottom: "1px solid " + C.border,
+        cursor: "pointer",
+        background: sel === i ? "#FFF5F6" : "transparent"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        fontWeight: 600,
+        color: C.text
+      }
+    }, per.nome), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: C.textMuted
+      }
+    }, per.crm)), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px",
+        fontSize: 12,
+        color: C.textSec
+      }
+    }, per.comarca), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px",
+        fontSize: 14,
+        fontWeight: 700
+      }
+    }, per.proc), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px"
+      }
+    }, /*#__PURE__*/React.createElement(Badge, {
+      color: C.green,
+      bg: C.greenLight
+    }, per.fav, "%")), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px"
+      }
+    }, /*#__PURE__*/React.createElement(Badge, {
+      color: C.red,
+      bg: C.redLight
+    }, per.desfav, "%")), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px"
+      }
+    }, /*#__PURE__*/React.createElement(Badge, {
+      color: conColor(per.consistencia),
+      bg: conColor(per.consistencia) === C.green ? C.greenLight : conColor(per.consistencia) === C.amber ? C.amberLight : C.redLight
+    }, per.consistencia, "%")), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px",
+        fontSize: 12,
+        color: C.textSec
+      }
+    }, per.tempoMedio, "d"), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px"
+      }
+    }, /*#__PURE__*/React.createElement(Badge, {
+      color: e2.c,
+      bg: e2.bg
+    }, e2.label.split(" ")[0])), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px"
+      }
+    }, /*#__PURE__*/React.createElement(Spark, {
+      data: per.spark,
+      color: per.tend === "alta" ? C.green : per.tend === "baixa" ? C.red : C.amber
+    })), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "12px"
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: e => {
+        e.stopPropagation();
+        setModal(i);
+      },
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 4,
+        padding: "6px 12px",
+        border: "1px solid " + C.border,
+        borderRadius: 6,
+        background: C.white,
+        cursor: "pointer",
+        fontSize: 11,
+        color: C.textSec,
+        fontFamily: font,
+        whiteSpace: "nowrap"
+      }
+    }, "\uD83D\uDC41 Ver Detalhes")));
+  })))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gap: 14
+    }
+  }, /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Distribui\xE7\xE3o por Recomenda\xE7\xE3o"
+  }), [{
+    label: "Aceitar Nomeação",
+    count: distEstrategia.aceitar,
+    color: C.green,
+    bg: C.greenLight,
+    icon: "✅"
+  }, {
+    label: "Nomear Assistente",
+    count: distEstrategia.assistente,
+    color: C.amber,
+    bg: C.amberLight,
+    icon: "⚠️"
+  }, {
+    label: "Impugnar Perito",
+    count: distEstrategia.impugnar,
+    color: C.red,
+    bg: C.redLight,
+    icon: "🔴"
+  }].map(d => /*#__PURE__*/React.createElement("div", {
+    key: d.label,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "10px 12px",
+      background: d.bg,
+      borderRadius: 8,
+      marginBottom: 8,
+      border: "1px solid " + d.color + "22"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16
+    }
+  }, d.icon), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      fontWeight: 600,
+      color: C.text
+    }
+  }, d.label)), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 20,
+      fontWeight: 800,
+      color: d.color
+    }
+  }, d.count))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted,
+      marginTop: 8,
+      textAlign: "center"
+    }
+  }, "De ", peritosData.length, " peritos monitorados")), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "CIDs com Maior Risco Pericial"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginBottom: 12,
+      marginTop: -8
+    }
+  }, "Taxa favor\xE1vel ao reclamante consolidada por CID"), cidConsolidado.sort((a, b) => b.fav - a.fav).map(c => /*#__PURE__*/React.createElement("div", {
+    key: c.cid,
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 3
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textSec
+    }
+  }, c.cid), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      color: c.fav >= 50 ? C.red : C.green
+    }
+  }, c.fav, "%")), /*#__PURE__*/React.createElement(MiniBar, {
+    value: c.fav,
+    max: 100,
+    color: c.fav >= 50 ? C.red : C.green,
+    h: 6
+  })))), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Exposi\xE7\xE3o Pericial por TRT / Comarca"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginBottom: 12,
+      marginTop: -8
+    }
+  }, "Taxa favor\xE1vel consolidada por tribunal regional \u2014 clique para expandir comarcas"), trtData.sort((a, b) => b.fav - a.fav).map(t => {
+    const risk = t.fav >= 50;
+    const isOpen = expandedTrt === t.trt;
+    return /*#__PURE__*/React.createElement("div", {
+      key: t.trt,
+      style: {
+        marginBottom: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      onClick: () => setExpandedTrt(isOpen ? null : t.trt),
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "10px 12px",
+        background: risk ? C.redLight : C.greenLight,
+        borderRadius: isOpen ? "8px 8px 0 0" : "8px",
+        border: "1px solid " + (risk ? C.red : C.green) + "22",
+        cursor: "pointer",
+        transition: "all 0.2s"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 40,
+        textAlign: "center"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 18,
+        fontWeight: 800,
+        color: risk ? C.red : C.green
+      }
+    }, t.fav, "%")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        fontWeight: 700,
+        color: C.text
+      }
+    }, t.trt), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: C.textMuted
+      }
+    }, t.nome, " \xB7 ", t.comarcas.length, " comarcas")), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        color: C.textMuted,
+        transform: isOpen ? "rotate(180deg)" : "rotate(0)",
+        transition: "transform 0.2s",
+        display: "inline-block"
+      }
+    }, "\u25BC")), isOpen && /*#__PURE__*/React.createElement("div", {
+      style: {
+        border: "1px solid " + C.border,
+        borderTop: "none",
+        borderRadius: "0 0 8px 8px",
+        padding: 8,
+        background: C.white
+      }
+    }, t.comarcas.sort((a, b) => b.fav - a.fav).map(c => {
+      const cr = c.fav >= 50;
+      return /*#__PURE__*/React.createElement("div", {
+        key: c.comarca,
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "6px 8px",
+          marginBottom: 4,
+          background: C.bg,
+          borderRadius: 6
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          width: 32,
+          textAlign: "center"
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 14,
+          fontWeight: 800,
+          color: cr ? C.red : C.green
+        }
+      }, c.fav, "%")), /*#__PURE__*/React.createElement("div", {
+        style: {
+          flex: 1
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 11,
+          fontWeight: 600,
+          color: C.text
+        }
+      }, c.comarca), /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 9,
+          color: C.textMuted
+        }
+      }, c.proc, " processos"), /*#__PURE__*/React.createElement(MiniBar, {
+        value: c.fav,
+        max: 100,
+        color: cr ? C.red : C.green,
+        h: 3
+      })), /*#__PURE__*/React.createElement(Badge, {
+        color: cr ? C.red : C.green,
+        bg: cr ? C.redLight : C.greenLight
+      }, c.delta));
+    })));
+  }))));
 };
-
 function App() {
-  return (<div style={{minHeight:"100vh",background:C.bg,fontFamily:font,color:C.text}}>
-    <div style={{background:C.white,borderBottom:"1px solid "+C.border,padding:"14px 28px",display:"flex",alignItems:"center",gap:12}}><div style={{width:32,height:32,borderRadius:8,background:C.red,display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg></div><div><div style={{fontSize:16,fontWeight:700,color:C.text}}>Processos Trabalhistas Bradesco</div><div style={{fontSize:11,color:C.textMuted}}>Análise de Reintegrados</div></div></div>
-    <div style={{padding:"20px 28px"}}><PeritosScreen /></div>
-    <div style={{padding:"12px 28px",borderTop:"1px solid "+C.border,display:"flex",justifyContent:"space-between",fontSize:10,color:C.textMuted}}><span>© 2026 Deep — Plataforma Reintegrados</span><span>Dados simulados · 11/05/2026</span></div>
-  </div>);
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: "100vh",
+      background: C.bg,
+      fontFamily: font,
+      color: C.text
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.white,
+      borderBottom: "1px solid " + C.border,
+      padding: "14px 28px",
+      display: "flex",
+      alignItems: "center",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 32,
+      height: 32,
+      borderRadius: 8,
+      background: C.red,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "white",
+    strokeWidth: "2.5"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+  }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      color: C.text
+    }
+  }, "Processos Trabalhistas Bradesco"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted
+    }
+  }, "An\xE1lise de Reintegrados"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "20px 28px"
+    }
+  }, /*#__PURE__*/React.createElement(PeritosScreen, null)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 28px",
+      borderTop: "1px solid " + C.border,
+      display: "flex",
+      justifyContent: "space-between",
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 Deep \u2014 Plataforma Reintegrados"), /*#__PURE__*/React.createElement("span", null, "Dados simulados \xB7 11/05/2026")));
 }
 
-
-try {
-  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-} catch(e) {
-  document.getElementById('error-display').style.display = 'block';
-  document.getElementById('error-display').textContent = e.message + '\n' + e.stack;
-}
-</script>
-<script>
-window.onerror = function(msg, url, line, col, error) {
-  var el = document.getElementById('error-display');
-  el.style.display = 'block';
-  el.textContent = 'Error: ' + msg + '\nLine: ' + line + '\nCol: ' + col;
-};
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
 </script>
 </body>
 </html>
