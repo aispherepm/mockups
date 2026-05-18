@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Reintegrados - Insights Estrategicos</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:#F5F6FA}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#F0F0F0}::-webkit-scrollbar-thumb{background:#CCC;border-radius:3px}</style>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+</head><body><div id="root"></div><script>
+const {
+  useState
+} = React;
+const C = {
+  bg: "#F5F6FA",
+  white: "#FFFFFF",
+  red: "#CC092F",
+  redLight: "#FDE8EC",
+  redMid: "#E84667",
+  purple: "#7B2D8E",
+  purpleLight: "#F3E8F7",
+  green: "#2E7D32",
+  greenLight: "#E8F5E9",
+  amber: "#F57F17",
+  amberLight: "#FFF8E1",
+  blue: "#1565C0",
+  blueLight: "#E3F2FD",
+  navy: "#1a1a2e",
+  text: "#1a1a2e",
+  textSec: "#5f6368",
+  textMuted: "#9AA0A6",
+  border: "#E8EAED",
+  shadow: "0 1px 3px rgba(0,0,0,0.08)"
+};
+const font = "'Segoe UI','Roboto',-apple-system,sans-serif";
+const ST = ({
+  title
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: "flex",
+    alignItems: "stretch",
+    gap: 10,
+    marginBottom: 16
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    width: 4,
+    background: C.red,
+    borderRadius: 2,
+    flexShrink: 0
+  }
+}), /*#__PURE__*/React.createElement("h3", {
+  style: {
+    margin: 0,
+    fontSize: 15,
+    fontWeight: 700,
+    color: C.text
+  }
+}, title));
+const Cd = ({
+  children,
+  style
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    background: C.white,
+    borderRadius: 10,
+    border: "1px solid " + C.border,
+    padding: 20,
+    boxShadow: C.shadow,
+    ...style
+  }
+}, children);
+function App() {
+  const [arvoreOpen, setArvoreOpen] = useState({
+    0: true,
+    1: false,
+    2: false
+  });
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: "100vh",
+      background: C.bg,
+      fontFamily: font,
+      color: C.text
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.white,
+      borderBottom: "1px solid " + C.border,
+      padding: "14px 28px",
+      display: "flex",
+      alignItems: "center",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 34,
+      height: 34,
+      borderRadius: "50%",
+      background: C.red,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "white",
+    strokeWidth: "2.5"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+  }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 700
+    }
+  }, "Processos Trabalhistas Bradesco"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted
+    }
+  }, "An\xE1lise de Reintegrados"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "16px 28px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      marginBottom: 14,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "relative",
+      flex: "0 0 170px"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      left: 10,
+      top: "50%",
+      transform: "translateY(-50%)",
+      fontSize: 13,
+      color: C.textMuted
+    }
+  }, "\uD83D\uDD0D"), /*#__PURE__*/React.createElement("input", {
+    placeholder: "Buscar",
+    style: {
+      width: "100%",
+      padding: "7px 10px 7px 30px",
+      borderRadius: 8,
+      border: "1px solid " + C.border,
+      fontSize: 12,
+      fontFamily: font,
+      background: C.white,
+      outline: "none",
+      boxSizing: "border-box"
+    }
+  })), ["Todas as Decisões", "Todos os Estados", "Todos os motivos do pedido", "Todos os submotivos do pedido"].map(f => /*#__PURE__*/React.createElement("div", {
+    key: f,
+    style: {
+      position: "relative"
+    }
+  }, /*#__PURE__*/React.createElement("select", {
+    style: {
+      appearance: "none",
+      padding: "7px 24px 7px 10px",
+      borderRadius: 8,
+      border: "1px solid " + C.border,
+      background: C.white,
+      fontSize: 11,
+      color: C.textSec,
+      fontFamily: font,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("option", null, f)), /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: "absolute",
+      right: 8,
+      top: "50%",
+      transform: "translateY(-50%)",
+      fontSize: 9,
+      color: C.textMuted,
+      pointerEvents: "none"
+    }
+  }, "\u25BC")))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 4,
+      marginBottom: 16,
+      flexWrap: "wrap"
+    }
+  }, [{
+    l: "Assessment",
+    i: "📊",
+    a: false
+  }, {
+    l: "Insights Estratégicos",
+    i: "💡",
+    a: true
+  }, {
+    l: "Timeline",
+    i: "📅"
+  }, {
+    l: "Processos",
+    i: "📋"
+  }, {
+    l: "Mapa Estratégico",
+    i: "🗺️"
+  }, {
+    l: "Perfil Jurídico",
+    i: "⚖️"
+  }, {
+    l: "Tempo & Velocidade",
+    i: "⏱️"
+  }, {
+    l: "Análise Advocatícia",
+    i: "👨‍⚖️"
+  }, {
+    l: "Inteligência Pericial",
+    i: "🩺"
+  }, {
+    l: "Contexto Processual",
+    i: "🔍"
+  }, {
+    l: "Perfil do Envolvido",
+    i: "👤"
+  }, {
+    l: "Leitura Semântica",
+    i: "📖"
+  }, {
+    l: "Score de Risco",
+    i: "📈"
+  }].map(t => /*#__PURE__*/React.createElement("div", {
+    key: t.l,
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: 3,
+      padding: "8px 12px",
+      minWidth: 80,
+      borderRadius: 8,
+      background: t.a ? C.red : C.white,
+      color: t.a ? "white" : C.textSec,
+      border: "1px solid " + (t.a ? C.red : C.border),
+      fontSize: 9,
+      fontWeight: 600,
+      cursor: "pointer",
+      boxShadow: t.a ? "0 2px 6px rgba(204,9,47,0.2)" : "none"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14
+    }
+  }, t.i), t.l))), /*#__PURE__*/React.createElement(Cd, {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 36,
+      height: 36,
+      borderRadius: "50%",
+      background: C.redLight,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 18
+    }
+  }, "\uD83C\uDFAF"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700
+    }
+  }, "Central de Intelig\xEAncia Estrat\xE9gica"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted
+    }
+  }, "Insights acion\xE1veis de 844 processos \u2014 organizados por tipo de a\xE7\xE3o"))), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.green,
+      display: "flex",
+      alignItems: "center",
+      gap: 4
+    }
+  }, "\u2705 Atualizado")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 10,
+      height: 10,
+      borderRadius: "50%",
+      background: C.red
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      fontWeight: 800,
+      color: C.red,
+      textTransform: "uppercase",
+      letterSpacing: 0.8
+    }
+  }, "A\xE7\xE3o Imediata"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      height: 1,
+      background: C.red + "33"
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 16,
+      borderRadius: 10,
+      border: "2px solid " + C.red + "33",
+      background: "#FFFBFB"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textSec,
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
+      marginBottom: 10
+    }
+  }, "MANDADO DE SEGURAN\xC7A"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 26,
+      fontWeight: 800,
+      color: C.red
+    }
+  }, "15% fora do prazo"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: C.textMuted,
+      marginTop: 2
+    }
+  }, "MS impetrados ap\xF3s 120 dias \u2014 argumento de urg\xEAncia perdido"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 12,
+      padding: "10px 14px",
+      background: C.red,
+      borderRadius: 8,
+      color: "white",
+      fontSize: 12,
+      fontWeight: 600
+    }
+  }, "\u2192 Alertar escrit\xF3rios antes de 90 dias \xB7 Criar notifica\xE7\xE3o autom\xE1tica")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 16,
+      borderRadius: 10,
+      border: "2px solid " + C.red + "33",
+      background: "#FFFBFB"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textSec,
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
+      marginBottom: 10
+    }
+  }, "TAXA DE REVERS\xC3O \u2014 JUSTA CAUSA"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 26,
+      fontWeight: 800,
+      color: C.red
+    }
+  }, "42.9% revertidas"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: C.textMuted,
+      marginTop: 2
+    }
+  }, "67 de 156 processos \u2014 justa causa anulada, segue pra reintegra\xE7\xE3o"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 12,
+      padding: "10px 14px",
+      background: C.red,
+      borderRadius: 8,
+      color: "white",
+      fontSize: 12,
+      fontWeight: 600
+    }
+  }, "\u2192 Refor\xE7ar documenta\xE7\xE3o pr\xE9-desligamento em dispensas por justa causa")))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 10,
+      height: 10,
+      borderRadius: "50%",
+      background: C.amber
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      fontWeight: 800,
+      color: C.amber,
+      textTransform: "uppercase",
+      letterSpacing: 0.8
+    }
+  }, "Aten\xE7\xE3o Estrat\xE9gica"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      height: 1,
+      background: C.amber + "33"
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 16,
+      borderRadius: 10,
+      border: "1px solid " + C.amber + "33",
+      background: "#FFFDF5"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textSec,
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
+      marginBottom: 8
+    }
+  }, "MAIOR PREDITOR DE DEFERIMENTO"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 24,
+      fontWeight: 800,
+      color: C.text
+    }
+  }, "Benef\xEDcio B91 (INSS)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: C.textMuted,
+      marginTop: 2
+    }
+  }, "78.2% de deferimento quando concedido \xB7 mais que o dobro sem benef\xEDcio"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 12,
+      padding: "10px 14px",
+      background: C.amber,
+      borderRadius: 8,
+      color: "white",
+      fontSize: 12,
+      fontWeight: 600
+    }
+  }, "\u2192 Priorizar defesa em processos com B91 ativo")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 16,
+      borderRadius: 10,
+      border: "1px solid " + C.amber + "33",
+      background: "#FFFDF5"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textSec,
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
+      marginBottom: 8
+    }
+  }, "VELOCIDADE DE DECIS\xC3O"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "baseline",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 24,
+      fontWeight: 800,
+      color: C.text
+    }
+  }, "38 dias"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.green
+    }
+  }, "Liminar")), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      color: C.textMuted
+    }
+  }, "/"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 24,
+      fontWeight: 800,
+      color: C.text
+    }
+  }, "280 dias"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.red
+    }
+  }, "Senten\xE7a"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 12,
+      padding: "10px 14px",
+      background: C.amber,
+      borderRadius: 8,
+      color: "white",
+      fontSize: 12,
+      fontWeight: 600
+    }
+  }, "\u2192 Separar an\xE1lise por tipo de decis\xE3o em todas as vis\xF5es")))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 10,
+      height: 10,
+      borderRadius: "50%",
+      background: C.purple
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      fontWeight: 800,
+      color: C.purple,
+      textTransform: "uppercase",
+      letterSpacing: 0.8
+    }
+  }, "Insight Estrutural"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      height: 1,
+      background: C.purple + "33"
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 16,
+      borderRadius: 10,
+      border: "1px solid " + C.purple + "33",
+      background: "#FDFAFF"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textSec,
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
+      marginBottom: 8
+    }
+  }, "CAUSA RAIZ MAIS FREQUENTE"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 24,
+      fontWeight: 800,
+      color: C.text
+    }
+  }, "Organiza\xE7\xE3o do Trabalho \u2014 38.5%"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: C.textMuted,
+      marginTop: 2
+    }
+  }, "Metas abusivas, sobrecarga de tarefas, ac\xFAmulo de fun\xE7\xF5es, controle e fiscaliza\xE7\xE3o excessivos"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      padding: "10px 14px",
+      background: C.purple,
+      borderRadius: 8,
+      color: "white",
+      fontSize: 12,
+      fontWeight: 600
+    }
+  }, "\u2192 Engajar Mirella e Paloma (People/RH) para a\xE7\xF5es preventivas"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      padding: "10px 14px",
+      background: C.purpleLight,
+      borderRadius: 8,
+      color: C.purple,
+      fontSize: 12,
+      fontWeight: 600
+    }
+  }, "\u2192 Longo prazo: reduzir causa raiz para diminuir volume de processos"))))), /*#__PURE__*/React.createElement(Cd, {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      marginBottom: 6
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 32,
+      height: 32,
+      borderRadius: "50%",
+      background: C.redLight,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 16
+    }
+  }, "\uD83D\uDD0D"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700
+    }
+  }, "Causa Raiz \xB7 Peti\xE7\xE3o Inicial"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted
+    }
+  }, "Padr\xF5es identificados nas iniciais que contextualizam o adoecimento"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(4,1fr)",
+      gap: 12,
+      marginTop: 16,
+      marginBottom: 20
+    }
+  }, [{
+    label: "Organização do trabalho",
+    pct: 38.5,
+    detail: "Metas abusivas, sobrecarga, acúmulo de funções, controle excessivo",
+    color: C.red
+  }, {
+    label: "Assédio moral",
+    pct: 28.2,
+    detail: "Humilhações, cobranças vexatórias, exposição de ranking, perseguição",
+    color: C.redMid
+  }, {
+    label: "Condições de trabalho",
+    pct: 18.7,
+    detail: "Ergonomia inadequada, mobiliário, posto incompatível com restrições",
+    color: C.purple
+  }, {
+    label: "Gestão da saúde",
+    pct: 14.6,
+    detail: "Falta de acompanhamento, retorno sem adaptação funcional",
+    color: C.amber
+  }].map((c, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      padding: 16,
+      background: C.bg,
+      borderRadius: 8,
+      borderLeft: "4px solid " + c.color
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 24,
+      fontWeight: 800,
+      color: c.color
+    }
+  }, c.pct, "%"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      fontWeight: 700,
+      color: C.text,
+      marginTop: 4
+    }
+  }, c.label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted,
+      marginTop: 6,
+      lineHeight: 1.4
+    }
+  }, c.detail)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: C.text,
+      marginBottom: 4
+    }
+  }, "Alega\xE7\xF5es recorrentes na peti\xE7\xE3o inicial por estado"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginBottom: 12
+    }
+  }, "Top alega\xE7\xF5es de causa raiz identificadas na inicial, ordenadas por volume no recorte estadual"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3,1fr)",
+      gap: 12
+    }
+  }, [{
+    uf: "RJ",
+    total: 98,
+    items: [{
+      n: 1,
+      label: "Nexo causal entre labor e LER/DORT",
+      cases: 41,
+      pct: 41.8
+    }, {
+      n: 2,
+      label: "Equiparação a acidente de trabalho",
+      cases: 28,
+      pct: 28.6
+    }, {
+      n: 3,
+      label: "Incapacidade para função habitual",
+      cases: 19,
+      pct: 19.4
+    }]
+  }, {
+    uf: "SP",
+    total: 79,
+    items: [{
+      n: 1,
+      label: "Doença psíquica relacionada ao trabalho",
+      cases: 31,
+      pct: 39.2
+    }, {
+      n: 2,
+      label: "Assédio moral e dano à saúde mental",
+      cases: 22,
+      pct: 27.8
+    }, {
+      n: 3,
+      label: "Readaptação impossível sem reintegração",
+      cases: 14,
+      pct: 17.7
+    }]
+  }, {
+    uf: "MG",
+    total: 54,
+    items: [{
+      n: 1,
+      label: "Estabilidade acidentária (art. 118)",
+      cases: 24,
+      pct: 44.4
+    }, {
+      n: 2,
+      label: "Nexo causal entre labor e LER/DORT",
+      cases: 15,
+      pct: 27.8
+    }, {
+      n: 3,
+      label: "Perícia médica favorável ao empregado",
+      cases: 9,
+      pct: 16.7
+    }]
+  }].map((e, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      padding: 14,
+      border: "1px solid " + C.border,
+      borderRadius: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14,
+      fontWeight: 800,
+      color: C.text
+    }
+  }, e.uf), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted
+    }
+  }, e.total, " casos")), e.items.map((it, j) => /*#__PURE__*/React.createElement("div", {
+    key: j,
+    style: {
+      display: "flex",
+      gap: 8,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 22,
+      height: 22,
+      borderRadius: "50%",
+      background: j === 0 ? C.red : C.purpleLight,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 10,
+      fontWeight: 700,
+      color: j === 0 ? "white" : C.purple,
+      flexShrink: 0
+    }
+  }, it.n), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.text,
+      lineHeight: 1.3
+    }
+  }, it.label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginTop: 2
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, it.cases, " casos"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      fontWeight: 700,
+      color: C.red
+    }
+  }, it.pct, "% do estado"))))))))), /*#__PURE__*/React.createElement(Cd, {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement(ST, {
+    title: "Correla\xE7\xE3o Tipo de Doen\xE7a \xD7 Estado"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginBottom: 14,
+      marginTop: -8
+    }
+  }, "Heatmap de volume processual por subtipo de doen\xE7a e UF \u2014 leitura de hotspots e padr\xF5es regionais"), /*#__PURE__*/React.createElement("table", {
+    style: {
+      width: "100%",
+      borderCollapse: "collapse"
+    }
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "8px 12px",
+      fontSize: 11,
+      color: C.textSec,
+      textAlign: "left"
+    }
+  }, "Tipo de doen\xE7a"), ["RJ", "SP", "MG", "PE", "BA", "CE", "RS", "PR", "PA", "PB"].map(h => /*#__PURE__*/React.createElement("th", {
+    key: h,
+    style: {
+      padding: "8px 8px",
+      fontSize: 11,
+      color: C.textSec,
+      textAlign: "center"
+    }
+  }, h)))), /*#__PURE__*/React.createElement("tbody", null, [{
+    d: "LER/DORT",
+    vals: [41, 18, 15, 12, 9, 17, 8, 7, 6, 5]
+  }, {
+    d: "Psíquica",
+    vals: [12, 31, 9, 8, 6, 5, 11, 10, 4, 3]
+  }, {
+    d: "Ac. Trabalho",
+    vals: [18, 14, 11, 20, 7, 6, 5, 4, 9, 2]
+  }, {
+    d: "Estigmatizantes",
+    vals: [4, 6, 3, 2, 16, 3, 2, 1, 2, 4]
+  }].map((row, i) => /*#__PURE__*/React.createElement("tr", {
+    key: i
+  }, /*#__PURE__*/React.createElement("td", {
+    style: {
+      padding: "6px 12px",
+      fontSize: 12,
+      fontWeight: 600,
+      color: C.text,
+      borderBottom: "1px solid " + C.border
+    }
+  }, row.d), row.vals.map((v, j) => {
+    const bg = v >= 30 ? "#CC092F" : v >= 15 ? "#7B2D8E" : v >= 8 ? "#E3D5E8" : "#F5F6FA";
+    const tc = v >= 15 ? "white" : C.textSec;
+    return /*#__PURE__*/React.createElement("td", {
+      key: j,
+      style: {
+        padding: "4px 4px",
+        textAlign: "center",
+        borderBottom: "1px solid " + C.border
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "inline-flex",
+        width: 40,
+        height: 28,
+        borderRadius: 4,
+        background: bg,
+        alignItems: "center",
+        justifyContent: "center"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        fontWeight: 700,
+        color: tc
+      }
+    }, v)));
+  }))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12,
+      marginTop: 10,
+      justifyContent: "center",
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, [{
+    l: "≥30 (Alta)",
+    c: "#CC092F"
+  }, {
+    l: "15-29 (Média)",
+    c: "#7B2D8E"
+  }, {
+    l: "8-14",
+    c: "#E3D5E8"
+  }, {
+    l: "<8 (Baixa)",
+    c: "#F5F6FA"
+  }].map(x => /*#__PURE__*/React.createElement("span", {
+    key: x.l,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 14,
+      height: 10,
+      borderRadius: 2,
+      background: x.c,
+      border: "1px solid " + C.border
+    }
+  }), x.l)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 14,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement(Cd, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 28,
+      height: 28,
+      borderRadius: "50%",
+      background: C.greenLight,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 13
+    }
+  }, "\u2705"), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      margin: 0,
+      fontSize: 15,
+      fontWeight: 700,
+      color: C.green
+    }
+  }, "Quando a Empresa Ganha")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginBottom: 12
+    }
+  }, "Fundamenta\xE7\xE3o recorrente nas senten\xE7as favor\xE1veis ao banco"), [{
+    l: "Laudo aponta ausência de nexo/incapacidade ou concausa",
+    p: 32
+  }, {
+    l: "Exames, histórico clínico e decisão de desligamento consistentes entre si",
+    p: 24
+  }, {
+    l: "Laudo pericial desfavorável prevalece sobre prova testemunhal isolada",
+    p: 18
+  }, {
+    l: "Sem prova robusta de assédio — cobranças no exercício regular da gestão",
+    p: 15
+  }, {
+    l: "Dispensa fora de momento juridicamente sensível e/ou estabilidade legal",
+    p: 11
+  }].map((c, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 4
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      color: C.textSec
+    }
+  }, c.l), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      fontWeight: 700,
+      color: C.green
+    }
+  }, c.p, "%")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 8,
+      background: "#F0F0F0",
+      borderRadius: 4,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: c.p / 32 * 100 + "%",
+      height: "100%",
+      background: C.green,
+      borderRadius: 4
+    }
+  }))))), /*#__PURE__*/React.createElement(Cd, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 28,
+      height: 28,
+      borderRadius: "50%",
+      background: C.redLight,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 13
+    }
+  }, "\u26A0\uFE0F"), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      margin: 0,
+      fontSize: 15,
+      fontWeight: 700,
+      color: C.red
+    }
+  }, "Quando a Empresa Perde")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginBottom: 12
+    }
+  }, "Fundamenta\xE7\xE3o recorrente nas senten\xE7as desfavor\xE1veis ao banco"), [{
+    l: "Laudo indica nexo, concausa ou apresenta conclusão inconclusiva",
+    p: 28
+  }, {
+    l: "Decisão de desligamento em momento juridicamente sensível",
+    p: 22
+  }, {
+    l: "Lacunas ou inconsistências no acompanhamento pós-adoecimento",
+    p: 20
+  }, {
+    l: "Incoerência entre documentação médica, histórico funcional e desligamento",
+    p: 18
+  }, {
+    l: "Prova testemunhal forte — principalmente em doenças psíquicas",
+    p: 12
+  }].map((c, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 4
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      color: C.textSec
+    }
+  }, c.l), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      fontWeight: 700,
+      color: C.red
+    }
+  }, c.p, "%")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 8,
+      background: "#F0F0F0",
+      borderRadius: 4,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: c.p / 28 * 100 + "%",
+      height: "100%",
+      background: C.red,
+      borderRadius: 4
+    }
+  })))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 14,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement(Cd, null, /*#__PURE__*/React.createElement(ST, {
+    title: "Benef\xEDcio INSS como Preditor de Deferimento"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginBottom: 14,
+      marginTop: -8
+    }
+  }, "Taxa de reintegra\xE7\xE3o deferida por tipo de benef\xEDcio previdenci\xE1rio"), [{
+    tipo: "B91 (Acidentário)",
+    total: 142,
+    def: 78.2
+  }, {
+    tipo: "B31 (Auxílio-doença comum)",
+    total: 98,
+    def: 52.0
+  }, {
+    tipo: "Sem benefício INSS",
+    total: 604,
+    def: 35.8
+  }].map((b, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      marginBottom: 12,
+      padding: 12,
+      background: C.bg,
+      borderRadius: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      fontWeight: 600,
+      color: C.text
+    }
+  }, b.tipo), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, b.total, " proc.")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      height: 26,
+      borderRadius: 6,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: b.def + "%",
+      background: C.red,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "white",
+      fontWeight: 700
+    }
+  }, b.def, "%")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 100 - b.def + "%",
+      background: C.purple,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, 100 - b.def > 18 && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "white",
+      fontWeight: 700
+    }
+  }, (100 - b.def).toFixed(1), "%"))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 12px",
+      background: C.amberLight,
+      borderRadius: 6,
+      fontSize: 11,
+      color: C.text,
+      display: "flex",
+      gap: 6,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "\u26A0\uFE0F"), "Concess\xE3o de B91 \xE9 o maior preditor isolado de deferimento de reintegra\xE7\xE3o.")), /*#__PURE__*/React.createElement(Cd, null, /*#__PURE__*/React.createElement(ST, {
+    title: "Dashboard Mandado de Seguran\xE7a"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginBottom: 14,
+      marginTop: -8
+    }
+  }, "Recurso contra liminar de reintegra\xE7\xE3o \u2014 prazo de 120 dias"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8,
+      marginBottom: 12
+    }
+  }, [{
+    v: "68",
+    l: "MS Impetrados",
+    s: "De 380 com liminar",
+    c: C.blue
+  }, {
+    v: "72d",
+    l: "Prazo Médio",
+    s: "Meta: < 90 dias",
+    c: C.amber
+  }, {
+    v: "38.2%",
+    l: "Taxa de Sucesso",
+    s: "26 MS deferidos",
+    c: C.green
+  }, {
+    v: "27",
+    l: "Acima 90 dias",
+    s: "Risco perda prazo",
+    c: C.red
+  }].map((k, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      padding: 10,
+      background: C.bg,
+      borderRadius: 8,
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 18,
+      fontWeight: 800,
+      color: k.c
+    }
+  }, k.v), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      fontWeight: 600,
+      color: C.textSec
+    }
+  }, k.l), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9,
+      color: C.textMuted
+    }
+  }, k.s)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 600,
+      color: C.textSec,
+      marginBottom: 6
+    }
+  }, "Faixa de prazo de impetra\xE7\xE3o"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      height: 26,
+      borderRadius: 6,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "30%",
+      background: C.green,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: "white",
+      fontWeight: 600
+    }
+  }, "<30d")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "30%",
+      background: C.amber,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: "white",
+      fontWeight: 600
+    }
+  }, "30-90d")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "25%",
+      background: C.red,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: "white",
+      fontWeight: 600
+    }
+  }, "90-120d")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "15%",
+      background: C.navy,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: "white",
+      fontWeight: 600
+    }
+  }, ">120d"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 8,
+      padding: "8px 12px",
+      background: C.redLight,
+      borderRadius: 6,
+      fontSize: 10,
+      color: C.red
+    }
+  }, "\u26A0\uFE0F 15% impetrados ap\xF3s 120 dias \u2014 prazo expirado. Escrit\xF3rios perdendo argumento de urg\xEAncia."))), /*#__PURE__*/React.createElement(Cd, {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 32,
+      height: 32,
+      borderRadius: "50%",
+      background: C.purpleLight,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 16
+    }
+  }, "\uD83D\uDD00"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700,
+      color: C.red
+    }
+  }, "An\xE1lise de fluxo: motivo do pedido ", ">", " submotivo ", ">", " detalhes"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted
+    }
+  }, "Mapeamento dos principais padr\xF5es do pedido de reintegra\xE7\xE3o em tr\xEAs n\xEDveis"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3,1fr)",
+      gap: 10,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 12,
+      background: C.bg,
+      borderRadius: 8,
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.red,
+      fontWeight: 700
+    }
+  }, "Total Processos (Top 3)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 22,
+      fontWeight: 800,
+      color: C.red
+    }
+  }, "79.5%"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, "Taxa m\xE9dia de deferimento")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 12,
+      background: C.bg,
+      borderRadius: 8,
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textSec,
+      fontWeight: 700
+    }
+  }, "Submotivos Analisados"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 22,
+      fontWeight: 800,
+      color: C.text
+    }
+  }, "12"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, "Padr\xF5es identificados")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 12,
+      background: C.bg,
+      borderRadius: 8,
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textSec,
+      fontWeight: 700
+    }
+  }, "Ponto Cr\xEDtico"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 800,
+      color: C.text
+    }
+  }, "LER/DORT"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, "160 casos \xB7 82.5% deferidos"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "300px 30px 1fr",
+      gap: 0,
+      alignItems: "flex-start"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 16,
+      border: "2px solid " + C.red,
+      borderRadius: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      fontWeight: 800,
+      color: C.red
+    }
+  }, "DOEN\xC7A"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted,
+      marginTop: 2
+    }
+  }, "Volume Total:"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 18,
+      fontWeight: 800
+    }
+  }, "253 processos"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginTop: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textSec
+    }
+  }, "Deferidos:"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      color: C.green
+    }
+  }, "198 (78.3%)")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 6,
+      background: "#F0F0F0",
+      borderRadius: 3,
+      marginTop: 6,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "45%",
+      height: "100%",
+      background: C.red,
+      borderRadius: 3
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted,
+      marginTop: 4
+    }
+  }, "Representatividade: 45.0% do total")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: 20,
+      paddingTop: 20
+    }
+  }, [0, 1, 2].map(i => /*#__PURE__*/React.createElement("svg", {
+    key: i,
+    width: "24",
+    height: "12"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M0 6h18m-4-4l4 4-4 4",
+    fill: "none",
+    stroke: C.border,
+    strokeWidth: "1.5"
+  })))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 8
+    }
+  }, [{
+    n: 1,
+    label: "LER/DORT",
+    vol: 160,
+    taxa: 82.5,
+    pct: 63.2,
+    top: true
+  }, {
+    n: 2,
+    label: "Psíquica",
+    vol: 52,
+    taxa: 75.0,
+    pct: 20.6
+  }, {
+    n: 3,
+    label: "Ac. Trabalho",
+    vol: 28,
+    taxa: 71.4,
+    pct: 11.1
+  }, {
+    n: 4,
+    label: "Estigmatizantes",
+    vol: 13,
+    taxa: 69.2,
+    pct: 5.1
+  }].map((s, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      padding: 12,
+      border: "1px solid " + C.border,
+      borderRadius: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 20,
+      height: 20,
+      borderRadius: "50%",
+      background: i === 0 ? C.red : C.purple,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 10,
+      fontWeight: 700,
+      color: "white"
+    }
+  }, s.n), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: C.text
+    }
+  }, s.label)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      alignItems: "center"
+    }
+  }, s.top && /*#__PURE__*/React.createElement("span", {
+    style: {
+      background: C.green,
+      color: "white",
+      fontSize: 8,
+      fontWeight: 700,
+      padding: "2px 6px",
+      borderRadius: 8
+    }
+  }, "TOP 1"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted
+    }
+  }, "Taxa Defer: ", /*#__PURE__*/React.createElement("strong", {
+    style: {
+      color: C.red
+    }
+  }, s.taxa, "%")))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginTop: 4,
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "Volume: ", s.vol), /*#__PURE__*/React.createElement("span", null, s.pct, "% do motivo do pedido")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 4,
+      background: "#F0F0F0",
+      borderRadius: 2,
+      marginTop: 4,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: s.taxa + "%",
+      height: "100%",
+      background: C.red,
+      borderRadius: 2
+    }
+  }))))))), /*#__PURE__*/React.createElement(Cd, {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement(ST, {
+    title: "\xC1rvore de Causas \u2014 Redirecionada para Causa Raiz Real"
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted,
+      fontStyle: "italic"
+    }
+  }, "Caminho: Causa Raiz \u2192 Tipo de Doen\xE7a \u2192 Estado")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 28,
+      height: 28,
+      borderRadius: "50%",
+      background: C.redLight,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 12
+    }
+  }, "\uD83D\uDD17"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: C.red
+    }
+  }, "PROCESSOS TRABALHISTAS COM REINTEGRA\xC7\xC3O"), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted
+    }
+  }, "Total de 562 processos analisados"))), [{
+    n: 1,
+    label: "ORGANIZAÇÃO DO TRABALHO",
+    pct: 38.5,
+    count: 216,
+    color: C.red,
+    children: [{
+      l: "LER/DORT",
+      p: 45,
+      c: 95
+    }, {
+      l: "Psíquica",
+      p: 32,
+      c: 69
+    }, {
+      l: "Ac. Trabalho",
+      p: 15,
+      c: 32
+    }, {
+      l: "Estigmatizantes",
+      p: 8,
+      c: 17
+    }]
+  }, {
+    n: 2,
+    label: "ASSÉDIO MORAL",
+    pct: 28.2,
+    count: 158,
+    color: C.redMid,
+    children: [{
+      l: "Psíquica",
+      p: 62,
+      c: 98
+    }, {
+      l: "Estigmatizantes",
+      p: 22,
+      c: 35
+    }, {
+      l: "LER/DORT",
+      p: 10,
+      c: 16
+    }, {
+      l: "Ac. Trabalho",
+      p: 6,
+      c: 9
+    }]
+  }, {
+    n: 3,
+    label: "CONDIÇÕES DE TRABALHO",
+    pct: 18.7,
+    count: 105,
+    color: C.purple,
+    children: [{
+      l: "LER/DORT",
+      p: 55,
+      c: 58
+    }, {
+      l: "Ac. Trabalho",
+      p: 30,
+      c: 32
+    }, {
+      l: "Psíquica",
+      p: 10,
+      c: 11
+    }, {
+      l: "Estigmatizantes",
+      p: 5,
+      c: 5
+    }]
+  }].map((item, idx) => /*#__PURE__*/React.createElement("div", {
+    key: idx,
+    style: {
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    onClick: () => setArvoreOpen(p => ({
+      ...p,
+      [idx]: !p[idx]
+    })),
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      padding: "12px 16px",
+      border: "1px solid " + C.border,
+      borderRadius: arvoreOpen[idx] ? "8px 8px 0 0" : "8px",
+      cursor: "pointer",
+      background: C.white
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      color: C.textMuted,
+      transform: arvoreOpen[idx] ? "rotate(90deg)" : "rotate(0)",
+      transition: "transform 0.2s"
+    }
+  }, "\u25B6"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 24,
+      height: 24,
+      borderRadius: "50%",
+      background: item.color,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 11,
+      fontWeight: 700,
+      color: "white"
+    }
+  }, item.n), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      fontWeight: 800,
+      color: item.color
+    }
+  }, item.label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      height: 6,
+      background: "#F0F0F0",
+      borderRadius: 3,
+      marginLeft: 12,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: item.pct + "%",
+      height: "100%",
+      background: item.color,
+      borderRadius: 3
+    }
+  })), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      fontWeight: 700,
+      color: C.text
+    }
+  }, item.pct, "%"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      background: C.bg,
+      padding: "2px 8px",
+      borderRadius: 10
+    }
+  }, item.count)), arvoreOpen[idx] && /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: "1px solid " + C.border,
+      borderTop: "none",
+      borderRadius: "0 0 8px 8px",
+      padding: 12,
+      background: C.bg
+    }
+  }, item.children.map((ch, ci) => /*#__PURE__*/React.createElement("div", {
+    key: ci,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      padding: "8px 12px",
+      marginBottom: 4,
+      background: C.white,
+      borderRadius: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 8,
+      height: 8,
+      borderRadius: "50%",
+      background: item.color,
+      flexShrink: 0
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      color: C.text,
+      minWidth: 120
+    }
+  }, ch.l), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      height: 4,
+      background: "#F0F0F0",
+      borderRadius: 2,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: ch.p + "%",
+      height: "100%",
+      background: item.color + "99",
+      borderRadius: 2
+    }
+  })), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 600,
+      color: C.textSec
+    }
+  }, ch.p, "%"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: C.textMuted
+    }
+  }, ch.c))))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gap: 12
+    }
+  }, [{
+    title: "Highlights Positivos",
+    color: C.green,
+    icon: "✅",
+    items: ["57.1% das justas causas mantidas — mais da metade encerram sem analisar reintegração", "Organização do trabalho identificada como causa raiz #1 — ação preventiva com RH é viável", "Laudo pericial desfavorável prevalece quando consistente e sem prova testemunhal robusta"]
+  }, {
+    title: "Pontos de Cuidado",
+    color: C.red,
+    icon: "⚠️",
+    items: ["B91 concedido = 78.2% de deferimento — quase sentença antecipada", "15% dos MS fora do prazo de 120 dias — escritórios sem alerta", "RO concentra 52% de LER/DORT — padrão regional extremo que exige estratégia local", "Assédio moral (28.2%) gera 62% de doença psíquica — cadeia causal clara"]
+  }, {
+    title: "Recomendações",
+    color: C.purple,
+    icon: "💡",
+    items: ["Incluir Mirella e Paloma (People/RH) para atuar nas causas raiz de organização do trabalho", "Criar alerta automático de MS para escritórios ao atingir 60 dias", "Separar liminar × sentença em TODAS as visões da plataforma", "Monitorar cassações de liminar — vitórias tardias do banco"]
+  }].map((s, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      padding: 14,
+      borderRadius: 8,
+      border: "1px solid " + s.color + "22",
+      background: C.white
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 6,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 24,
+      height: 24,
+      borderRadius: "50%",
+      background: s.color + "15",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 12
+    }
+  }, s.icon), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: s.color
+    }
+  }, s.title)), s.items.map((item, j) => /*#__PURE__*/React.createElement("div", {
+    key: j,
+    style: {
+      display: "flex",
+      gap: 6,
+      marginBottom: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 5,
+      height: 5,
+      borderRadius: "50%",
+      background: s.color,
+      marginTop: 5,
+      flexShrink: 0
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: C.textSec,
+      lineHeight: 1.5
+    }
+  }, item))))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 28px",
+      borderTop: "1px solid " + C.border,
+      display: "flex",
+      justifyContent: "space-between",
+      fontSize: 10,
+      color: C.textMuted,
+      marginTop: 16
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 Deep \u2014 Plataforma Reintegrados"), /*#__PURE__*/React.createElement("span", null, "Mockup baseado na ata de 14/05/2026 \xB7 Dados simulados")));
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script></body></html>
