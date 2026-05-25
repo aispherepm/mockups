@@ -1,1329 +1,834 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reintegrados — Assessment</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:#F5F6FA}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:#F0F0F0}
-::-webkit-scrollbar-thumb{background:#CCC;border-radius:3px}
-</style>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-</head>
-<body>
-<div id="root"></div>
-<script>
-const {
-  useState
-} = React;
-const C = {
-  bg: "#F5F6FA",
-  white: "#FFFFFF",
-  red: "#CC092F",
-  redLight: "#FDE8EC",
-  redMid: "#E84667",
-  purple: "#7B2D8E",
-  purpleLight: "#F3E8F7",
-  green: "#2E7D32",
-  greenLight: "#E8F5E9",
-  amber: "#F57F17",
-  amberLight: "#FFF8E1",
-  blue: "#1565C0",
-  blueLight: "#E3F2FD",
-  navy: "#1a1a2e",
-  text: "#1a1a2e",
-  textSec: "#5f6368",
-  textMuted: "#9AA0A6",
-  border: "#E8EAED",
-  shadow: "0 1px 3px rgba(0,0,0,0.08)"
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Reintegrados - Assessment</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Segoe UI","Roboto",-apple-system,sans-serif;background:#F5F6FA}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#F0F0F0}::-webkit-scrollbar-thumb{background:#CCC;border-radius:3px}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}</style><script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script><script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script></head><body><div id="root"></div><script>"use strict";
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _React = React;
+var useState = _React.useState;
+
+var C = { bg: "#F5F6FA", white: "#FFFFFF", red: "#CC092F", redLight: "#FDE8EC", redMid: "#E84667", purple: "#7B2D8E", purpleLight: "#F3E8F7", green: "#2E7D32", greenLight: "#E8F5E9", amber: "#F57F17", amberLight: "#FFF8E1", blue: "#1565C0", blueLight: "#E3F2FD", navy: "#1a1a2e", text: "#1a1a2e", textSec: "#5f6368", textMuted: "#9AA0A6", border: "#E8EAED", shadow: "0 1px 3px rgba(0,0,0,0.08)" };
+var font = "'Segoe UI','Roboto',-apple-system,sans-serif";
+var ST = function ST(_ref) {
+  var title = _ref.title;
+  return React.createElement(
+    "div",
+    { style: { display: "flex", alignItems: "stretch", gap: 10, marginBottom: 16 } },
+    React.createElement("div", { style: { width: 4, background: C.red, borderRadius: 2, flexShrink: 0 } }),
+    React.createElement(
+      "h3",
+      { style: { margin: 0, fontSize: 15, fontWeight: 700, color: C.text } },
+      title
+    )
+  );
 };
-const font = "'Segoe UI','Roboto',-apple-system,sans-serif";
-const SectionTitle = ({
-  title
-}) => /*#__PURE__*/React.createElement("div", {
-  style: {
-    display: "flex",
-    alignItems: "stretch",
-    gap: 10,
-    marginBottom: 16
-  }
-}, /*#__PURE__*/React.createElement("div", {
-  style: {
-    width: 4,
-    background: C.red,
-    borderRadius: 2,
-    flexShrink: 0
-  }
-}), /*#__PURE__*/React.createElement("h3", {
-  style: {
-    margin: 0,
-    fontSize: 15,
-    fontWeight: 700,
-    color: C.text
-  }
-}, title));
-const Card = ({
-  children,
-  style
-}) => /*#__PURE__*/React.createElement("div", {
-  style: {
-    background: C.white,
-    borderRadius: 10,
-    border: `1px solid ${C.border}`,
-    padding: 24,
-    boxShadow: C.shadow,
-    ...style
-  }
-}, children);
-
-// ─── Existing Assessment Data ─────────────────────────
-const estados = [{
-  uf: "RJ",
-  pct: 23.5,
-  count: 198
-}, {
-  uf: "BA",
-  pct: 21.3,
-  count: 180
-}, {
-  uf: "SP",
-  pct: 14.7,
-  count: 124
-}, {
-  uf: "MG",
-  pct: 6,
-  count: 51
-}, {
-  uf: "PE",
-  pct: 4.9,
-  count: 41
-}, {
-  uf: "PR",
-  pct: 4.1,
-  count: 35
-}, {
-  uf: "CE",
-  pct: 3,
-  count: 25
-}, {
-  uf: "RO",
-  pct: 2.8,
-  count: 24
-}, {
-  uf: "PB",
-  pct: 2.6,
-  count: 22
-}, {
-  uf: "DF",
-  pct: 2.3,
-  count: 19
-}];
-const motivos = [{
-  label: "Reintegração de Empregado",
-  pct: 42.8
-}, {
-  label: "Não Informado",
-  pct: 8.1
-}, {
-  label: "Contrato Bancário",
-  pct: 6.9
-}, {
-  label: "Doença Ocupacional",
-  pct: 5.8
-}, {
-  label: "Horas Extras",
-  pct: 4.5
-}, {
-  label: "Rescisão Trabalhista",
-  pct: 4.4
-}, {
-  label: "Contrato Individual de Trabalho",
-  pct: 3.5
-}, {
-  label: "Estabilidade",
-  pct: 3.2
-}];
-const submotivos = [{
-  label: "Nulidade da Dispensa",
-  pct: 31.1
-}, {
-  label: "Estabilidade Acidentária",
-  pct: 17.1
-}, {
-  label: "Outros",
-  pct: 12
-}, {
-  label: "Dispensa Discriminatória",
-  pct: 10.3
-}, {
-  label: "Doença Ocupacional",
-  pct: 6.6
-}, {
-  label: "Horas Extras / Jornada",
-  pct: 6.6
-}, {
-  label: "Doença Psiquiátrica Ocupacional",
-  pct: 4
-}, {
-  label: "LER/DORT",
-  pct: 4
-}];
-
-// ─── NEW: Tipo de Desligamento Data ──────────────────
-const tiposDesligamento = [{
-  label: "Dispensa sem justa causa",
-  pct: 58.2,
-  count: 491
-}, {
-  label: "Dispensa por justa causa",
-  pct: 18.5,
-  count: 156
-}, {
-  label: "PDV — Programa de Demissão Voluntária",
-  pct: 8.9,
-  count: 75
-}, {
-  label: "Pedido de demissão",
-  pct: 6.3,
-  count: 53
-}, {
-  label: "Término de contrato",
-  pct: 4.1,
-  count: 35
-}, {
-  label: "Não informado",
-  pct: 4.0,
-  count: 34
-}];
-const justaCausaData = {
-  total: 156,
-  mantida: 89,
-  mantidaPct: 57.1,
-  revertida: 67,
-  revertidaPct: 42.9,
-  deferida: 46,
-  deferidaPct: 68.7,
-  indeferida: 21,
-  indeferidaPct: 31.3
+var Cd = function Cd(_ref2) {
+  var children = _ref2.children;
+  var style = _ref2.style;
+  return React.createElement(
+    "div",
+    { style: _extends({ background: C.white, borderRadius: 10, border: "1px solid " + C.border, padding: 20, boxShadow: C.shadow }, style) },
+    children
+  );
 };
-const tipoXDeferimento = [{
-  label: "Justa causa revertida",
-  total: 67,
-  def: 68.7,
-  indef: 31.3
-}, {
-  label: "Dispensa sem justa causa",
-  total: 491,
-  def: 52.1,
-  indef: 47.9
-}, {
-  label: "PDV contestado",
-  total: 75,
-  def: 34.7,
-  indef: 65.3
-}, {
-  label: "Pedido de demissão",
-  total: 53,
-  def: 18.9,
-  indef: 81.1
-}, {
-  label: "Término de contrato",
-  total: 35,
-  def: 11.4,
-  indef: 88.6
-}];
+var PendingKPI = function PendingKPI(_ref3) {
+  var label = _ref3.label;
+  return React.createElement(
+    "div",
+    { style: { background: C.white, borderRadius: 10, border: "1px solid " + C.border, padding: "16px 18px", boxShadow: C.shadow, opacity: 0.55 } },
+    React.createElement(
+      "div",
+      { style: { fontSize: 12, color: C.textMuted } },
+      label
+    ),
+    React.createElement(
+      "div",
+      { style: { fontSize: 28, fontWeight: 800, color: C.textMuted, marginTop: 4 } },
+      "——"
+    ),
+    React.createElement(
+      "div",
+      { style: { fontSize: 10, color: C.textMuted, marginTop: 4, display: "flex", alignItems: "center", gap: 4 } },
+      React.createElement("span", { style: { display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: C.amber, animation: "pulse 1.5s infinite" } }),
+      "Em classificação"
+    )
+  );
+};
 
-// ─── Horizontal Bar Component (matches platform) ─────
-const HBar = ({
-  items,
-  maxPct
-}) => /*#__PURE__*/React.createElement("div", {
-  style: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 8
-  }
-}, items.map((item, i) => /*#__PURE__*/React.createElement("div", {
-  key: i,
-  style: {
-    display: "flex",
-    alignItems: "center",
-    gap: 12
-  }
-}, /*#__PURE__*/React.createElement("div", {
-  style: {
-    width: 180,
-    textAlign: "right",
-    flexShrink: 0
-  }
-}, /*#__PURE__*/React.createElement("span", {
-  style: {
-    fontSize: 12,
-    color: C.textSec
-  }
-}, item.label)), /*#__PURE__*/React.createElement("div", {
-  style: {
-    flex: 1,
-    height: 22,
-    background: "#F0F0F0",
-    borderRadius: 3,
-    overflow: "hidden",
-    position: "relative"
-  }
-}, /*#__PURE__*/React.createElement("div", {
-  style: {
-    height: "100%",
-    width: `${item.pct / (maxPct || 100) * 100}%`,
-    background: `linear-gradient(90deg, ${C.red}, ${C.redMid})`,
-    borderRadius: 3,
-    transition: "width 0.6s"
-  }
-})), /*#__PURE__*/React.createElement("span", {
-  style: {
-    fontSize: 12,
-    fontWeight: 700,
-    color: C.text,
-    minWidth: 42
-  }
-}, item.pct, "%"))));
+var HBar = function HBar(_ref4) {
+  var label = _ref4.label;
+  var pct = _ref4.pct;
+  var maxPct = _ref4.maxPct;
+  var color = _ref4.color;
+  return React.createElement(
+    "div",
+    { style: { display: "flex", alignItems: "center", gap: 0, marginBottom: 10 } },
+    React.createElement(
+      "div",
+      { style: { width: 260, textAlign: "right", paddingRight: 16, flexShrink: 0 } },
+      React.createElement(
+        "span",
+        { style: { fontSize: 13, color: C.text } },
+        label
+      )
+    ),
+    React.createElement(
+      "div",
+      { style: { flex: 1, height: 22, background: "#F0F0F0", borderRadius: 3, overflow: "hidden" } },
+      React.createElement("div", { style: { height: "100%", width: pct / (maxPct || 100) * 100 + "%", background: color || "linear-gradient(90deg," + C.red + "," + C.redMid + ")", borderRadius: 3 } })
+    ),
+    React.createElement(
+      "div",
+      { style: { width: 55, textAlign: "right", flexShrink: 0 } },
+      React.createElement(
+        "span",
+        { style: { fontSize: 13, fontWeight: 700, color: C.red } },
+        pct,
+        "%"
+      )
+    )
+  );
+};
+
+var estados = [{ uf: "RJ", pct: 23.5, c: 141 }, { uf: "BA", pct: 21.3, c: 128 }, { uf: "SP", pct: 14.7, c: 88 }, { uf: "MG", pct: 6, c: 36 }, { uf: "PE", pct: 4.8, c: 29 }, { uf: "PR", pct: 4.2, c: 25 }, { uf: "RS", pct: 3.8, c: 23 }, { uf: "PA", pct: 3.2, c: 19 }, { uf: "SC", pct: 3, c: 18 }, { uf: "CE", pct: 2.8, c: 17 }, { uf: "RO", pct: 2.8, c: 17 }, { uf: "PB", pct: 2.7, c: 16 }, { uf: "GO", pct: 2.5, c: 15 }, { uf: "DF", pct: 2.3, c: 14 }, { uf: "ES", pct: 2, c: 12 }, { uf: "MA", pct: 1.8, c: 11 }, { uf: "AM", pct: 1.5, c: 9 }, { uf: "MT", pct: 1.3, c: 8 }, { uf: "MS", pct: 1.2, c: 7 }, { uf: "AL", pct: 1, c: 6 }, { uf: "RN", pct: 0.8, c: 5 }, { uf: "SE", pct: 0.7, c: 4 }, { uf: "PI", pct: 0.7, c: 4 }, { uf: "TO", pct: 0.5, c: 3 }, { uf: "AC", pct: 0.3, c: 2 }];
+
+var comarcasRJ = [{ n: 1, comarca: "Rio de Janeiro", proc: 48, pct: 34, mag: "Dra. Fernanda Lopes Costa" }, { n: 2, comarca: "Niterói", proc: 38, pct: 27, mag: "Dra. Luciana Freitas Barbosa" }, { n: 3, comarca: "Duque de Caxias", proc: 28, pct: 19.9, mag: "Dr. Marcelo Henrique Dias" }, { n: 4, comarca: "Nova Iguaçu", proc: 18, pct: 12.8, mag: "Dra. Ana Paula Ribeiro" }, { n: 5, comarca: "São Gonçalo", proc: 9, pct: 6.4, mag: "Dr. Carlos Eduardo Mendes" }];
+
 function App() {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      minHeight: "100vh",
-      background: C.bg,
-      fontFamily: font,
-      color: C.text
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: C.white,
-      borderBottom: `1px solid ${C.border}`,
-      padding: "16px 28px",
-      display: "flex",
-      alignItems: "center",
-      gap: 12
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 36,
-      height: 36,
-      borderRadius: "50%",
-      background: C.red,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "18",
-    height: "18",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "white",
-    strokeWidth: "2.5"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-  }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 17,
-      fontWeight: 700
-    }
-  }, "Processos Trabalhistas Bradesco"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      color: C.textMuted
-    }
-  }, "An\xE1lise de Reintegrados"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "16px 28px"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 10,
-      marginBottom: 16,
-      flexWrap: "wrap"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: "relative",
-      flex: "0 0 180px"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      position: "absolute",
-      left: 10,
-      top: "50%",
-      transform: "translateY(-50%)",
-      fontSize: 13,
-      color: C.textMuted
-    }
-  }, "\uD83D\uDD0D"), /*#__PURE__*/React.createElement("input", {
-    placeholder: "Buscar",
-    style: {
-      width: "100%",
-      padding: "8px 12px 8px 32px",
-      borderRadius: 8,
-      border: `1px solid ${C.border}`,
-      fontSize: 12,
-      fontFamily: font,
-      background: C.white,
-      outline: "none",
-      boxSizing: "border-box"
-    }
-  })), ["Todas as Decisões", "Todos os Estados", "Todos os motivos do pedido", "Todos os submotivos do pedido"].map(f => /*#__PURE__*/React.createElement("div", {
-    key: f,
-    style: {
-      position: "relative"
-    }
-  }, /*#__PURE__*/React.createElement("select", {
-    style: {
-      appearance: "none",
-      padding: "8px 28px 8px 12px",
-      borderRadius: 8,
-      border: `1px solid ${C.border}`,
-      background: C.white,
-      fontSize: 12,
-      color: C.textSec,
-      fontFamily: font,
-      cursor: "pointer"
-    }
-  }, /*#__PURE__*/React.createElement("option", null, f)), /*#__PURE__*/React.createElement("span", {
-    style: {
-      position: "absolute",
-      right: 8,
-      top: "50%",
-      transform: "translateY(-50%)",
-      fontSize: 9,
-      color: C.textMuted,
-      pointerEvents: "none"
-    }
-  }, "\u25BC")))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 4,
-      marginBottom: 16,
-      flexWrap: "wrap"
-    }
-  }, [{
-    label: "Assessment",
-    icon: "📊",
-    active: true
-  }, {
-    label: "Insights Estratégicos",
-    icon: "💡"
-  }, {
-    label: "Timeline",
-    icon: "📅"
-  }, {
-    label: "Processos",
-    icon: "📋"
-  }, {
-    label: "Mapa Estratégico",
-    icon: "🗺️"
-  }, {
-    label: "Perfil Jurídico",
-    icon: "⚖️"
-  }, {
-    label: "Tempo & Velocidade",
-    icon: "⏱️"
-  }, {
-    label: "Análise Advocatícia",
-    icon: "👨‍⚖️"
-  }, {
-    label: "Inteligência Pericial",
-    icon: "🩺"
-  }, {
-    label: "Contexto Processual",
-    icon: "🔍"
-  }, {
-    label: "Perfil do Envolvido",
-    icon: "👤"
-  }, {
-    label: "Leitura Semântica",
-    icon: "📖"
-  }].map(t => /*#__PURE__*/React.createElement("div", {
-    key: t.label,
-    style: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: 3,
-      padding: "10px 14px",
-      minWidth: 85,
-      borderRadius: 8,
-      background: t.active ? C.red : C.white,
-      color: t.active ? "white" : C.textSec,
-      border: `1px solid ${t.active ? C.red : C.border}`,
-      fontSize: 10,
-      fontWeight: 600,
-      cursor: "pointer",
-      boxShadow: t.active ? "0 2px 6px rgba(204,9,47,0.2)" : "none"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 16
-    }
-  }, t.icon), t.label)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: 3,
-      padding: "10px 14px",
-      minWidth: 85,
-      borderRadius: 8,
-      background: C.white,
-      border: `1px solid ${C.border}`,
-      fontSize: 10,
-      fontWeight: 600,
-      color: C.textSec,
-      cursor: "pointer"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 16
-    }
-  }, "\uD83D\uDCC8"), "Score de Risco")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "repeat(4, 1fr)",
-      gap: 14,
-      marginBottom: 16
-    }
-  }, [{
-    label: "Total de Processos",
-    value: "844",
-    sub: "Passivos",
-    subColor: C.red,
-    icon: "📋",
-    iconBg: C.blueLight
-  }, {
-    label: "Decisões Deferidas",
-    value: "0",
-    sub: "0.0%  foram deferidas",
-    subColor: C.textMuted,
-    icon: "📌",
-    iconBg: C.redLight
-  }, {
-    label: "Segredo de Justiça",
-    value: "3",
-    sub: "0.4%  sob sigilo",
-    subColor: C.textMuted,
-    icon: "🔒",
-    iconBg: C.redLight
-  }, {
-    label: "Pagamento Retroativo",
-    value: "0",
-    sub: "0.0%  com pagamentos",
-    subColor: C.textMuted,
-    icon: "💰",
-    iconBg: C.greenLight
-  }].map((k, i) => /*#__PURE__*/React.createElement(Card, {
-    key: i,
-    style: {
-      padding: "18px 20px"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center"
-    }
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: C.textSec
-    }
-  }, k.label), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 30,
-      fontWeight: 800,
-      color: C.text,
-      lineHeight: 1.2,
-      marginTop: 4
-    }
-  }, k.value), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      color: k.subColor,
-      marginTop: 2
-    }
-  }, k.sub)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 44,
-      height: 44,
-      borderRadius: "50%",
-      background: k.iconBg,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: 20
-    }
-  }, k.icon))))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1.2fr 0.8fr",
-      gap: 14,
-      marginBottom: 16
-    }
-  }, /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Distribui\xE7\xE3o por Estado"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "flex-end",
-      gap: 8,
-      height: 200,
-      paddingTop: 20
-    }
-  }, estados.map((e, i) => {
-    const h = e.pct / 24 * 160;
-    return /*#__PURE__*/React.createElement("div", {
-      key: i,
-      style: {
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 4
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 9,
-        fontWeight: 700,
-        color: C.text
-      }
-    }, e.pct, "%"), /*#__PURE__*/React.createElement("div", {
-      style: {
-        width: "80%",
-        height: h,
-        background: i < 3 ? C.red : C.purple,
-        borderRadius: "4px 4px 0 0",
-        transition: "height 0.6s"
-      }
-    }), /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 10,
-        color: C.textMuted
-      }
-    }, e.uf));
-  }))), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "An\xE1lise de Decis\xF5es"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "center",
-      margin: "20px 0"
-    }
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "160",
-    height: "160",
-    viewBox: "0 0 160 160"
-  }, /*#__PURE__*/React.createElement("circle", {
-    cx: "80",
-    cy: "80",
-    r: "58",
-    fill: "none",
-    stroke: C.navy,
-    strokeWidth: "22"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "80",
-    cy: "80",
-    r: "58",
-    fill: "none",
-    stroke: C.red,
-    strokeWidth: "22",
-    strokeDasharray: "364 364",
-    strokeDashoffset: "0",
-    transform: "rotate(-90 80 80)"
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "center",
-      gap: 20,
-      fontSize: 12
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 5,
-      color: C.textSec
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: 2,
-      background: C.navy
-    }
-  }), " Deferida (0%)"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 5,
-      color: C.textSec
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: 2,
-      background: C.red
-    }
-  }), " Indeferida (100%)")))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 14,
-      marginBottom: 16
-    }
-  }, /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Motivos do pedido de reintegra\xE7\xE3o"
-  }), /*#__PURE__*/React.createElement(HBar, {
-    items: motivos,
-    maxPct: 43
-  })), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Submotivos do pedido de reintegra\xE7\xE3o"
-  }), /*#__PURE__*/React.createElement(HBar, {
-    items: submotivos,
-    maxPct: 32
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 14,
-      marginBottom: 16
-    }
-  }, /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Tipo de Desligamento"
-  }), /*#__PURE__*/React.createElement(HBar, {
-    items: tiposDesligamento,
-    maxPct: 59
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginTop: 12,
-      fontSize: 10,
-      color: C.textMuted,
-      fontStyle: "italic"
-    }
-  }, "Como o banco desligou o funcion\xE1rio \u2014 extra\xEDdo da peti\xE7\xE3o inicial")), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Tipo de Desligamento \xD7 Taxa de Deferimento"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexDirection: "column",
-      gap: 10
-    }
-  }, tipoXDeferimento.map((t, i) => /*#__PURE__*/React.createElement("div", {
-    key: i
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      marginBottom: 4
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 12,
-      color: C.textSec
-    }
-  }, t.label), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      color: C.textMuted
-    }
-  }, t.total, " proc.")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      height: 22,
-      borderRadius: 4,
-      overflow: "hidden"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: `${t.def}%`,
-      background: C.red,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }
-  }, t.def > 18 && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      color: "white",
-      fontWeight: 600
-    }
-  }, t.def, "%")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: `${t.indef}%`,
-      background: C.purple,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }
-  }, t.indef > 18 && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      color: "white",
-      fontWeight: 600
-    }
-  }, t.indef, "%")))))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "center",
-      gap: 20,
-      marginTop: 12,
-      fontSize: 11
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 5,
-      color: C.textSec
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: 2,
-      background: C.red
-    }
-  }), " Deferida"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 5,
-      color: C.textSec
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: 2,
-      background: C.purple
-    }
-  }), " Indeferida")))), /*#__PURE__*/React.createElement(Card, {
-    style: {
-      marginBottom: 16
-    }
-  }, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Indicador de Revers\xE3o \u2014 Dispensa por Justa Causa"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      color: C.textMuted,
-      marginBottom: 12,
-      marginTop: -8
-    }
-  }, "Resultado da an\xE1lise de justa causa nos ", justaCausaData.total, " processos com esse tipo de desligamento"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      height: 44,
-      borderRadius: 6,
-      overflow: "hidden",
-      marginBottom: 10
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: `${justaCausaData.mantidaPct}%`,
-      background: C.green,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 13,
-      color: "white",
-      fontWeight: 700
-    }
-  }, "Mantida ", justaCausaData.mantidaPct, "%")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: `${justaCausaData.revertidaPct}%`,
-      background: C.red,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 13,
-      color: "white",
-      fontWeight: 700
-    }
-  }, "Revertida ", justaCausaData.revertidaPct, "%"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 24,
-      fontSize: 11
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: C.green
-    }
-  }, "\u2713 ", justaCausaData.mantida, " processos \u2014 reintegra\xE7\xE3o n\xE3o \xE9 analisada"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: C.red
-    }
-  }, "\u2192 ", justaCausaData.revertida, " processos seguem para an\xE1lise de reintegra\xE7\xE3o"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 14,
-      marginBottom: 16
-    }
-  }, /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Justa Causa \u2014 Taxa de Revers\xE3o por Motivo"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      color: C.textMuted,
-      marginBottom: 16,
-      marginTop: -8
-    }
-  }, "Dos 156 processos com justa causa, qual o % de revers\xE3o por motivo alegado na peti\xE7\xE3o"), [{
-    motivo: "Estabilidade Acidentária",
-    total: 42,
-    revertida: 65.0
-  }, {
-    motivo: "Dispensa Discriminatória",
-    total: 28,
-    revertida: 57.1
-  }, {
-    motivo: "Doença Ocupacional",
-    total: 35,
-    revertida: 48.6
-  }, {
-    motivo: "Doença Psiquiátrica Ocupac.",
-    total: 18,
-    revertida: 44.4
-  }, {
-    motivo: "LER/DORT",
-    total: 15,
-    revertida: 33.3
-  }, {
-    motivo: "Contrato Bancário",
-    total: 12,
-    revertida: 25.0
-  }, {
-    motivo: "Outros",
-    total: 6,
-    revertida: 16.7
-  }].map((m, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      marginBottom: 10
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "baseline",
-      marginBottom: 4
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 12,
-      color: C.textSec
-    }
-  }, m.motivo), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 8,
-      alignItems: "baseline"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      color: C.textMuted
-    }
-  }, m.total, " proc."), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 12,
-      fontWeight: 700,
-      color: m.revertida >= 50 ? C.red : C.green
-    }
-  }, m.revertida, "%"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      height: 18,
-      borderRadius: 4,
-      overflow: "hidden"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: `${m.revertida}%`,
-      background: C.red,
-      display: "flex",
-      alignItems: "center",
-      paddingLeft: 6
-    }
-  }, m.revertida >= 25 && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 9,
-      color: "white",
-      fontWeight: 600
-    }
-  }, "Revertida")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: `${100 - m.revertida}%`,
-      background: C.green,
-      display: "flex",
-      alignItems: "center",
-      paddingLeft: 6
-    }
-  }, 100 - m.revertida >= 25 && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 9,
-      color: "white",
-      fontWeight: 600
-    }
-  }, "Mantida"))))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "center",
-      gap: 20,
-      marginTop: 12,
-      fontSize: 11
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 5,
-      color: C.textSec
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: 2,
-      background: C.red
-    }
-  }), " Justa causa revertida"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 5,
-      color: C.textSec
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: 2,
-      background: C.green
-    }
-  }), " Justa causa mantida"))), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Justa Causa Revertida \u2014 Deferimento por Motivo"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      color: C.textMuted,
-      marginBottom: 16,
-      marginTop: -8
-    }
-  }, "Dos 67 processos com justa causa revertida, qual o % de reintegra\xE7\xE3o deferida por motivo"), [{
-    motivo: "Estabilidade Acidentária",
-    total: 27,
-    deferida: 81.5
-  }, {
-    motivo: "Dispensa Discriminatória",
-    total: 16,
-    deferida: 75.0
-  }, {
-    motivo: "Doença Ocupacional",
-    total: 17,
-    deferida: 64.7
-  }, {
-    motivo: "Doença Psiquiátrica Ocupac.",
-    total: 8,
-    deferida: 62.5
-  }, {
-    motivo: "LER/DORT",
-    total: 5,
-    deferida: 40.0
-  }, {
-    motivo: "Contrato Bancário",
-    total: 3,
-    deferida: 33.3
-  }, {
-    motivo: "Outros",
-    total: 1,
-    deferida: 0.0
-  }].map((m, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      marginBottom: 10
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "baseline",
-      marginBottom: 4
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 12,
-      color: C.textSec
-    }
-  }, m.motivo), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 8,
-      alignItems: "baseline"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      color: C.textMuted
-    }
-  }, m.total, " proc."), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 12,
-      fontWeight: 700,
-      color: m.deferida >= 50 ? C.red : C.purple
-    }
-  }, m.deferida, "%"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      height: 18,
-      borderRadius: 4,
-      overflow: "hidden"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: `${m.deferida}%`,
-      background: C.red,
-      display: "flex",
-      alignItems: "center",
-      paddingLeft: 6
-    }
-  }, m.deferida >= 25 && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 9,
-      color: "white",
-      fontWeight: 600
-    }
-  }, "Deferida")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: `${100 - m.deferida}%`,
-      background: C.purple,
-      display: "flex",
-      alignItems: "center",
-      paddingLeft: 6
-    }
-  }, 100 - m.deferida >= 25 && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 9,
-      color: "white",
-      fontWeight: 600
-    }
-  }, "Indeferida"))))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "center",
-      gap: 20,
-      marginTop: 12,
-      fontSize: 11
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 5,
-      color: C.textSec
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: 2,
-      background: C.red
-    }
-  }), " Reintegra\xE7\xE3o deferida"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 5,
-      color: C.textSec
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: 2,
-      background: C.purple
-    }
-  }), " Reintegra\xE7\xE3o indeferida")))), /*#__PURE__*/React.createElement(Card, {
-    style: {
-      marginBottom: 16
-    }
-  }, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Central de Intelig\xEAncia Estrat\xE9gica"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "repeat(4, 1fr)",
-      gap: 12,
-      marginBottom: 16
-    }
-  }, [{
-    value: "95.5%",
-    label: "TAXA DE DECISÃO",
-    sub: "642 de 672 processos",
-    color: C.blue,
-    icon: "🎯"
-  }, {
-    value: "67.9%",
-    label: "TAXA DE DEFERIMENTO",
-    sub: "448 decisões favoráveis",
-    color: C.red,
-    icon: "📈"
-  }, {
-    value: "100 dias",
-    label: "TEMPO MÉDIO",
-    sub: "Até decisão judicial",
-    color: C.purple,
-    icon: "⏱️"
-  }, {
-    value: "0.3%",
-    label: "TAXA DE RECURSO TOTAL",
-    sub: "2 processos recorridos",
-    color: C.redMid,
-    icon: "📉"
-  }].map((k, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      padding: "16px 18px",
-      borderRadius: 8,
-      background: C.white,
-      border: `1px solid ${C.border}`
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: "100%",
-      height: 6,
-      background: k.color,
-      borderRadius: 3,
-      marginBottom: 12
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 24,
-      fontWeight: 800,
-      color: C.text
-    }
-  }, k.value), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 10,
-      fontWeight: 700,
-      color: C.textSec,
-      textTransform: "uppercase",
-      letterSpacing: 0.5,
-      marginTop: 4
-    }
-  }, k.label), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      color: C.textMuted,
-      marginTop: 2
-    }
-  }, k.sub)))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr 1fr",
-      gap: 12
-    }
-  }, [{
-    title: "Highlights Positivos",
-    color: C.green,
-    icon: "✅",
-    items: ["Taxa de deferimento de 67.9% indica padrão favorável nas decisões", "503 processos concluídos em menos de 6 meses demonstram eficiência", "\"Estabilidade\" possui 366 deferimentos — estratégia bem-sucedida", "Taxa de recurso de 0.3% sugere estabilidade nas decisões de 1º grau"]
-  }, {
-    title: "Pontos de Cuidado",
-    color: C.red,
-    icon: "⚠️",
-    items: ["58 processos com mais de 1 ano até decisão — identificar causas de morosidade", "RJ concentra 45 indeferimentos — analisar particularidades regionais", "\"Nulidade de justa causa\" tem 73 indeferimentos — revisar abordagem jurídica"]
-  }, {
-    title: "Recomendações",
-    color: C.purple,
-    icon: "💡",
-    items: ["Priorizar acompanhamento dos 58 processos lentos para acelerar conclusões", "Replicar estratégias de \"estabilidade\" (366 processos) em casos de nulidade", "Desenvolver estratégia específica para RJ considerando particularidades locais"]
-  }].map((section, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      padding: 16,
-      borderRadius: 8,
-      border: `1px solid ${section.color}22`,
-      background: C.white
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      marginBottom: 12
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 28,
-      height: 28,
-      borderRadius: "50%",
-      background: section.color + "15",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: 14
-    }
-  }, section.icon), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 13,
-      fontWeight: 700,
-      color: section.color
-    }
-  }, section.title)), section.items.map((item, j) => /*#__PURE__*/React.createElement("div", {
-    key: j,
-    style: {
-      display: "flex",
-      gap: 8,
-      marginBottom: 8
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 6,
-      height: 6,
-      borderRadius: "50%",
-      background: section.color,
-      marginTop: 5,
-      flexShrink: 0
-    }
-  }), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 11,
-      color: C.textSec,
-      lineHeight: 1.5
-    }
-  }, item)))))))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "12px 28px",
-      borderTop: `1px solid ${C.border}`,
-      display: "flex",
-      justifyContent: "space-between",
-      fontSize: 10,
-      color: C.textMuted
-    }
-  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 Deep \u2014 Plataforma Reintegrados"), /*#__PURE__*/React.createElement("span", null, "Dados simulados para mockup \xB7 Maio/2026")));
+  return React.createElement(
+    "div",
+    { style: { minHeight: "100vh", background: C.bg, fontFamily: font, color: C.text } },
+    React.createElement(
+      "style",
+      null,
+      "@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}"
+    ),
+    React.createElement(
+      "div",
+      { style: { background: C.white, borderBottom: "1px solid " + C.border, padding: "14px 28px", display: "flex", alignItems: "center", gap: 12 } },
+      React.createElement(
+        "div",
+        { style: { width: 34, height: 34, borderRadius: "50%", background: C.red, display: "flex", alignItems: "center", justifyContent: "center" } },
+        React.createElement(
+          "svg",
+          { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "white", strokeWidth: "2.5" },
+          React.createElement("path", { d: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" })
+        )
+      ),
+      React.createElement(
+        "div",
+        null,
+        React.createElement(
+          "div",
+          { style: { fontSize: 16, fontWeight: 700 } },
+          "Processos Trabalhistas Bradesco"
+        ),
+        React.createElement(
+          "div",
+          { style: { fontSize: 11, color: C.textMuted } },
+          "Análise de Reintegrados"
+        )
+      )
+    ),
+    React.createElement(
+      "div",
+      { style: { padding: "16px 28px" } },
+      React.createElement(
+        "div",
+        { style: { display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" } },
+        React.createElement(
+          "div",
+          { style: { position: "relative", flex: "0 0 200px" } },
+          React.createElement(
+            "span",
+            { style: { position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: C.textMuted } },
+            "🔍"
+          ),
+          React.createElement("input", { placeholder: "Buscar", style: { width: "100%", padding: "8px 12px 8px 32px", borderRadius: 8, border: "1px solid " + C.border, fontSize: 12, fontFamily: font, background: C.white, outline: "none", boxSizing: "border-box" } })
+        ),
+        ["Todos os Estados", "Todos os motivos do pedido", "Todos os submotivos do pedido"].map(function (f) {
+          return React.createElement(
+            "div",
+            { key: f, style: { position: "relative" } },
+            React.createElement(
+              "select",
+              { style: { appearance: "none", padding: "8px 28px 8px 12px", borderRadius: 8, border: "1px solid " + C.border, background: C.white, fontSize: 12, color: C.textSec, fontFamily: font, cursor: "pointer" } },
+              React.createElement(
+                "option",
+                null,
+                f
+              )
+            ),
+            React.createElement(
+              "span",
+              { style: { position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", fontSize: 9, color: C.textMuted, pointerEvents: "none" } },
+              "▼"
+            )
+          );
+        })
+      ),
+      React.createElement(
+        "div",
+        { style: { display: "flex", gap: 4, marginBottom: 16, flexWrap: "wrap" } },
+        [{ l: "Assessment", i: "📊", a: true }, { l: "Insights Estratégicos", i: "💡" }, { l: "Timeline", i: "📅" }, { l: "Processos", i: "📋" }, { l: "Mapa Estratégico", i: "🗺️" }, { l: "Perfil Jurídico", i: "⚖️" }, { l: "Tempo & Velocidade", i: "⏱️" }, { l: "Análise Advocatícia", i: "👨‍⚖️" }, { l: "Inteligência Pericial", i: "🩺" }, { l: "Contexto Processual", i: "🔍" }, { l: "Perfil do Envolvido", i: "👤" }, { l: "Leitura Semântica", i: "📖" }, { l: "Score de Risco", i: "📈" }].map(function (t) {
+          return React.createElement(
+            "div",
+            { key: t.l, style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "8px 12px", minWidth: 80, borderRadius: 8, background: t.a ? C.red : C.white, color: t.a ? "white" : C.textSec, border: "1px solid " + (t.a ? C.red : C.border), fontSize: 9, fontWeight: 600, cursor: "pointer", boxShadow: t.a ? "0 2px 6px rgba(204,9,47,0.2)" : "none" } },
+            React.createElement(
+              "span",
+              { style: { fontSize: 14 } },
+              t.i
+            ),
+            t.l
+          );
+        })
+      ),
+      React.createElement(
+        "div",
+        { style: { display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 14 } },
+        React.createElement(
+          Cd,
+          { style: { padding: "16px 18px" } },
+          React.createElement(
+            "div",
+            { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } },
+            React.createElement(
+              "div",
+              null,
+              React.createElement(
+                "div",
+                { style: { fontSize: 12, color: C.textSec } },
+                "Total de Processos"
+              ),
+              React.createElement(
+                "div",
+                { style: { fontSize: 30, fontWeight: 800, color: C.text, marginTop: 4 } },
+                "1.311"
+              ),
+              React.createElement(
+                "div",
+                { style: { fontSize: 11, color: C.red, marginTop: 2 } },
+                "Passivos"
+              )
+            ),
+            React.createElement(
+              "div",
+              { style: { width: 42, height: 42, borderRadius: "50%", background: C.blueLight, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 } },
+              "📋"
+            )
+          )
+        ),
+        React.createElement(PendingKPI, { label: "Decisões Deferidas" }),
+        React.createElement(PendingKPI, { label: "Segredo de Justiça" }),
+        React.createElement(
+          Cd,
+          { style: { padding: "16px 18px" } },
+          React.createElement(
+            "div",
+            { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } },
+            React.createElement(
+              "div",
+              null,
+              React.createElement(
+                "div",
+                { style: { fontSize: 12, color: C.textSec } },
+                "Mandado de Segurança"
+              ),
+              React.createElement(
+                "div",
+                { style: { fontSize: 30, fontWeight: 800, color: C.text, marginTop: 4 } },
+                "419"
+              ),
+              React.createElement(
+                "div",
+                { style: { fontSize: 11, color: C.green, marginTop: 2 } },
+                "0.0% fora do prazo"
+              )
+            ),
+            React.createElement(
+              "div",
+              { style: { width: 42, height: 42, borderRadius: "50%", background: C.redLight, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 } },
+              "⚖️"
+            )
+          )
+        )
+      ),
+      React.createElement(
+        "div",
+        { style: { display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 16 } },
+        React.createElement(PendingKPI, { label: "TAXA DE DECISÃO" }),
+        React.createElement(PendingKPI, { label: "TAXA DE DEFERIMENTO" }),
+        React.createElement(PendingKPI, { label: "TEMPO MÉDIO" }),
+        React.createElement(PendingKPI, { label: "TAXA DE RECURSO TOTAL" })
+      ),
+      React.createElement(
+        "div",
+        { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 } },
+        React.createElement(
+          Cd,
+          null,
+          React.createElement(ST, { title: "Top 5 Motivos do pedido de reintegração" }),
+          React.createElement(HBar, { label: "Estabilidade Provisória", pct: 78.3, maxPct: 79 }),
+          React.createElement(HBar, { label: "Doença / Incapacidade", pct: 56.7, maxPct: 79 }),
+          React.createElement(HBar, { label: "Dispensa Discriminatória", pct: 33, maxPct: 79 }),
+          React.createElement(HBar, { label: "Garantia Convencional", pct: 6.5, maxPct: 79 }),
+          React.createElement(HBar, { label: "Dispensa Obstativa / Outros", pct: 4.3, maxPct: 79 })
+        ),
+        React.createElement(
+          Cd,
+          null,
+          React.createElement(ST, { title: "Top 5 Submotivos do pedido de reintegração" }),
+          React.createElement(HBar, { label: "Acidente de trabalho / Doença ocupacional", pct: 70, maxPct: 71 }),
+          React.createElement(HBar, { label: "Doença grave estigmatizante", pct: 24.1, maxPct: 71 }),
+          React.createElement(HBar, { label: "Contrato suspenso / auxílio-doença no aviso prévio", pct: 22.4, maxPct: 71 }),
+          React.createElement(HBar, { label: "Transtornos psiquiátricos", pct: 15.4, maxPct: 71, color: C.purple }),
+          React.createElement(HBar, { label: "Inaptidão no exame demissional", pct: 13.6, maxPct: 71, color: C.purple })
+        )
+      ),
+      React.createElement(
+        Cd,
+        { style: { marginBottom: 16 } },
+        React.createElement(ST, { title: "Distribuição por Estado" }),
+        React.createElement(
+          "div",
+          { style: { display: "flex", alignItems: "flex-end", gap: 3, height: 200, paddingTop: 16, overflowX: "auto" } },
+          estados.map(function (e, i) {
+            var h = Math.max(e.pct / 24 * 170, 4);return React.createElement(
+              "div",
+              { key: i, style: { flex: "0 0 42px", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 } },
+              React.createElement(
+                "span",
+                { style: { fontSize: 8, fontWeight: 700, color: C.text } },
+                e.pct,
+                "%"
+              ),
+              React.createElement("div", { style: { width: "70%", height: h, background: i < 3 ? C.red : i < 6 ? C.redMid : C.purple, borderRadius: "3px 3px 0 0" } }),
+              React.createElement(
+                "span",
+                { style: { fontSize: 8, color: C.textMuted } },
+                e.uf
+              )
+            );
+          })
+        )
+      ),
+      React.createElement(
+        Cd,
+        { style: { marginBottom: 16 } },
+        React.createElement(ST, { title: "Comarcas — RJ" }),
+        React.createElement(
+          "div",
+          { style: { fontSize: 11, color: C.textMuted, marginBottom: 12, marginTop: -8 } },
+          "Distribuição de comarcas e magistrados no estado RJ"
+        ),
+        React.createElement(
+          "div",
+          { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 16 } },
+          React.createElement(
+            "span",
+            { style: { background: C.red, color: "white", fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 6 } },
+            "RJ"
+          ),
+          React.createElement(
+            "span",
+            { style: { fontSize: 12, color: C.textSec } },
+            "5 comarcas · 141 processos no estado"
+          )
+        ),
+        React.createElement(
+          "table",
+          { style: { width: "100%", borderCollapse: "collapse" } },
+          React.createElement(
+            "thead",
+            null,
+            React.createElement(
+              "tr",
+              null,
+              ["#", "COMARCA", "PARTICIPAÇÃO", "MAGISTRADO"].map(function (h) {
+                return React.createElement(
+                  "th",
+                  { key: h, style: { padding: "8px 12px", fontSize: 10, color: C.textSec, textAlign: "left", borderBottom: "2px solid " + C.border, textTransform: "uppercase", letterSpacing: 0.5 } },
+                  h
+                );
+              })
+            )
+          ),
+          React.createElement(
+            "tbody",
+            null,
+            comarcasRJ.map(function (c) {
+              return React.createElement(
+                "tr",
+                { key: c.n },
+                React.createElement(
+                  "td",
+                  { style: { padding: "10px 12px", fontSize: 12, color: C.textMuted, borderBottom: "1px solid " + C.border } },
+                  c.n
+                ),
+                React.createElement(
+                  "td",
+                  { style: { padding: "10px 12px", borderBottom: "1px solid " + C.border } },
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 13, fontWeight: 600, color: C.text } },
+                    c.comarca
+                  ),
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 10, color: C.textMuted } },
+                    c.proc,
+                    " processos"
+                  )
+                ),
+                React.createElement(
+                  "td",
+                  { style: { padding: "10px 12px", borderBottom: "1px solid " + C.border } },
+                  React.createElement(
+                    "div",
+                    { style: { display: "flex", alignItems: "center", gap: 8 } },
+                    React.createElement(
+                      "div",
+                      { style: { width: 120, height: 8, background: "#F0F0F0", borderRadius: 4, overflow: "hidden" } },
+                      React.createElement("div", { style: { width: c.pct + "%", height: "100%", background: c.pct > 25 ? C.red : c.pct > 15 ? C.redMid : C.purple, borderRadius: 4 } })
+                    ),
+                    React.createElement(
+                      "span",
+                      { style: { fontSize: 12, fontWeight: 700, color: C.text } },
+                      c.pct,
+                      "%"
+                    )
+                  )
+                ),
+                React.createElement(
+                  "td",
+                  { style: { padding: "10px 12px", fontSize: 12, color: C.textSec, borderBottom: "1px solid " + C.border } },
+                  React.createElement(
+                    "span",
+                    { style: { display: "inline-flex", alignItems: "center", gap: 4 } },
+                    React.createElement("span", { style: { width: 8, height: 8, borderRadius: "50%", background: C.greenLight, border: "1px solid " + C.green } }),
+                    c.mag
+                  )
+                )
+              );
+            })
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { marginTop: 10, fontSize: 10, color: C.textMuted, fontStyle: "italic" } },
+          "Percentuais calculados sobre o total de processos do estado RJ."
+        )
+      ),
+      React.createElement(
+        "div",
+        { style: { padding: "10px 16px", background: C.amberLight, borderRadius: 8, border: "1px solid " + C.amber + "22", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 } },
+        React.createElement(
+          "span",
+          { style: { fontSize: 14 } },
+          "📊"
+        ),
+        React.createElement(
+          "span",
+          { style: { fontSize: 11, color: C.text } },
+          "Indicadores abaixo dependem da classificação de sentenças e acórdãos. Dados em fase de processamento — valores simulados para validação de conceito."
+        )
+      ),
+      React.createElement(
+        "div",
+        { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 } },
+        React.createElement(
+          Cd,
+          null,
+          React.createElement(ST, { title: "Tipo de Desligamento" }),
+          React.createElement(
+            "div",
+            { style: { fontSize: 11, color: C.textMuted, marginBottom: 14, marginTop: -8 } },
+            "Como o banco desligou o funcionário — extraído da petição inicial"
+          ),
+          React.createElement(HBar, { label: "Dispensa sem justa causa", pct: 58.2, maxPct: 59 }),
+          React.createElement(HBar, { label: "Dispensa por justa causa", pct: 18.5, maxPct: 59 }),
+          React.createElement(HBar, { label: "PDV", pct: 8.9, maxPct: 59 }),
+          React.createElement(HBar, { label: "Pedido de demissão", pct: 6.3, maxPct: 59 }),
+          React.createElement(HBar, { label: "Término de contrato", pct: 4.1, maxPct: 59 }),
+          React.createElement(HBar, { label: "Não informado", pct: 4.0, maxPct: 59 })
+        ),
+        React.createElement(
+          Cd,
+          null,
+          React.createElement(ST, { title: "Tipo de Desligamento × Taxa de Deferimento" }),
+          React.createElement(
+            "div",
+            { style: { fontSize: 11, color: C.textMuted, marginBottom: 14, marginTop: -8 } },
+            "Percentual de reintegração deferida por tipo de desligamento"
+          ),
+          [{ label: "Justa causa revertida", total: 67, def: 68.7, indef: 31.3 }, { label: "Dispensa sem justa causa", total: 491, def: 52.1, indef: 47.9 }, { label: "PDV contestado", total: 75, def: 34.7, indef: 65.3 }, { label: "Pedido de demissão", total: 53, def: 18.9, indef: 81.1 }, { label: "Término de contrato", total: 35, def: 11.4, indef: 88.6 }].map(function (t, i) {
+            return React.createElement(
+              "div",
+              { key: i, style: { marginBottom: 12 } },
+              React.createElement(
+                "div",
+                { style: { display: "flex", justifyContent: "space-between", marginBottom: 4 } },
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 12, color: C.textSec } },
+                  t.label
+                ),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 10, color: C.textMuted } },
+                  t.total,
+                  " proc."
+                )
+              ),
+              React.createElement(
+                "div",
+                { style: { display: "flex", height: 22, borderRadius: 4, overflow: "hidden" } },
+                React.createElement(
+                  "div",
+                  { style: { width: t.def + "%", background: C.red, display: "flex", alignItems: "center", justifyContent: "center" } },
+                  t.def > 15 && React.createElement(
+                    "span",
+                    { style: { fontSize: 10, color: "white", fontWeight: 600 } },
+                    t.def,
+                    "%"
+                  )
+                ),
+                React.createElement(
+                  "div",
+                  { style: { width: t.indef + "%", background: C.purple, display: "flex", alignItems: "center", justifyContent: "center" } },
+                  t.indef > 15 && React.createElement(
+                    "span",
+                    { style: { fontSize: 10, color: "white", fontWeight: 600 } },
+                    t.indef,
+                    "%"
+                  )
+                )
+              )
+            );
+          }),
+          React.createElement(
+            "div",
+            { style: { display: "flex", justifyContent: "center", gap: 16, marginTop: 8, fontSize: 11 } },
+            React.createElement(
+              "span",
+              { style: { display: "flex", alignItems: "center", gap: 4, color: C.textSec } },
+              React.createElement("span", { style: { width: 10, height: 10, borderRadius: 2, background: C.red } }),
+              "Deferida"
+            ),
+            React.createElement(
+              "span",
+              { style: { display: "flex", alignItems: "center", gap: 4, color: C.textSec } },
+              React.createElement("span", { style: { width: 10, height: 10, borderRadius: 2, background: C.purple } }),
+              "Indeferida"
+            )
+          )
+        )
+      ),
+      React.createElement(
+        Cd,
+        { style: { marginBottom: 16 } },
+        React.createElement(ST, { title: "Indicador de Reversão — Dispensa por Justa Causa" }),
+        React.createElement(
+          "div",
+          { style: { fontSize: 11, color: C.textMuted, marginBottom: 12, marginTop: -8 } },
+          "Resultado da análise de justa causa nos processos com esse tipo de desligamento"
+        ),
+        React.createElement(
+          "div",
+          { style: { display: "flex", height: 44, borderRadius: 6, overflow: "hidden", marginBottom: 8 } },
+          React.createElement(
+            "div",
+            { style: { width: "57.1%", background: C.green, display: "flex", alignItems: "center", justifyContent: "center" } },
+            React.createElement(
+              "span",
+              { style: { fontSize: 13, color: "white", fontWeight: 700 } },
+              "Mantida 57.1%"
+            )
+          ),
+          React.createElement(
+            "div",
+            { style: { width: "42.9%", background: C.red, display: "flex", alignItems: "center", justifyContent: "center" } },
+            React.createElement(
+              "span",
+              { style: { fontSize: 13, color: "white", fontWeight: 700 } },
+              "Revertida 42.9%"
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { display: "flex", gap: 24, fontSize: 11 } },
+          React.createElement(
+            "span",
+            { style: { color: C.green } },
+            "✓ 89 processos — reintegração não é analisada"
+          ),
+          React.createElement(
+            "span",
+            { style: { color: C.red } },
+            "→ 67 processos seguem para análise de reintegração"
+          )
+        )
+      ),
+      React.createElement(
+        Cd,
+        { style: { marginBottom: 16 } },
+        React.createElement(ST, { title: "Justa Causa — Fluxo Processual" }),
+        React.createElement(
+          "div",
+          { style: { display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 12, marginBottom: 24 } },
+          React.createElement(
+            "div",
+            { style: { padding: "16px 18px", background: C.white, borderRadius: 10, border: "1px solid " + C.border, borderLeft: "5px solid " + C.navy, boxShadow: C.shadow } },
+            React.createElement(
+              "div",
+              { style: { fontSize: 28, fontWeight: 800, color: C.text } },
+              "156"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 12, fontWeight: 700, color: C.text, marginTop: 4 } },
+              "Pedido de Reversão"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 10, color: C.textMuted, marginTop: 4, lineHeight: 1.4 } },
+              "Processos com dispensa por justa causa e pedido de reversão pelo reclamante"
+            )
+          ),
+          React.createElement(
+            "div",
+            { style: { padding: "16px 18px", background: C.white, borderRadius: 10, border: "1px solid " + C.border, borderLeft: "5px solid " + C.green, boxShadow: C.shadow } },
+            React.createElement(
+              "div",
+              { style: { fontSize: 28, fontWeight: 800, color: C.green } },
+              "89"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 12, fontWeight: 700, color: C.text, marginTop: 4 } },
+              "JC Mantida"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 10, color: C.textMuted, marginTop: 4, lineHeight: 1.4 } },
+              "Justa causa confirmada pelo juiz. Reintegração não é analisada."
+            )
+          ),
+          React.createElement(
+            "div",
+            { style: { padding: "16px 18px", background: C.white, borderRadius: 10, border: "1px solid " + C.border, borderLeft: "5px solid " + C.red, boxShadow: C.shadow } },
+            React.createElement(
+              "div",
+              { style: { fontSize: 28, fontWeight: 800, color: C.red } },
+              "67"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 12, fontWeight: 700, color: C.text, marginTop: 4 } },
+              "JC Revertida"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 10, color: C.textMuted, marginTop: 4, lineHeight: 1.4 } },
+              "Justa causa anulada pelo juiz. Processo segue para análise de reintegração."
+            )
+          ),
+          React.createElement(
+            "div",
+            { style: { padding: "16px 18px", background: C.white, borderRadius: 10, border: "1px solid " + C.border, borderLeft: "5px solid " + C.redMid, boxShadow: C.shadow } },
+            React.createElement(
+              "div",
+              { style: { fontSize: 28, fontWeight: 800, color: C.red } },
+              "46"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 12, fontWeight: 700, color: C.text, marginTop: 4 } },
+              "Reintegração Deferida"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 10, color: C.textMuted, marginTop: 4, lineHeight: 1.4 } },
+              "Dos 67 revertidos, o juiz deferiu a reintegração do empregado."
+            )
+          ),
+          React.createElement(
+            "div",
+            { style: { padding: "16px 18px", background: C.white, borderRadius: 10, border: "1px solid " + C.border, borderLeft: "5px solid " + C.purple, boxShadow: C.shadow } },
+            React.createElement(
+              "div",
+              { style: { fontSize: 28, fontWeight: 800, color: C.purple } },
+              "21"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 12, fontWeight: 700, color: C.text, marginTop: 4 } },
+              "Reintegração Indeferida"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 10, color: C.textMuted, marginTop: 4, lineHeight: 1.4 } },
+              "Dos 67 revertidos, o juiz negou o pedido de reintegração."
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { marginBottom: 20, padding: "16px 20px", background: C.bg, borderRadius: 8 } },
+          React.createElement(
+            "div",
+            { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 12 } },
+            React.createElement(
+              "div",
+              { style: { width: 22, height: 22, borderRadius: "50%", background: C.red, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "white" } },
+              "1"
+            ),
+            React.createElement(
+              "span",
+              { style: { fontSize: 13, fontWeight: 700, color: C.text } },
+              "Por que o juiz reverteu a justa causa"
+            ),
+            React.createElement(
+              "span",
+              { style: { fontSize: 11, color: C.textMuted } },
+              "— 67 processos"
+            )
+          ),
+          [{ motivo: "Ausência de prova suficiente", total: 18, pct: 26.9 }, { motivo: "Desproporcionalidade da penalidade", total: 14, pct: 20.9 }, { motivo: "Falta de imediatidade (perdão tácito)", total: 11, pct: 16.4 }, { motivo: "Vício formal no processo de desligamento", total: 9, pct: 13.4 }, { motivo: "Falta de gradação disciplinar", total: 8, pct: 11.9 }, { motivo: "Dupla punição (bis in idem)", total: 4, pct: 6.0 }].map(function (m, i) {
+            return React.createElement(
+              "div",
+              { key: i, style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 6 } },
+              React.createElement(
+                "div",
+                { style: { width: 220, textAlign: "right", flexShrink: 0 } },
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 12, color: C.textSec } },
+                  m.motivo
+                )
+              ),
+              React.createElement(
+                "div",
+                { style: { flex: 1, height: 16, background: "#E8E8E8", borderRadius: 3, overflow: "hidden" } },
+                React.createElement("div", { style: { width: m.pct / 27 * 100 + "%", height: "100%", background: C.red, borderRadius: 3 } })
+              ),
+              React.createElement(
+                "span",
+                { style: { fontSize: 10, color: C.textMuted, minWidth: 40 } },
+                m.total,
+                " proc."
+              ),
+              React.createElement(
+                "span",
+                { style: { fontSize: 12, fontWeight: 700, color: C.red, minWidth: 40, textAlign: "right" } },
+                m.pct,
+                "%"
+              )
+            );
+          })
+        ),
+        React.createElement(
+          "div",
+          { style: { padding: "16px 20px", background: C.bg, borderRadius: 8 } },
+          React.createElement(
+            "div",
+            { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 12 } },
+            React.createElement(
+              "div",
+              { style: { width: 22, height: 22, borderRadius: "50%", background: C.purple, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "white" } },
+              "2"
+            ),
+            React.createElement(
+              "span",
+              { style: { fontSize: 13, fontWeight: 700, color: C.text } },
+              "Motivo do pedido de reintegração e taxa de deferimento"
+            ),
+            React.createElement(
+              "span",
+              { style: { fontSize: 11, color: C.textMuted } },
+              "— dos 67 revertidos"
+            )
+          ),
+          [{ motivo: "Doença Ocupacional", total: 22, pct: 32.8, def: 72.7 }, { motivo: "Estabilidade Acidentária", total: 15, pct: 22.4, def: 80.0 }, { motivo: "Dispensa Discriminatória", total: 12, pct: 17.9, def: 66.7 }, { motivo: "Doença Psiquiátrica", total: 8, pct: 11.9, def: 62.5 }, { motivo: "LER/DORT", total: 6, pct: 9.0, def: 50.0 }, { motivo: "Outros", total: 4, pct: 6.0, def: 25.0 }].map(function (m, i) {
+            return React.createElement(
+              "div",
+              { key: i, style: { marginBottom: 10 } },
+              React.createElement(
+                "div",
+                { style: { display: "flex", justifyContent: "space-between", marginBottom: 4 } },
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 12, color: C.textSec } },
+                  m.motivo
+                ),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 10, color: C.textMuted } },
+                  m.total,
+                  " proc. (",
+                  m.pct,
+                  "%)"
+                )
+              ),
+              React.createElement(
+                "div",
+                { style: { display: "flex", height: 20, borderRadius: 4, overflow: "hidden" } },
+                React.createElement(
+                  "div",
+                  { style: { width: m.def + "%", background: C.red, display: "flex", alignItems: "center", justifyContent: "center" } },
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 10, color: "white", fontWeight: 600 } },
+                    "Deferida ",
+                    m.def,
+                    "%"
+                  )
+                ),
+                React.createElement(
+                  "div",
+                  { style: { width: 100 - m.def + "%", background: C.purple, display: "flex", alignItems: "center", justifyContent: "center" } },
+                  100 - m.def >= 20 && React.createElement(
+                    "span",
+                    { style: { fontSize: 10, color: "white", fontWeight: 600 } },
+                    "Indeferida"
+                  )
+                )
+              )
+            );
+          }),
+          React.createElement(
+            "div",
+            { style: { display: "flex", justifyContent: "center", gap: 16, marginTop: 8, fontSize: 11 } },
+            React.createElement(
+              "span",
+              { style: { display: "flex", alignItems: "center", gap: 4, color: C.textSec } },
+              React.createElement("span", { style: { width: 10, height: 10, borderRadius: 2, background: C.red } }),
+              "Reintegração deferida"
+            ),
+            React.createElement(
+              "span",
+              { style: { display: "flex", alignItems: "center", gap: 4, color: C.textSec } },
+              React.createElement("span", { style: { width: 10, height: 10, borderRadius: 2, background: C.purple } }),
+              "Reintegração indeferida"
+            )
+          )
+        )
+      )
+    ),
+    React.createElement(
+      "div",
+      { style: { padding: "12px 28px", borderTop: "1px solid " + C.border, display: "flex", justifyContent: "space-between", fontSize: 10, color: C.textMuted } },
+      React.createElement(
+        "span",
+        null,
+        "© 2026 Deep — Plataforma Reintegrados"
+      ),
+      React.createElement(
+        "span",
+        null,
+        "Mockup · Dados simulados · Maio/2026"
+      )
+    )
+  );
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
-</script>
-</body>
-</html>
+/* Header */ /* Filters */ /* Tabs */ /* ═══ KPIs — matching production ═══ */ /* ═══ Motivos + Submotivos — matching production ═══ */ /* ═══ Distribuição por Estado — matching production ═══ */ /* ═══ Comarcas — RJ — matching production ═══ */ /* ═══════════════════════════════════════════════════ */ /* ═══ NOVAS VISÕES — após Comarcas ═══ */ /* ═══════════════════════════════════════════════════ */ /* Banner separador */ /* ═══ Tipo de Desligamento + Taxa Deferimento por Tipo ═══ */ /* ═══ Indicador de Reversão ═══ */ /* ═══ Justa Causa — Pipeline Visual + 3 Etapas ═══ */ /* Pipeline visual — cards com borda lateral colorida */ /* Etapa 2: Motivos de reversão */ /* Etapa 3: Motivo do pedido de reintegração + taxa deferimento */
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));</script></body></html>
