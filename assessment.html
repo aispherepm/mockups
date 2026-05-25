@@ -1,6 +1,10 @@
 <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Reintegrados - Assessment</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Segoe UI","Roboto",-apple-system,sans-serif;background:#F5F6FA}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#F0F0F0}::-webkit-scrollbar-thumb{background:#CCC;border-radius:3px}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}</style><script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script><script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script></head><body><div id="root"></div><script>"use strict";
 
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var _React = React;
 var useState = _React.useState;
@@ -93,6 +97,13 @@ var estados = [{ uf: "RJ", pct: 23.5, c: 141 }, { uf: "BA", pct: 21.3, c: 128 },
 var comarcasRJ = [{ n: 1, comarca: "Rio de Janeiro", proc: 48, pct: 34, mag: "Dra. Fernanda Lopes Costa" }, { n: 2, comarca: "Niterói", proc: 38, pct: 27, mag: "Dra. Luciana Freitas Barbosa" }, { n: 3, comarca: "Duque de Caxias", proc: 28, pct: 19.9, mag: "Dr. Marcelo Henrique Dias" }, { n: 4, comarca: "Nova Iguaçu", proc: 18, pct: 12.8, mag: "Dra. Ana Paula Ribeiro" }, { n: 5, comarca: "São Gonçalo", proc: 9, pct: 6.4, mag: "Dr. Carlos Eduardo Mendes" }];
 
 function App() {
+  var _useState = useState({ 0: true, 1: true, 2: false, 3: false, 4: false });
+
+  var _useState2 = _slicedToArray(_useState, 2);
+
+  var arvoreOpen = _useState2[0];
+  var setArvoreOpen = _useState2[1];
+
   return React.createElement(
     "div",
     { style: { minHeight: "100vh", background: C.bg, fontFamily: font, color: C.text } },
@@ -673,10 +684,10 @@ function App() {
         ),
         React.createElement(
           "div",
-          { style: { marginBottom: 20, padding: "16px 20px", background: C.bg, borderRadius: 8 } },
+          { style: { padding: "16px 20px", background: C.bg, borderRadius: 8, marginBottom: 20 } },
           React.createElement(
             "div",
-            { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 12 } },
+            { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 4 } },
             React.createElement(
               "div",
               { style: { width: 22, height: 22, borderRadius: "50%", background: C.red, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "white" } },
@@ -685,7 +696,7 @@ function App() {
             React.createElement(
               "span",
               { style: { fontSize: 13, fontWeight: 700, color: C.text } },
-              "Por que o juiz reverteu a justa causa"
+              "Motivo de Reversão de Justa Causa"
             ),
             React.createElement(
               "span",
@@ -693,38 +704,163 @@ function App() {
               "— 67 processos"
             )
           ),
-          [{ motivo: "Ausência de prova suficiente", total: 18, pct: 26.9 }, { motivo: "Desproporcionalidade da penalidade", total: 14, pct: 20.9 }, { motivo: "Falta de imediatidade (perdão tácito)", total: 11, pct: 16.4 }, { motivo: "Vício formal no processo de desligamento", total: 9, pct: 13.4 }, { motivo: "Falta de gradação disciplinar", total: 8, pct: 11.9 }, { motivo: "Dupla punição (bis in idem)", total: 4, pct: 6.0 }].map(function (m, i) {
-            return React.createElement(
+          React.createElement(
+            "div",
+            { style: { fontSize: 11, color: C.textMuted, marginBottom: 16, marginLeft: 30 } },
+            "Decomposição hierárquica: navegue pelos níveis para análise detalhada dos motivos de reversão"
+          ),
+          React.createElement(
+            "div",
+            { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16, marginLeft: 30 } },
+            React.createElement(
               "div",
-              { key: i, style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 6 } },
+              { style: { padding: "12px 16px", background: C.white, borderRadius: 8, border: "1px solid " + C.border } },
               React.createElement(
                 "div",
-                { style: { width: 220, textAlign: "right", flexShrink: 0 } },
+                { style: { fontSize: 11, color: C.textSec } },
+                "Submotivos Analisados"
+              ),
+              React.createElement(
+                "div",
+                { style: { fontSize: 22, fontWeight: 800, color: C.red } },
+                "22"
+              ),
+              React.createElement(
+                "div",
+                { style: { fontSize: 10, color: C.textMuted } },
+                "Padrões na fundamentação (top 22)"
+              )
+            ),
+            React.createElement(
+              "div",
+              { style: { padding: "12px 16px", background: C.white, borderRadius: 8, border: "1px solid " + C.border } },
+              React.createElement(
+                "div",
+                { style: { fontSize: 11, color: C.textSec } },
+                "Ponto Crítico"
+              ),
+              React.createElement(
+                "div",
+                { style: { fontSize: 14, fontWeight: 800, color: C.text } },
+                "Falta Disciplinar / Conduta"
+              ),
+              React.createElement(
+                "div",
+                { style: { fontSize: 10, color: C.textMuted } },
+                "38 casos"
+              )
+            )
+          ),
+          React.createElement(
+            "div",
+            { style: { marginLeft: 30 } },
+            React.createElement(
+              "div",
+              { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 12 } },
+              React.createElement(
+                "div",
+                { style: { width: 28, height: 28, borderRadius: "50%", background: C.redLight, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12 } },
+                "🔗"
+              ),
+              React.createElement(
+                "div",
+                null,
                 React.createElement(
                   "span",
-                  { style: { fontSize: 12, color: C.textSec } },
-                  m.motivo
+                  { style: { fontSize: 12, fontWeight: 700, color: C.red } },
+                  "PROCESSOS COM JUSTA CAUSA REVERTIDA"
+                ),
+                React.createElement("br", null),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 10, color: C.textMuted } },
+                  "Total de 67 processos analisados"
                 )
-              ),
-              React.createElement(
-                "div",
-                { style: { flex: 1, height: 16, background: "#E8E8E8", borderRadius: 3, overflow: "hidden" } },
-                React.createElement("div", { style: { width: m.pct / 27 * 100 + "%", height: "100%", background: C.red, borderRadius: 3 } })
-              ),
-              React.createElement(
-                "span",
-                { style: { fontSize: 10, color: C.textMuted, minWidth: 40 } },
-                m.total,
-                " proc."
-              ),
-              React.createElement(
-                "span",
-                { style: { fontSize: 12, fontWeight: 700, color: C.red, minWidth: 40, textAlign: "right" } },
-                m.pct,
-                "%"
               )
-            );
-          })
+            ),
+            [{ n: 1, label: "FALTA DISCIPLINAR / CONDUTA", pct: 56.7, count: 38, color: C.red, open: true, children: [{ l: "Improbidade (alínea \"a\")", p: 26.3, c: 10 }, { l: "Desídia (alínea \"e\")", p: 21.1, c: 8 }, { l: "Abandono de emprego (alínea \"i\")", p: 18.4, c: 7 }, { l: "Indisciplina / Insubordinação (alínea \"h\")", p: 15.8, c: 6 }, { l: "Incontinência de conduta (alínea \"b\")", p: 10.5, c: 4 }, { l: "Embriaguez habitual ou em serviço (alínea \"f\")", p: 7.9, c: 3 }] }, { n: 2, label: "VÍCIOS FORMAIS / PROCESSUAIS", pct: 25.4, count: 17, color: C.redMid, open: true, children: [{ l: "Perdão tácito / falta de imediatidade", p: 35.3, c: 6 }, { l: "Ausência de gradação punitiva", p: 23.5, c: 4 }, { l: "Bis in idem (dupla punição)", p: 17.6, c: 3 }, { l: "Ausência de procedimento formal obrigatório", p: 11.8, c: 2 }, { l: "Nulidade por motivação discriminatória", p: 5.9, c: 1 }, { l: "Reversão por contexto de rescisão indireta", p: 5.9, c: 1 }] }, { n: 3, label: "FALTA CONTRA HONRA / INTEGRIDADE", pct: 10.4, count: 7, color: C.purple, open: false, children: [{ l: "Ato lesivo à honra — qualquer pessoa (alínea \"j\")", p: 42.9, c: 3 }, { l: "Ato lesivo à honra — empregador (alínea \"k\")", p: 28.6, c: 2 }, { l: "Ofensas físicas (alíneas \"j\"/\"k\")", p: 28.5, c: 2 }] }, { n: 4, label: "FALTA CONTRA PATRIMÔNIO / SIGILO", pct: 4.5, count: 3, color: C.amber, open: false, children: [{ l: "Violação de segredo da empresa (alínea \"g\")", p: 66.7, c: 2 }, { l: "Negociação habitual (alínea \"c\")", p: 33.3, c: 1 }] }, { n: 5, label: "FALTA CRIMINAL / REGULATÓRIA", pct: 3.0, count: 2, color: C.blue, open: false, children: [{ l: "Condenação criminal (alínea \"d\")", p: 50, c: 1 }, { l: "Perda de habilitação profissional (alínea \"m\")", p: 50, c: 1 }] }].map(function (item, idx) {
+              var isOpen = arvoreOpen[idx];return React.createElement(
+                "div",
+                { key: idx, style: { marginBottom: 8 } },
+                React.createElement(
+                  "div",
+                  { onClick: function () {
+                      return setArvoreOpen(function (p) {
+                        return _extends({}, p, _defineProperty({}, idx, !p[idx]));
+                      });
+                    }, style: { display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", border: "1px solid " + C.border, borderRadius: isOpen ? "8px 8px 0 0" : "8px", cursor: "pointer", background: C.white } },
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 11, color: C.textMuted, transform: isOpen ? "rotate(90deg)" : "rotate(0)", transition: "transform 0.2s" } },
+                    "▶"
+                  ),
+                  React.createElement(
+                    "span",
+                    { style: { width: 24, height: 24, borderRadius: "50%", background: item.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "white" } },
+                    item.n
+                  ),
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 13, fontWeight: 800, color: item.color } },
+                    item.label
+                  ),
+                  React.createElement(
+                    "div",
+                    { style: { flex: 1, height: 6, background: "#F0F0F0", borderRadius: 3, marginLeft: 8, overflow: "hidden" } },
+                    React.createElement("div", { style: { width: item.pct + "%", height: "100%", background: item.color, borderRadius: 3 } })
+                  ),
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 12, fontWeight: 700, color: C.text } },
+                    item.pct,
+                    "%"
+                  ),
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 11, color: C.textMuted, background: C.bg, padding: "2px 8px", borderRadius: 10 } },
+                    item.count
+                  ),
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 12, color: C.textMuted, cursor: "pointer" } },
+                    isOpen ? "−" : "+"
+                  )
+                ),
+                isOpen && React.createElement(
+                  "div",
+                  { style: { border: "1px solid " + C.border, borderTop: "none", borderRadius: "0 0 8px 8px", padding: "8px 12px", background: C.white } },
+                  item.children.map(function (ch, ci) {
+                    return React.createElement(
+                      "div",
+                      { key: ci, style: { display: "flex", alignItems: "center", gap: 10, padding: "8px 12px 8px 20px", borderBottom: ci < item.children.length - 1 ? "1px solid " + C.border : "none" } },
+                      React.createElement("span", { style: { width: 6, height: 6, borderRadius: "50%", background: item.color, flexShrink: 0 } }),
+                      React.createElement(
+                        "span",
+                        { style: { fontSize: 12, color: C.text, flex: 1 } },
+                        ch.l
+                      ),
+                      React.createElement(
+                        "div",
+                        { style: { width: 120, height: 4, background: "#F0F0F0", borderRadius: 2, overflow: "hidden", flexShrink: 0 } },
+                        React.createElement("div", { style: { width: ch.p + "%", height: "100%", background: item.color + "88", borderRadius: 2 } })
+                      ),
+                      React.createElement(
+                        "span",
+                        { style: { fontSize: 11, fontWeight: 600, color: C.textSec, minWidth: 40, textAlign: "right" } },
+                        ch.p,
+                        "%"
+                      ),
+                      React.createElement(
+                        "span",
+                        { style: { fontSize: 10, color: C.textMuted, minWidth: 20, textAlign: "right" } },
+                        ch.c
+                      )
+                    );
+                  })
+                )
+              );
+            })
+          )
         ),
         React.createElement(
           "div",
@@ -830,5 +966,5 @@ function App() {
     )
   );
 }
-/* Header */ /* Filters */ /* Tabs */ /* ═══ KPIs — matching production ═══ */ /* ═══ Motivos + Submotivos — matching production ═══ */ /* ═══ Distribuição por Estado — matching production ═══ */ /* ═══ Comarcas — RJ — matching production ═══ */ /* ═══════════════════════════════════════════════════ */ /* ═══ NOVAS VISÕES — após Comarcas ═══ */ /* ═══════════════════════════════════════════════════ */ /* Banner separador */ /* ═══ Tipo de Desligamento + Taxa Deferimento por Tipo ═══ */ /* ═══ Indicador de Reversão ═══ */ /* ═══ Justa Causa — Pipeline Visual + 3 Etapas ═══ */ /* Pipeline visual — cards com borda lateral colorida */ /* Etapa 2: Motivos de reversão */ /* Etapa 3: Motivo do pedido de reintegração + taxa deferimento */
+/* Header */ /* Filters */ /* Tabs */ /* ═══ KPIs — matching production ═══ */ /* ═══ Motivos + Submotivos — matching production ═══ */ /* ═══ Distribuição por Estado — matching production ═══ */ /* ═══ Comarcas — RJ — matching production ═══ */ /* ═══════════════════════════════════════════════════ */ /* ═══ NOVAS VISÕES — após Comarcas ═══ */ /* ═══════════════════════════════════════════════════ */ /* Banner separador */ /* ═══ Tipo de Desligamento + Taxa Deferimento por Tipo ═══ */ /* ═══ Indicador de Reversão ═══ */ /* ═══ Justa Causa — Pipeline Visual + 3 Etapas ═══ */ /* Pipeline visual — cards com borda lateral colorida */ /* Etapa 2: Motivo de Reversão de Justa Causa — Árvore 2 níveis */ /* KPI cards */ /* Árvore accordion */ /* Etapa 3: Motivo do pedido de reintegração + taxa deferimento */
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));</script></body></html>
