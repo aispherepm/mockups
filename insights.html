@@ -230,6 +230,17 @@
 
   .mockup-note { text-align: center; padding: 20px; font-size: 10px; color: var(--text-muted); font-style: italic; border-top: 1px dashed var(--border); margin-top: 32px; }
 
+  /* Sprint Status */
+  .sprint-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 4px; margin-left: 8px; }
+  .sprint-tag.current { background: var(--green-light); color: var(--green); }
+  .sprint-tag.partial { background: var(--amber-light); color: var(--amber); }
+  .sprint-tag.roadmap { background: var(--bg); color: var(--text-muted); border: 1px dashed var(--border); }
+  .sprint-tag.source { background: var(--blue-light); color: var(--blue); }
+  .sprint-banner { padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border); background: var(--white); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .sprint-banner .sb-title { font-size: 12px; font-weight: 700; color: var(--text); }
+  .factor-pending { opacity: 0.45; position: relative; }
+  .factor-pending::after { content: 'Aguardando laudo pericial'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 9px; color: var(--text-muted); font-style: italic; }
+
   @media (max-width: 1024px) {
     .sidebar { display: none; }
     .causa-grid { grid-template-columns: repeat(2,1fr); }
@@ -292,6 +303,15 @@
       <div class="tab">📊 Score de Risco</div>
     </div>
 
+    <!-- Sprint Reference Banner -->
+    <div class="sprint-banner">
+      <div class="sb-title">📋 Referência de Sprint</div>
+      <span class="sprint-tag current">● Sprint atual</span> Petição inicial + Decisão interlocutória
+      <span class="sprint-tag partial">◐ Parcial</span> Depende de dado já existente nos metadados
+      <span class="sprint-tag roadmap">○ Roadmap</span> Aguarda integração futura (laudo pericial)
+      <span class="sprint-tag source">↳ Fonte</span> Origem do dado
+    </div>
+
     <!-- ============================================================
          SEÇÃO 1 — CENTRAL DE INTELIGÊNCIA ESTRATÉGICA (REORGANIZADA)
          ============================================================ -->
@@ -299,7 +319,7 @@
       <div class="card-header">
         <div class="card-icon" style="background:var(--red-light);color:var(--red);">🎯</div>
         <div>
-          <div class="card-title">Central de Inteligência Estratégica</div>
+          <div class="card-title">Central de Inteligência Estratégica <span class="sprint-tag current">● Sprint atual</span></div>
           <div class="card-subtitle">Insights acionáveis de 1.313 processos — organizados por tipo de ação</div>
         </div>
         <div class="card-badge-right badge-green">● Atualizado</div>
@@ -312,13 +332,13 @@
       </div>
       <div class="grid-2" style="margin-bottom:20px;">
         <div class="insight-card">
-          <div class="ic-label">Mandado de segurança</div>
+          <div class="ic-label">Mandado de segurança <span class="sprint-tag source">↳ Decisão interlocutória</span></div>
           <div class="ic-value" style="color:var(--red);">15% fora do prazo</div>
           <div class="ic-desc">MS impetrados após 120 dias — argumento de urgência perdido</div>
           <div class="insight-pill red">→ Escritórios que impetraram MS em até 30 dias tiveram 2× mais sucesso</div>
         </div>
         <div class="insight-card">
-          <div class="ic-label">Atestmed vs. perícia presencial</div>
+          <div class="ic-label">Atestmed vs. perícia presencial <span class="sprint-tag source">↳ Petição inicial (docs INSS)</span></div>
           <div class="ic-value" style="color:var(--purple);">65% Atestmed</div>
           <div class="ic-desc">De 612 processos com histórico INSS, 398 avaliados via Atestmed (documental remoto)</div>
           <div class="insight-pill purple">→ Deferimento 14pp superior no Atestmed — priorizar contestação documental</div>
@@ -333,7 +353,7 @@
             Atenção estratégica
           </div>
           <div class="insight-card">
-            <div class="ic-label">Maior preditor de deferimento</div>
+            <div class="ic-label">Maior preditor de deferimento <span class="sprint-tag partial">◐ Pet. inicial + metadados</span></div>
             <div class="ic-value" style="color:var(--text);">Benefício B91 (INSS)</div>
             <div class="ic-desc">78,2% de deferimento quando concedido — mais que o dobro sem benefício</div>
             <div class="insight-pill amber">→ Priorizar defesa em processos com B91 ativo</div>
@@ -345,7 +365,7 @@
             Insight estrutural
           </div>
           <div class="insight-card">
-            <div class="ic-label">Causa raiz mais frequente</div>
+            <div class="ic-label">Causa raiz mais frequente <span class="sprint-tag source">↳ Petição inicial</span></div>
             <div class="ic-value" style="color:var(--text); font-size:20px;">Esforço Repetitivo / Ergonomia — 55,1%</div>
             <div class="ic-desc">LER/DORT causada por movimentos repetitivos, digitação intensa, mobiliário inadequado</div>
             <div class="insight-pill blue">→ Atuar na prevenção das causas organizacionais identificadas</div>
@@ -359,19 +379,24 @@
          ============================================================ -->
     <div class="section-title">
       <span class="dot" style="background:var(--green);"></span>
-      <span class="label" style="color:var(--text);">Preditores de resultado</span>
+      <span class="label" style="color:var(--text);">Preditores de resultado <span class="sprint-tag partial">◐ Parcial — alguns fatores aguardam laudo pericial</span></span>
     </div>
     <p style="font-size:11px;color:var(--text-sec);margin:-8px 0 14px 20px;">Fatores estatisticamente associados a deferimento e improcedência nos processos analisados</p>
+    <div style="margin-bottom:14px;padding:8px 14px;background:var(--bg);border-radius:6px;font-size:10px;color:var(--text-sec);display:flex;gap:16px;flex-wrap:wrap;">
+      <span><span class="sprint-tag source" style="margin:0;">↳ Petição inicial</span> B91, tipo desligamento, tempo de empresa, Atestmed, CID, afastamentos</span>
+      <span><span class="sprint-tag source" style="margin:0;">↳ Decisão interlocutória</span> MS prazo</span>
+      <span><span class="sprint-tag roadmap" style="margin:0;">○ Laudo pericial</span> Perícia favorável</span>
+    </div>
     <div class="gp-grid">
       <div class="gp-card" style="border-top:3px solid var(--green);">
         <div class="gp-header">
           <div class="gp-icon" style="background:var(--green-light);color:var(--green);">✓</div>
-          <div><div class="gp-title" style="color:var(--green);">Quando o banco ganha</div></div>
+          <div><div class="gp-title" style="color:var(--green);">Fatores de improcedência <span style="font-size:10px;font-weight:400;color:var(--text-muted);">(favorável ao banco)</span></div></div>
           <div class="gp-count"><span class="badge badge-green">478 processos improcedentes</span></div>
         </div>
         <div class="gp-factor"><div class="gp-bullet" style="background:var(--green);"></div><div class="gp-factor-text"><strong>Documentação robusta de desligamento</strong> — processo demissional completo, ASO demissional dentro do prazo, homologação com sindicato</div><div class="gp-factor-pct" style="background:var(--green-light);color:var(--green);">em 82%</div></div>
         <div class="gp-factor"><div class="gp-bullet" style="background:var(--green);"></div><div class="gp-factor-text"><strong>Ausência de B91 ativo</strong> — reclamante sem benefício acidentário concedido pelo INSS no momento da dispensa</div><div class="gp-factor-pct" style="background:var(--green-light);color:var(--green);">em 74%</div></div>
-        <div class="gp-factor"><div class="gp-bullet" style="background:var(--green);"></div><div class="gp-factor-text"><strong>Perícia presencial favorável</strong> — laudo pericial sem nexo causal ou nexo concausal fraco</div><div class="gp-factor-pct" style="background:var(--green-light);color:var(--green);">em 68%</div></div>
+        <div class="gp-factor factor-pending"><div class="gp-bullet" style="background:var(--text-muted);"></div><div class="gp-factor-text"><strong>Perícia presencial favorável</strong> — laudo pericial sem nexo causal ou nexo concausal fraco</div><div class="gp-factor-pct" style="background:var(--bg);color:var(--text-muted);">em 68%</div></div>
         <div class="gp-factor"><div class="gp-bullet" style="background:var(--green);"></div><div class="gp-factor-text"><strong>Tempo de empresa curto</strong> — menos de 24 meses de vínculo, dificultando prova de nexo</div><div class="gp-factor-pct" style="background:var(--green-light);color:var(--green);">em 55%</div></div>
         <div class="gp-factor"><div class="gp-bullet" style="background:var(--green);"></div><div class="gp-factor-text"><strong>MS impetrado fora do prazo</strong> — argumento de urgência perdido, impetração após 120 dias</div><div class="gp-factor-pct" style="background:var(--green-light);color:var(--green);">em 43%</div></div>
       </div>
@@ -379,7 +404,7 @@
       <div class="gp-card" style="border-top:3px solid var(--red);">
         <div class="gp-header">
           <div class="gp-icon" style="background:var(--red-light);color:var(--red);">✗</div>
-          <div><div class="gp-title" style="color:var(--red);">Quando o banco perde</div></div>
+          <div><div class="gp-title" style="color:var(--red);">Fatores de deferimento <span style="font-size:10px;font-weight:400;color:var(--text-muted);">(favorável ao reclamante)</span></div></div>
           <div class="gp-count"><span class="badge badge-red">835 processos deferidos</span></div>
         </div>
         <div class="gp-factor"><div class="gp-bullet" style="background:var(--red);"></div><div class="gp-factor-text"><strong>B91 concedido durante contrato</strong> — benefício acidentário ativo gera presunção de nexo causal que inverte ônus da prova</div><div class="gp-factor-pct" style="background:var(--red-light);color:var(--red);">em 78%</div></div>
@@ -402,7 +427,7 @@
          ============================================================ -->
     <div class="section-title">
       <span class="dot" style="background:var(--blue);"></span>
-      <span class="label" style="color:var(--blue);">Causa raiz — Petição inicial</span>
+      <span class="label" style="color:var(--blue);">Causa raiz — Petição inicial <span class="sprint-tag current">● Sprint atual</span></span>
     </div>
 
     <div class="section-bar" style="margin-bottom:6px;">
@@ -433,7 +458,7 @@
       <div class="card-header">
         <div class="card-icon" style="background:var(--red-light);color:var(--red);">🗺</div>
         <div>
-          <div class="card-title">Alegações recorrentes na petição inicial por estado</div>
+          <div class="card-title">Alegações recorrentes na petição inicial por estado <span class="sprint-tag current">● Sprint atual</span></div>
           <div class="card-subtitle">Top 5 alegações de causa raiz por UF · Clique no estado para ver detalhes</div>
         </div>
       </div>
@@ -527,7 +552,7 @@
       <div class="section-bar">
         <div class="sb" style="background:var(--purple);"></div>
         <div>
-          <div class="sb-title">Correlação Tipo de Doença × Estado</div>
+          <div class="sb-title">Correlação Tipo de Doença × Estado <span class="sprint-tag current">● Sprint atual</span></div>
           <div class="sb-desc">Heatmap de volume processual por subtipo de doença e UF — leitura de hotspots e padrões regionais</div>
         </div>
       </div>
@@ -559,8 +584,8 @@
       <div class="card-header">
         <div class="card-icon" style="background:var(--purple-light);color:var(--purple);">🩺</div>
         <div>
-          <div class="card-title">Atestmed vs. Perícia Presencial — Detalhe</div>
-          <div class="card-subtitle">Análise de processos com histórico de afastamento INSS · B91/B31 ativo</div>
+          <div class="card-title">Atestmed vs. Perícia Presencial — Detalhe <span class="sprint-tag current">● Sprint atual</span></div>
+          <div class="card-subtitle">Análise de processos com histórico de afastamento INSS · B91/B31 ativo · <span class="sprint-tag source" style="margin:0;">↳ Petição inicial (docs de afastamento anexados)</span></div>
         </div>
       </div>
       <div class="atestmed-stats">
@@ -604,7 +629,7 @@
          ============================================================ -->
     <div class="section-title">
       <span class="dot" style="background:var(--purple);"></span>
-      <span class="label" style="color:var(--purple);">Árvore de causas</span>
+      <span class="label" style="color:var(--purple);">Árvore de causas <span class="sprint-tag current">● Sprint atual</span></span>
     </div>
     <div class="card">
       <div class="section-bar" style="margin-bottom:14px;">
@@ -633,7 +658,8 @@
 
     <div class="mockup-note">
       Dados simulados para mockup · Proposta de redesign tela Insights Estratégicos · Plataforma Reintegrados · DeepCenter<br>
-      Versão: 25/05/2026 · Para referência de desenvolvimento
+      Versão: 25/05/2026 · Para referência de desenvolvimento<br>
+      <strong>Sprint atual:</strong> 8 de 9 visões viáveis (Petição inicial + Decisão interlocutória) · 1 fator pendente (laudo pericial)
     </div>
 
   </main>
