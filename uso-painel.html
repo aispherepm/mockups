@@ -1,0 +1,785 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Reintegrados - Uso do Painel</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Segoe UI","Roboto",-apple-system,sans-serif;background:#F5F6FA}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#F0F0F0}::-webkit-scrollbar-thumb{background:#CCC;border-radius:3px}</style><script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script><script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script></head><body><div id="root"></div><script>"use strict";
+
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+var _React = React;
+var useState = _React.useState;
+
+var C = { bg: "#F5F6FA", white: "#FFFFFF", red: "#CC092F", redLight: "#FDE8EC", redMid: "#E84667", purple: "#7B2D8E", purpleLight: "#F3E8F7", green: "#2E7D32", greenLight: "#E8F5E9", amber: "#F57F17", amberLight: "#FFF8E1", blue: "#1565C0", blueLight: "#E3F2FD", navy: "#1a1a2e", text: "#1a1a2e", textSec: "#5f6368", textMuted: "#9AA0A6", border: "#E8EAED", shadow: "0 1px 3px rgba(0,0,0,0.08)" };
+var font = "'Segoe UI','Roboto',-apple-system,sans-serif";
+var ST = function ST(_ref) {
+  var title = _ref.title;
+  var sub = _ref.sub;
+  return React.createElement(
+    "div",
+    { style: { marginBottom: 16 } },
+    React.createElement(
+      "div",
+      { style: { display: "flex", alignItems: "stretch", gap: 10 } },
+      React.createElement("div", { style: { width: 4, background: C.red, borderRadius: 2, flexShrink: 0 } }),
+      React.createElement(
+        "div",
+        null,
+        React.createElement(
+          "h3",
+          { style: { margin: 0, fontSize: 15, fontWeight: 700, color: C.text } },
+          title
+        ),
+        sub && React.createElement(
+          "div",
+          { style: { fontSize: 11, color: C.textMuted, marginTop: 2 } },
+          sub
+        )
+      )
+    )
+  );
+};
+var Cd = function Cd(_ref2) {
+  var children = _ref2.children;
+  var style = _ref2.style;
+  return React.createElement(
+    "div",
+    { style: _extends({ background: C.white, borderRadius: 10, border: "1px solid " + C.border, padding: 20, boxShadow: C.shadow }, style) },
+    children
+  );
+};
+
+// Mock data
+var diasAcesso = [{ dia: "13/05", u: 0 }, { dia: "14/05", u: 3 }, { dia: "15/05", u: 2 }, { dia: "16/05", u: 0 }, { dia: "17/05", u: 0 }, { dia: "18/05", u: 0 }, { dia: "19/05", u: 4 }, { dia: "20/05", u: 5 }, { dia: "21/05", u: 3 }, { dia: "22/05", u: 2 }, { dia: "23/05", u: 0 }, { dia: "24/05", u: 0 }, { dia: "25/05", u: 1 }, { dia: "26/05", u: 6 }, { dia: "27/05", u: 4 }];
+var maxU = Math.max.apply(Math, _toConsumableArray(diasAcesso.map(function (d) {
+  return d.u;
+})));
+
+var modulos = [{ nome: "Assessment", acessos: 342, tempo: 5.2, adocao: 100, color: C.red }, { nome: "Processos", acessos: 287, tempo: 4.8, adocao: 92, color: C.redMid }, { nome: "Insights Estratégicos", acessos: 156, tempo: 3.5, adocao: 75, color: C.purple }, { nome: "Mapa Estratégico", acessos: 98, tempo: 2.1, adocao: 67, color: C.blue }, { nome: "Análise Advocatícia", acessos: 76, tempo: 1.8, adocao: 58, color: C.amber }, { nome: "Perfil Jurídico", acessos: 65, tempo: 1.5, adocao: 50, color: C.navy }, { nome: "Tempo & Velocidade", acessos: 54, tempo: 1.2, adocao: 42, color: C.green }, { nome: "Timeline", acessos: 43, tempo: 0.9, adocao: 42, color: C.textMuted }, { nome: "Inteligência Pericial", acessos: 32, tempo: 2.4, adocao: 33, color: C.red }, { nome: "Leitura Semântica", acessos: 21, tempo: 0.8, adocao: 25, color: C.purple }, { nome: "Score de Risco", acessos: 12, tempo: 0.5, adocao: 17, color: C.amber }];
+
+var usuarios = [{ nome: "Carlos Lucena", dept: "Jurídico", ultimo: "26/05/2026", sessoes: 48, tempoMedio: "14min", tipo: "heavy" }, { nome: "Sheila Gonçalves", dept: "Causa Raiz", ultimo: "26/05/2026", sessoes: 35, tempoMedio: "18min", tipo: "heavy" }, { nome: "Mário Santos", dept: "Jurídico", ultimo: "25/05/2026", sessoes: 22, tempoMedio: "8min", tipo: "regular" }, { nome: "Priscilla Galantini", dept: "Jurídico", ultimo: "23/05/2026", sessoes: 15, tempoMedio: "6min", tipo: "regular" }, { nome: "Matheus Haran", dept: "Jurídico", ultimo: "22/05/2026", sessoes: 12, tempoMedio: "5min", tipo: "regular" }, { nome: "Rafael Oliveira", dept: "Compliance", ultimo: "19/05/2026", sessoes: 4, tempoMedio: "3min", tipo: "light" }, { nome: "Juliana Costa", dept: "Jurídico", ultimo: "14/05/2026", sessoes: 2, tempoMedio: "2min", tipo: "light" }, { nome: "Fernando Silva", dept: "Jurídico", ultimo: "07/05/2026", sessoes: 1, tempoMedio: "1min", tipo: "inativo" }];
+
+var heatmapData = [{ h: "08h", seg: 1, ter: 2, qua: 1, qui: 3, sex: 1, sab: 0, dom: 0 }, { h: "09h", seg: 3, ter: 4, qua: 3, qui: 5, sex: 2, sab: 0, dom: 0 }, { h: "10h", seg: 5, ter: 6, qua: 4, qui: 7, sex: 4, sab: 0, dom: 0 }, { h: "11h", seg: 4, ter: 5, qua: 5, qui: 6, sex: 3, sab: 0, dom: 0 }, { h: "12h", seg: 1, ter: 1, qua: 1, qui: 2, sex: 1, sab: 0, dom: 0 }, { h: "13h", seg: 2, ter: 3, qua: 2, qui: 3, sex: 2, sab: 0, dom: 0 }, { h: "14h", seg: 6, ter: 7, qua: 5, qui: 8, sex: 5, sab: 1, dom: 0 }, { h: "15h", seg: 5, ter: 6, qua: 6, qui: 7, sex: 4, sab: 0, dom: 0 }, { h: "16h", seg: 4, ter: 5, qua: 4, qui: 5, sex: 3, sab: 0, dom: 0 }, { h: "17h", seg: 3, ter: 3, qua: 2, qui: 4, sex: 2, sab: 0, dom: 0 }, { h: "18h", seg: 1, ter: 2, qua: 1, qui: 2, sex: 1, sab: 0, dom: 0 }];
+
+var filtrosMaisUsados = [{ filtro: "Estado + Motivo do pedido", uso: 156, pct: 34 }, { filtro: "Submotivo do pedido", uso: 98, pct: 21 }, { filtro: "Estado isolado", uso: 87, pct: 19 }, { filtro: "Motivo + Submotivo combinado", uso: 65, pct: 14 }, { filtro: "Busca por CNJ", uso: 54, pct: 12 }];
+
+var tipoBadge = function tipoBadge(tipo) {
+  if (tipo === "heavy") return { bg: C.greenLight, color: C.green, label: "Heavy" };
+  if (tipo === "regular") return { bg: C.blueLight, color: C.blue, label: "Regular" };
+  if (tipo === "light") return { bg: C.amberLight, color: C.amber, label: "Light" };
+  return { bg: C.redLight, color: C.red, label: "Inativo" };
+};
+
+var heatColor = function heatColor(v) {
+  if (v >= 7) return C.red;
+  if (v >= 5) return C.redMid;
+  if (v >= 3) return C.purple;
+  if (v >= 1) return "#E3D5E8";
+  return "#F5F6FA";
+};
+
+function App() {
+  var _useState = useState("14d");
+
+  var _useState2 = _slicedToArray(_useState, 2);
+
+  var periodo = _useState2[0];
+  var setPeriodo = _useState2[1];
+
+  var _useState3 = useState("");
+
+  var _useState32 = _slicedToArray(_useState3, 2);
+
+  var mes = _useState32[0];
+  var setMes = _useState32[1];
+
+  return React.createElement(
+    "div",
+    { style: { minHeight: "100vh", background: C.bg, fontFamily: font, color: C.text } },
+    React.createElement(
+      "div",
+      { style: { display: "flex", minHeight: "100vh" } },
+      React.createElement(
+        "div",
+        { style: { width: 200, background: C.white, borderRight: "1px solid " + C.border, padding: "20px 0", flexShrink: 0 } },
+        React.createElement(
+          "div",
+          { style: { padding: "0 16px", marginBottom: 24 } },
+          React.createElement(
+            "div",
+            { style: { fontSize: 14, fontWeight: 800, color: C.navy, letterSpacing: 1 } },
+            "DEEP"
+          ),
+          React.createElement(
+            "div",
+            { style: { fontSize: 8, color: C.textMuted } },
+            "TURN-ON DATA"
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { fontSize: 10, color: C.textMuted, padding: "0 16px", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 } },
+          "Visão Geral"
+        ),
+        React.createElement(
+          "div",
+          { style: { padding: "10px 16px", background: C.red, color: "white", fontSize: 13, fontWeight: 600, margin: "0 8px", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 } },
+          React.createElement(
+            "span",
+            { style: { fontSize: 14 } },
+            "📊"
+          ),
+          "Uso do Painel"
+        ),
+        React.createElement(
+          "div",
+          { style: { padding: "10px 16px", fontSize: 13, color: C.textSec, margin: "4px 8px", borderRadius: 8, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" } },
+          React.createElement(
+            "span",
+            { style: { fontSize: 14 } },
+            "📋"
+          ),
+          "Reintegrados"
+        ),
+        React.createElement(
+          "div",
+          { style: { padding: "10px 16px", fontSize: 13, color: C.textSec, margin: "4px 8px", borderRadius: 8, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" } },
+          React.createElement(
+            "span",
+            { style: { fontSize: 14 } },
+            "💬"
+          ),
+          "Chat"
+        ),
+        React.createElement(
+          "div",
+          { style: { padding: "10px 16px", fontSize: 13, color: C.textSec, margin: "4px 8px", borderRadius: 8, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" } },
+          React.createElement(
+            "span",
+            { style: { fontSize: 14 } },
+            "⚙️"
+          ),
+          "Configurações"
+        )
+      ),
+      React.createElement(
+        "div",
+        { style: { flex: 1, padding: "24px 32px", overflowY: "auto" } },
+        React.createElement(
+          "div",
+          { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 } },
+          React.createElement(
+            "div",
+            null,
+            React.createElement(
+              "span",
+              { style: { display: "inline-flex", alignItems: "center", gap: 4, padding: "4px 10px", borderRadius: 6, background: C.redLight, color: C.red, fontSize: 10, fontWeight: 700, marginBottom: 8 } },
+              "📊 USO DO PAINEL"
+            ),
+            React.createElement(
+              "h1",
+              { style: { fontSize: 24, fontWeight: 800, color: C.text, margin: 0 } },
+              "Acessos ao painel"
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 12, color: C.textMuted, marginTop: 4 } },
+              "Veja quem usa o painel, acompanhe a evolução diária e consulte o histórico de entradas."
+            )
+          ),
+          React.createElement(
+            "div",
+            { style: { display: "flex", gap: 8, alignItems: "center" } },
+            React.createElement(
+              "div",
+              { style: { display: "flex", gap: 2 } },
+              [{ l: "7d", v: "7d" }, { l: "14d", v: "14d" }, { l: "30d", v: "30d" }, { l: "90d", v: "90d" }].map(function (p) {
+                return React.createElement(
+                  "button",
+                  { key: p.v, onClick: function () {
+                      return setPeriodo(p.v);
+                    }, style: { padding: "6px 12px", borderRadius: 6, border: "1px solid " + (periodo === p.v ? C.red : C.border), background: periodo === p.v ? C.red : "white", color: periodo === p.v ? "white" : C.textSec, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: font } },
+                  p.l
+                );
+              })
+            ),
+            React.createElement(
+              "div",
+              { style: { position: "relative" } },
+              React.createElement(
+                "select",
+                { value: mes, onChange: function (e) {
+                    return setMes(e.target.value);
+                  }, style: { appearance: "none", padding: "6px 28px 6px 12px", borderRadius: 6, border: "1px solid " + C.border, background: C.white, fontSize: 11, color: C.textSec, fontFamily: font, cursor: "pointer" } },
+                React.createElement(
+                  "option",
+                  { value: "" },
+                  "Mês"
+                ),
+                React.createElement(
+                  "option",
+                  { value: "mai26" },
+                  "Mai/2026"
+                ),
+                React.createElement(
+                  "option",
+                  { value: "abr26" },
+                  "Abr/2026"
+                ),
+                React.createElement(
+                  "option",
+                  { value: "mar26" },
+                  "Mar/2026"
+                ),
+                React.createElement(
+                  "option",
+                  { value: "fev26" },
+                  "Fev/2026"
+                ),
+                React.createElement(
+                  "option",
+                  { value: "jan26" },
+                  "Jan/2026"
+                )
+              ),
+              React.createElement(
+                "span",
+                { style: { position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", fontSize: 9, color: C.textMuted, pointerEvents: "none" } },
+                "▼"
+              )
+            ),
+            React.createElement(
+              "button",
+              { style: { padding: "8px 16px", borderRadius: 8, border: "1px solid " + C.border, background: C.white, fontSize: 12, fontWeight: 600, color: C.text, cursor: "pointer", fontFamily: font } },
+              "Atualizar"
+            ),
+            React.createElement(
+              "button",
+              { style: { padding: "8px 16px", borderRadius: 8, border: "1px solid " + C.green, background: C.greenLight, fontSize: 12, fontWeight: 600, color: C.green, cursor: "pointer", fontFamily: font, display: "flex", alignItems: "center", gap: 6 } },
+              React.createElement(
+                "svg",
+                { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: C.green, strokeWidth: "2" },
+                React.createElement("path", { d: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" })
+              ),
+              "Exportar"
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 12, marginBottom: 20 } },
+          [{ label: "Usuários hoje", value: "6", sub: "Pessoas que acessaram hoje", icon: "👤", iconBg: C.redLight }, { label: "Usuários no período", value: "12", sub: "Contas com acesso registrado", icon: "👥", iconBg: C.purpleLight }, { label: "Média diária", value: "3.2", sub: "Média de usuários por dia", icon: "📈", iconBg: C.redLight }, { label: "Sessões no período", value: "47", sub: "Total de logins registrados", icon: "🔑", iconBg: C.blueLight }, { label: "Taxa de retorno", value: "67%", sub: "Voltaram em 7 dias", icon: "🔄", iconBg: C.greenLight }].map(function (k, i) {
+            return React.createElement(
+              Cd,
+              { key: i, style: { padding: "14px 16px" } },
+              React.createElement(
+                "div",
+                { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } },
+                React.createElement(
+                  "div",
+                  null,
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 11, color: C.textSec } },
+                    k.label
+                  ),
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 26, fontWeight: 800, color: C.text, marginTop: 4 } },
+                    k.value
+                  ),
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 10, color: C.textMuted, marginTop: 2 } },
+                    k.sub
+                  )
+                ),
+                React.createElement(
+                  "div",
+                  { style: { width: 38, height: 38, borderRadius: "50%", background: k.iconBg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 } },
+                  k.icon
+                )
+              )
+            );
+          })
+        ),
+        React.createElement(
+          Cd,
+          { style: { marginBottom: 20 } },
+          React.createElement(
+            "div",
+            { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 } },
+            React.createElement(ST, { title: "Evolução de acessos", sub: "Ritmo diário de uso do painel nos últimos 14 dias" }),
+            React.createElement(
+              "span",
+              { style: { fontSize: 11, color: C.textSec } },
+              "Média diária: ",
+              React.createElement(
+                "strong",
+                null,
+                "3.2 usuários"
+              )
+            )
+          ),
+          React.createElement(
+            "div",
+            { style: { display: "flex", alignItems: "flex-end", gap: 6, height: 140 } },
+            diasAcesso.map(function (d, i) {
+              var h = maxU > 0 ? d.u / maxU * 120 : 0;return React.createElement(
+                "div",
+                { key: i, style: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 } },
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 9, fontWeight: 700, color: d.u > 0 ? C.text : C.textMuted } },
+                  d.u
+                ),
+                React.createElement("div", { style: { width: "70%", height: Math.max(h, 2), background: d.u > 0 ? "linear-gradient(180deg," + C.red + "," + C.redMid + ")" : "#F0F0F0", borderRadius: "3px 3px 0 0", transition: "height 0.3s" } }),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 8, color: C.textMuted } },
+                  d.dia
+                )
+              );
+            })
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 } },
+          React.createElement(
+            Cd,
+            null,
+            React.createElement(ST, { title: "Engajamento por Sessão" }),
+            React.createElement(
+              "div",
+              { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 } },
+              [{ label: "Tempo médio de sessão", value: "8.5 min", color: C.red }, { label: "Ações por sessão", value: "12.3", color: C.purple }, { label: "Processos abertos", value: "4.2", color: C.blue }, { label: "Exportações no período", value: "18", color: C.green }].map(function (k, i) {
+                return React.createElement(
+                  "div",
+                  { key: i, style: { padding: 12, background: C.bg, borderRadius: 8, borderLeft: "4px solid " + k.color } },
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 20, fontWeight: 800, color: k.color } },
+                    k.value
+                  ),
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 10, color: C.textSec, marginTop: 2 } },
+                    k.label
+                  )
+                );
+              })
+            ),
+            React.createElement(
+              "div",
+              { style: { fontSize: 10, color: C.textMuted, fontStyle: "italic" } },
+              "Média calculada sobre as 47 sessões do período selecionado"
+            )
+          ),
+          React.createElement(
+            Cd,
+            null,
+            React.createElement(ST, { title: "Módulos Mais Acessados" }),
+            modulos.slice(0, 7).map(function (m, i) {
+              return React.createElement(
+                "div",
+                { key: i, style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 8 } },
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 11, color: C.textMuted, minWidth: 16, textAlign: "right" } },
+                  i + 1
+                ),
+                React.createElement(
+                  "div",
+                  { style: { width: 140, flexShrink: 0 } },
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 12, color: C.text } },
+                    m.nome
+                  )
+                ),
+                React.createElement(
+                  "div",
+                  { style: { flex: 1, height: 14, background: "#F0F0F0", borderRadius: 3, overflow: "hidden" } },
+                  React.createElement("div", { style: { width: m.acessos / 342 * 100 + "%", height: "100%", background: m.color, borderRadius: 3 } })
+                ),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 11, fontWeight: 700, color: C.text, minWidth: 30, textAlign: "right" } },
+                  m.acessos
+                )
+              );
+            })
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 } },
+          React.createElement(
+            Cd,
+            null,
+            React.createElement(ST, { title: "Tempo Médio por Módulo", sub: "Minutos gastos em média por sessão em cada módulo" }),
+            modulos.slice(0, 7).map(function (m, i) {
+              return React.createElement(
+                "div",
+                { key: i, style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 8 } },
+                React.createElement(
+                  "div",
+                  { style: { width: 140, flexShrink: 0 } },
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 12, color: C.text } },
+                    m.nome
+                  )
+                ),
+                React.createElement(
+                  "div",
+                  { style: { flex: 1, height: 14, background: "#F0F0F0", borderRadius: 3, overflow: "hidden" } },
+                  React.createElement("div", { style: { width: m.tempo / 5.2 * 100 + "%", height: "100%", background: m.color + "88", borderRadius: 3 } })
+                ),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 11, fontWeight: 700, color: C.text, minWidth: 45, textAlign: "right" } },
+                  m.tempo,
+                  " min"
+                )
+              );
+            }),
+            React.createElement(
+              "div",
+              { style: { marginTop: 12, padding: "8px 12px", background: C.amberLight, borderRadius: 6, fontSize: 10, color: C.text } },
+              "⚠️ Inteligência Pericial tem alto tempo por sessão (2.4 min) mas baixo volume — usuários engajados mas poucos acessam."
+            )
+          ),
+          React.createElement(
+            Cd,
+            null,
+            React.createElement(ST, { title: "Mapa de Calor — Dia × Horário", sub: "Quando os usuários mais acessam a plataforma" }),
+            React.createElement(
+              "table",
+              { style: { width: "100%", borderCollapse: "collapse" } },
+              React.createElement(
+                "thead",
+                null,
+                React.createElement(
+                  "tr",
+                  null,
+                  React.createElement("th", { style: { padding: "4px 6px", fontSize: 9, color: C.textMuted } }),
+                  ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"].map(function (d) {
+                    return React.createElement(
+                      "th",
+                      { key: d, style: { padding: "4px 6px", fontSize: 9, color: C.textSec, textAlign: "center" } },
+                      d
+                    );
+                  })
+                )
+              ),
+              React.createElement(
+                "tbody",
+                null,
+                heatmapData.map(function (row, i) {
+                  return React.createElement(
+                    "tr",
+                    { key: i },
+                    React.createElement(
+                      "td",
+                      { style: { padding: "2px 6px", fontSize: 9, color: C.textMuted } },
+                      row.h
+                    ),
+                    [row.seg, row.ter, row.qua, row.qui, row.sex, row.sab, row.dom].map(function (v, j) {
+                      return React.createElement(
+                        "td",
+                        { key: j, style: { padding: 2, textAlign: "center" } },
+                        React.createElement(
+                          "div",
+                          { style: { width: 28, height: 20, borderRadius: 3, background: heatColor(v), display: "inline-flex", alignItems: "center", justifyContent: "center" } },
+                          React.createElement(
+                            "span",
+                            { style: { fontSize: 8, fontWeight: 700, color: v >= 3 ? "white" : v >= 1 ? C.purple : "transparent" } },
+                            v > 0 ? v : ""
+                          )
+                        )
+                      );
+                    })
+                  );
+                })
+              )
+            ),
+            React.createElement(
+              "div",
+              { style: { display: "flex", gap: 8, marginTop: 8, justifyContent: "center", fontSize: 9, color: C.textMuted } },
+              [{ l: "7+", c: C.red }, { l: "5-6", c: C.redMid }, { l: "3-4", c: C.purple }, { l: "1-2", c: "#E3D5E8" }, { l: "0", c: "#F5F6FA" }].map(function (x) {
+                return React.createElement(
+                  "span",
+                  { key: x.l, style: { display: "flex", alignItems: "center", gap: 3 } },
+                  React.createElement("span", { style: { width: 12, height: 8, borderRadius: 2, background: x.c, border: "1px solid " + C.border } }),
+                  x.l
+                );
+              })
+            )
+          )
+        ),
+        React.createElement(
+          Cd,
+          { style: { marginBottom: 20 } },
+          React.createElement(ST, { title: "Usuários — Detalhe de Acesso", sub: "Último acesso, sessões, tempo médio e classificação de engajamento" }),
+          React.createElement(
+            "table",
+            { style: { width: "100%", borderCollapse: "collapse" } },
+            React.createElement(
+              "thead",
+              null,
+              React.createElement(
+                "tr",
+                null,
+                ["USUÁRIO", "DEPARTAMENTO", "ÚLTIMO ACESSO", "SESSÕES", "TEMPO MÉDIO", "ENGAJAMENTO"].map(function (h) {
+                  return React.createElement(
+                    "th",
+                    { key: h, style: { padding: "10px 12px", fontSize: 10, color: C.textSec, textAlign: "left", borderBottom: "2px solid " + C.border, textTransform: "uppercase", letterSpacing: 0.5 } },
+                    h
+                  );
+                })
+              )
+            ),
+            React.createElement(
+              "tbody",
+              null,
+              usuarios.map(function (u, i) {
+                var badge = tipoBadge(u.tipo);return React.createElement(
+                  "tr",
+                  { key: i, style: { background: u.tipo === "inativo" ? "#FFF8F8" : "transparent" } },
+                  React.createElement(
+                    "td",
+                    { style: { padding: "10px 12px", borderBottom: "1px solid " + C.border } },
+                    React.createElement(
+                      "div",
+                      { style: { fontSize: 13, fontWeight: 600, color: C.text } },
+                      u.nome
+                    )
+                  ),
+                  React.createElement(
+                    "td",
+                    { style: { padding: "10px 12px", borderBottom: "1px solid " + C.border, fontSize: 12, color: C.textSec } },
+                    u.dept
+                  ),
+                  React.createElement(
+                    "td",
+                    { style: { padding: "10px 12px", borderBottom: "1px solid " + C.border, fontSize: 12, color: u.tipo === "inativo" ? C.red : C.textSec } },
+                    u.ultimo
+                  ),
+                  React.createElement(
+                    "td",
+                    { style: { padding: "10px 12px", borderBottom: "1px solid " + C.border, fontSize: 12, fontWeight: 600, color: C.text } },
+                    u.sessoes
+                  ),
+                  React.createElement(
+                    "td",
+                    { style: { padding: "10px 12px", borderBottom: "1px solid " + C.border, fontSize: 12, color: C.textSec } },
+                    u.tempoMedio
+                  ),
+                  React.createElement(
+                    "td",
+                    { style: { padding: "10px 12px", borderBottom: "1px solid " + C.border } },
+                    React.createElement(
+                      "span",
+                      { style: { display: "inline-flex", padding: "3px 10px", borderRadius: 4, fontSize: 10, fontWeight: 700, background: badge.bg, color: badge.color } },
+                      badge.label
+                    )
+                  )
+                );
+              })
+            )
+          ),
+          React.createElement(
+            "div",
+            { style: { display: "flex", gap: 16, marginTop: 12, fontSize: 11, color: C.textSec } },
+            React.createElement(
+              "span",
+              null,
+              "Heavy: 5+ sessões/semana"
+            ),
+            React.createElement(
+              "span",
+              null,
+              "Regular: 2-4/semana"
+            ),
+            React.createElement(
+              "span",
+              null,
+              "Light: 1/semana"
+            ),
+            React.createElement(
+              "span",
+              { style: { color: C.red } },
+              "Inativo: 0 nos últimos 14 dias"
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 } },
+          React.createElement(
+            Cd,
+            null,
+            React.createElement(ST, { title: "Distribuição por Engajamento" }),
+            React.createElement(
+              "div",
+              { style: { display: "flex", gap: 12 } },
+              [{ tipo: "Heavy", count: 2, pct: 25, color: C.green }, { tipo: "Regular", count: 3, pct: 37.5, color: C.blue }, { tipo: "Light", count: 2, pct: 25, color: C.amber }, { tipo: "Inativo", count: 1, pct: 12.5, color: C.red }].map(function (t, i) {
+                return React.createElement(
+                  "div",
+                  { key: i, style: { flex: 1, padding: 14, background: C.bg, borderRadius: 8, textAlign: "center", borderTop: "4px solid " + t.color } },
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 22, fontWeight: 800, color: t.color } },
+                    t.count
+                  ),
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 11, fontWeight: 600, color: C.text } },
+                    t.tipo
+                  ),
+                  React.createElement(
+                    "div",
+                    { style: { fontSize: 10, color: C.textMuted } },
+                    t.pct,
+                    "%"
+                  )
+                );
+              })
+            )
+          ),
+          React.createElement(
+            Cd,
+            null,
+            React.createElement(ST, { title: "Acesso por Departamento" }),
+            [{ dept: "Jurídico", users: 5, sessoes: 88, pct: 62.5 }, { dept: "Causa Raiz", users: 1, sessoes: 35, pct: 12.5 }, { dept: "Compliance", users: 1, sessoes: 4, pct: 12.5 }, { dept: "Outros", users: 1, sessoes: 1, pct: 12.5 }].map(function (d, i) {
+              return React.createElement(
+                "div",
+                { key: i, style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 10 } },
+                React.createElement(
+                  "div",
+                  { style: { width: 100, flexShrink: 0 } },
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 12, color: C.text } },
+                    d.dept
+                  )
+                ),
+                React.createElement(
+                  "div",
+                  { style: { flex: 1, height: 14, background: "#F0F0F0", borderRadius: 3, overflow: "hidden" } },
+                  React.createElement("div", { style: { width: d.sessoes / 88 * 100 + "%", height: "100%", background: C.red, borderRadius: 3 } })
+                ),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 10, color: C.textMuted, minWidth: 60 } },
+                  d.users,
+                  " user(s)"
+                ),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 11, fontWeight: 700, color: C.text, minWidth: 55, textAlign: "right" } },
+                  d.sessoes,
+                  " sessões"
+                )
+              );
+            })
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 } },
+          React.createElement(
+            Cd,
+            null,
+            React.createElement(ST, { title: "Taxa de Adoção por Módulo", sub: "% de usuários que acessaram cada módulo pelo menos 1 vez" }),
+            modulos.map(function (m, i) {
+              return React.createElement(
+                "div",
+                { key: i, style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 6 } },
+                React.createElement(
+                  "div",
+                  { style: { width: 150, flexShrink: 0 } },
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 11, color: C.text } },
+                    m.nome
+                  )
+                ),
+                React.createElement(
+                  "div",
+                  { style: { flex: 1, height: 12, background: "#F0F0F0", borderRadius: 3, overflow: "hidden" } },
+                  React.createElement("div", { style: { width: m.adocao + "%", height: "100%", background: m.adocao >= 75 ? C.green : m.adocao >= 50 ? C.amber : C.red, borderRadius: 3 } })
+                ),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 11, fontWeight: 700, color: m.adocao >= 75 ? C.green : m.adocao >= 50 ? C.amber : C.red, minWidth: 35, textAlign: "right" } },
+                  m.adocao,
+                  "%"
+                )
+              );
+            })
+          ),
+          React.createElement(
+            Cd,
+            null,
+            React.createElement(ST, { title: "Filtros Mais Utilizados", sub: "Combinações de filtro mais aplicadas pelos usuários" }),
+            filtrosMaisUsados.map(function (f, i) {
+              return React.createElement(
+                "div",
+                { key: i, style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 10 } },
+                React.createElement(
+                  "span",
+                  { style: { width: 20, height: 20, borderRadius: "50%", background: i === 0 ? C.red : C.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: i === 0 ? "white" : C.textSec } },
+                  i + 1
+                ),
+                React.createElement(
+                  "div",
+                  { style: { flex: 1 } },
+                  React.createElement(
+                    "span",
+                    { style: { fontSize: 12, color: C.text } },
+                    f.filtro
+                  )
+                ),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 10, color: C.textMuted } },
+                  f.uso,
+                  "x"
+                ),
+                React.createElement(
+                  "span",
+                  { style: { fontSize: 11, fontWeight: 700, color: C.text } },
+                  f.pct,
+                  "%"
+                )
+              );
+            }),
+            React.createElement(
+              "div",
+              { style: { marginTop: 12, padding: "8px 12px", background: C.bg, borderRadius: 6, fontSize: 10, color: C.textSec } },
+              "Filtros revelam o que os usuários mais buscam. \"Estado + Motivo\" sendo o mais usado indica análise estratégica por região."
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { style: { padding: "12px 0", display: "flex", justifyContent: "space-between", fontSize: 10, color: C.textMuted, borderTop: "1px solid " + C.border } },
+          React.createElement(
+            "span",
+            null,
+            "© 2026 Deep — Plataforma Reintegrados"
+          ),
+          React.createElement(
+            "span",
+            null,
+            "Dados simulados · Mockup Uso do Painel"
+          )
+        )
+      )
+    )
+  );
+}
+/* Sidebar hint */ /* Main content */ /* Header */ /* ═══ CAMADA 1: VISÃO GERAL ═══ */ /* Evolução de acessos */ /* ═══ CAMADA 2: COMPORTAMENTO DO USUÁRIO ═══ */ /* Tempo médio de sessão + KPIs de engajamento */ /* Módulos mais acessados */ /* Tempo por módulo + Heatmap */ /* Tempo médio por módulo */ /* Heatmap dia × hora */ /* ═══ CAMADA 3: SEGMENTAÇÃO DE USUÁRIOS ═══ */ /* Distribuição por tipo + Departamento */ /* ═══ CAMADA 4: ADOÇÃO DE FEATURES ═══ */
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));</script></body></html>
