@@ -30,10 +30,10 @@
     --gap: 14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI','Roboto',-apple-system,sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+  body { font-family: 'Segoe UI','Roboto',-apple-system,sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; }
 
   /* Shell */
-  .app-shell { display: flex; min-height: 100vh; }
+  .app-shell { display: flex; min-height: 100vh; width: 100%; overflow-x: hidden; }
 
   /* Sidebar */
   .sidebar { width: 200px; background: var(--white); border-right: 1px solid var(--border); padding: 20px 0; flex-shrink: 0; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; }
@@ -48,7 +48,7 @@
   .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted); }
 
   /* Main */
-  .main { flex: 1; padding: 24px 32px; max-width: 1200px; }
+  .main { flex: 1; padding: 24px 32px; max-width: 1200px; min-width: 0; overflow-x: hidden; }
 
   /* Page Header */
   .page-header { margin-bottom: 20px; }
@@ -57,7 +57,7 @@
   .page-subtitle { font-size: 13px; color: var(--text-sec); margin-top: 2px; margin-left: 42px; }
 
   /* Filters */
-  .filters-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filters-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; overflow: hidden; }
   .filter-input { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text-sec); background: var(--white); min-width: 160px; }
   .filter-input.search { min-width: 200px; padding-left: 36px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239AA0A6' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 12px center; }
 
@@ -209,6 +209,7 @@
   .atestmed-stat .as-value { font-size: 24px; font-weight: 800; font-family: 'JetBrains Mono',monospace; }
   .atestmed-stat .as-label { font-size: 10px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.3px; margin-top: 2px; }
   .inss-content { display: grid; grid-template-columns: 180px 1fr; gap: 20px; align-items: center; }
+  .compare-table { width: 100%; overflow-x: auto; }
   .donut-wrap { display: flex; align-items: center; justify-content: center; flex-direction: column; }
   .donut-legend { display: flex; gap: 14px; margin-top: 8px; }
   .donut-legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text-sec); }
@@ -243,11 +244,60 @@
   .factor-pending { opacity: 0.45; position: relative; }
   .factor-pending::after { content: 'Aguardando laudo pericial'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 9px; color: var(--text-muted); font-style: italic; }
 
+  /* ═══ RESPONSIVE ═══ */
   @media (max-width: 1024px) {
     .sidebar { display: none; }
+    .main { padding: 16px 20px; max-width: 100%; }
     .causa-grid { grid-template-columns: repeat(2,1fr); }
     .map-container { grid-template-columns: 1fr; }
     .gp-grid { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .inss-content { grid-template-columns: 1fr; }
+    .tree-row .motivo { font-size: 11px; }
+    .tree-row .bar-wrap { display: none; }
+    .tree-usage { flex-direction: column; gap: 8px; }
+    .sprint-banner { flex-wrap: wrap; }
+  }
+
+  @media (max-width: 768px) {
+    .main { padding: 12px 14px; }
+    .card { padding: 16px; }
+    .page-title { font-size: 18px; }
+    .causa-grid { grid-template-columns: 1fr; }
+    .tabs { gap: 4px; }
+    .tab { padding: 6px 10px; font-size: 10px; min-width: 0; }
+    .filters-bar { flex-direction: column; }
+    .filter-input { min-width: 100% !important; }
+    .filter-input.search { min-width: 100% !important; }
+    .heatmap-table th, .heatmap-table td { font-size: 9px; padding: 4px 2px; min-width: 26px; }
+    .heatmap-table th:first-child, .heatmap-table td:first-child { min-width: 120px; }
+    .allegation-row { flex-wrap: wrap; gap: 4px; }
+    .allegation-bar-wrap { display: none; }
+    .allegation-pct { width: auto; }
+    .compare-table td { padding: 6px 4px; font-size: 11px; }
+    .gp-factor { flex-wrap: wrap; }
+    .gp-factor .gp-factor-pct { margin-top: 4px; }
+    .tree-row { flex-wrap: wrap; gap: 8px; padding: 10px 12px; }
+    .tree-row .pct, .tree-row .count { width: auto; }
+    .tree-stats { grid-template-columns: 1fr; }
+    .atestmed-stats, .atestmed-kpi-row, [style*="grid-template-columns: 1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
+    .insight-card .ic-value { font-size: 20px; }
+    .state-name { font-size: 16px; }
+    .sprint-tag, .sprint-tag-overlay, .stag { font-size: 8px; padding: 1px 6px; }
+  }
+
+  @media (max-width: 480px) {
+    .main { padding: 10px; }
+    .card { padding: 12px; border-radius: 8px; }
+    .section-title .label { font-size: 10px; }
+    .card-title { font-size: 13px; }
+    .causa-card .cc-pct { font-size: 22px; }
+    .causa-card .cc-name { font-size: 11px; }
+    .causa-card .cc-desc { font-size: 9px; }
+    .insight-card .ic-value { font-size: 18px; }
+    .insight-pill { font-size: 10px; padding: 6px 10px; }
+    .gp-card { padding: 14px; }
+    .tree-row .motivo { font-size: 10px; }
   }
 </style>
 </head>
@@ -591,7 +641,7 @@
           <div class="card-subtitle">Análise de processos com histórico de afastamento INSS · B91/B31 ativo · <span class="sprint-tag source" style="margin:0;">↳ Petição inicial (docs de afastamento anexados)</span></div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div class="atestmed-kpi-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
         <div class="atestmed-stat">
           <div class="as-value" style="color:var(--text);">612</div>
           <div class="as-label">Processos com histórico INSS</div>
