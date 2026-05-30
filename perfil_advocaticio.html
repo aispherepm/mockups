@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil Advocatício — Reintegrados | DeepCenter</title>
+<style>
+  :root{
+    --red:#CC092F; --redMid:#E84667; --redLight:#FDE8EC;
+    --purple:#7B2D8E; --purpleLight:#F3E8F7;
+    --green:#2E7D32; --greenLight:#E8F5E9;
+    --amber:#F57F17; --amberLight:#FFF8E1;
+    --blue:#1565C0; --blueLight:#E3F2FD;
+    --navy:#1a1a2e; --bg:#F5F6FA; --white:#fff; --border:#E8EAED;
+    --text:#1a1a2e; --textSec:#5f6368; --textMuted:#9AA0A6;
+    --shadow:0 1px 3px rgba(0,0,0,0.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+  .app{display:flex;min-height:100vh}
+  .side{width:232px;background:var(--white);border-right:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;padding:16px 0}
+  .collapse{align-self:flex-end;margin:0 14px 8px;width:24px;height:24px;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--textMuted);font-size:12px;cursor:pointer}
+  .brand{padding:0 20px 14px}
+  .brand .mark{font-size:27px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+  .brand .mark .b{color:#41719C}.brand .mark .e{color:#8C8C8C}
+  .brand .slogan{font-size:8px;letter-spacing:3px;color:#8C8C8C;margin-top:3px}
+  .navlabel{font-size:10px;letter-spacing:1px;color:var(--textMuted);padding:10px 20px 6px;text-transform:uppercase}
+  .nav{padding:0 12px}
+  .nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;color:var(--textSec);text-decoration:none;font-size:13.5px;margin-bottom:3px}
+  .nav a .ic{width:18px;text-align:center;font-size:15px}
+  .nav a:hover{background:var(--bg)}
+  .nav a.active{background:var(--red);color:#fff;font-weight:600}
+  .nav a.active .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:#fff;opacity:.9}
+  .bottom{margin-top:auto;padding:0 16px}
+  .sair{display:flex;align-items:center;gap:9px;border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--textSec);font-size:13px;margin-bottom:12px;cursor:pointer}
+  .statuscard{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+  .statuscard .on{font-size:11px;color:var(--green);font-weight:600;margin-bottom:7px}
+  .statuscard .t1{font-size:11px;color:var(--textSec)} .statuscard .t2{font-size:11px;color:var(--text);font-weight:600;margin-top:2px}
+  .main{flex:1;padding:20px 26px;overflow-x:hidden}
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logoico{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--red),var(--redMid));display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+  .topbar h1{font-size:20px;font-weight:800;color:var(--navy)} .topbar p{font-size:12px;color:var(--textSec);margin-top:1px}
+  .filters{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .search{flex:1;min-width:240px;display:flex;align-items:center;gap:9px;background:var(--white);border:1px solid var(--border);border-radius:24px;padding:10px 16px;color:var(--textMuted)}
+  .search input{border:0;outline:0;flex:1;font-size:13px;background:transparent;color:var(--text)}
+  .fdrop{display:flex;align-items:center;gap:12px;background:var(--white);border:1px solid var(--border);border-radius:24px;padding:10px 16px;font-size:13px;color:var(--textSec);min-width:200px;justify-content:space-between;cursor:pointer}
+  .fdrop .ar{font-size:10px;color:var(--textMuted)}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:18px}
+  .tab{flex:0 0 auto;min-width:90px;background:var(--white);border:1px solid var(--border);border-radius:11px;padding:12px 10px;text-align:center;color:var(--textMuted);cursor:pointer}
+  .tab .ic{font-size:16px;display:block;margin-bottom:6px} .tab .lb{font-size:10.5px;font-weight:600;line-height:1.2}
+  .tab.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 5px 14px rgba(204,9,47,.28)}
+  .tab:not(.active):hover{background:#FFF5F6;color:var(--textSec)}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+  .kpi{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:flex-start}
+  .kpi .lb{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--textSec);margin-bottom:10px;max-width:150px}
+  .kpi .v{font-size:29px;font-weight:800;color:var(--navy);line-height:1} .kpi .sub{font-size:12px;margin-top:8px}
+  .kpi .ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:22px 24px;box-shadow:var(--shadow)}
+  .stitle{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:18px}
+  .stitle::before{content:"";width:4px;height:17px;background:var(--red);border-radius:2px}
+  .stitle .tag{margin-left:auto;font-size:10px;font-weight:600;color:var(--textMuted);text-transform:uppercase;letter-spacing:.5px}
+  .hbar{margin-bottom:13px}
+  .hbar .top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
+  .hbar .top .nm{color:var(--text);font-weight:600;display:flex;align-items:center;gap:7px} .hbar .top .pc{color:var(--textSec);font-variant-numeric:tabular-nums}
+  .hbar .track{height:9px;background:var(--bg);border-radius:5px;overflow:hidden}
+  .hbar .fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--redMid))}
+  .hbar.alt .fill{background:var(--purple)} .hbar.nv .fill{background:var(--navy)} .hbar.gr .fill{background:var(--green)}
+  .note{font-size:10.5px;color:var(--textMuted);font-style:italic;margin-top:12px}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600}
+  .b-red{background:var(--redLight);color:var(--red)} .b-purple{background:var(--purpleLight);color:var(--purple)}
+  .b-green{background:var(--greenLight);color:var(--green)} .b-amber{background:var(--amberLight);color:var(--amber)} .b-blue{background:var(--blueLight);color:var(--blue)} .b-gray{background:#EEF0F2;color:var(--textSec)}
+  .abuse{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .abuse:last-child{border-bottom:0}
+  .abuse .rk{width:26px;height:26px;border-radius:50%;background:var(--redLight);color:var(--red);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .abuse .info{flex:1} .abuse .info .nm{font-size:13px;font-weight:600} .abuse .info .mt{font-size:11px;color:var(--textSec)} .abuse .rgt{text-align:right}
+  .mc{display:flex;gap:12px;margin-bottom:14px}
+  .mcbox{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:13px 15px}
+  .mcbox .v{font-size:20px;font-weight:800;color:var(--navy)} .mcbox .l{font-size:11px;color:var(--textSec);margin-top:3px}
+  table{width:100%;border-collapse:collapse}
+  thead th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--textSec);padding:10px 12px;border-bottom:2px solid var(--border)}
+  tbody td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+  tbody tr:hover{background:#FFF5F6}
+  td .nm{font-weight:600;color:var(--text)} td .oab{font-size:11px;color:var(--textMuted)} .num{font-variant-numeric:tabular-nums}
+  .seemore{border:1px solid var(--border);background:var(--white);border-radius:7px;padding:6px 11px;font-size:12px;color:var(--red);font-weight:600;cursor:pointer;white-space:nowrap} .seemore:hover{background:var(--redLight)}
+  .insight{border-radius:10px;padding:18px 20px}
+  .insight .h{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px;margin-bottom:12px}
+  .insight .ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .insight ul{list-style:none;font-size:12.5px;line-height:1.55} .insight li{padding-left:16px;position:relative;margin-bottom:8px}
+  .insight li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%}
+  .ins-red{background:var(--redLight)} .ins-red .ic{background:#fff;color:var(--red)} .ins-red .h{color:var(--red)} .ins-red li::before{background:var(--red)}
+  .ins-purple{background:var(--purpleLight)} .ins-purple .ic{background:#fff;color:var(--purple)} .ins-purple .h{color:var(--purple)} .ins-purple li::before{background:var(--purple)}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;padding:30px;overflow-y:auto} .overlay.show{display:block}
+  .modal{background:var(--white);border-radius:14px;max-width:1080px;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+  .mhead{background:#fff;padding:24px 26px 20px;display:flex;align-items:center;gap:16px;position:relative;border-bottom:1px solid var(--border)}
+  .mhead::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--red),var(--redMid) 55%,#F8C8D4)}
+  .mhead .av{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--red),var(--redMid));display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800;color:#fff}
+  .mhead h2{font-size:19px;font-weight:800;color:var(--navy)} .mhead .role{font-size:12px;color:var(--textSec);margin-top:3px}
+  .mhead .tags{margin-top:8px;display:flex;gap:7px;flex-wrap:wrap}
+  .mhead .x{position:absolute;top:20px;right:20px;cursor:pointer;font-size:18px;color:var(--textSec);background:#F1F2F4;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .mhead .x:hover{background:#E4E6E9}
+  .mbody{padding:24px 26px;max-height:72vh;overflow-y:auto}
+  .mkpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .mkpi{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+  .mkpi .v{font-size:22px;font-weight:800;color:var(--navy)} .mkpi .l{font-size:10px;color:var(--textSec);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+  .strat{background:linear-gradient(120deg,#FFF8F9,#fff);border:1px solid var(--redLight);border-left:4px solid var(--red);border-radius:10px;padding:16px 18px;margin-bottom:20px}
+  .strat .h{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--red);font-size:13px;margin-bottom:8px} .strat p{font-size:13px;line-height:1.6}
+  .mgrid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  .msub{font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+  .xcard{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px 14px;margin-bottom:9px}
+  .xcard .l{font-size:12.5px;font-weight:600} .xcard .l small{display:block;font-size:11px;color:var(--textMuted);font-weight:400} .mini{font-size:11px;color:var(--textSec)}
+  .tesepanel{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:20px}
+  .tese-row{display:grid;grid-template-columns:185px 1fr 150px;align-items:center;gap:14px;margin-bottom:12px}
+  .tese-row:last-child{margin-bottom:0}
+  .tese-row .tnm{font-size:12.5px;font-weight:600;color:var(--text)}
+  .tese-row .ttrack{height:10px;background:#fff;border:1px solid var(--border);border-radius:5px;overflow:hidden}
+  .tese-row .tfill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--redMid))}
+  .tese-row .tmt{font-size:11.5px;color:var(--textSec);text-align:right} .tese-row .tmt b{color:var(--navy)}
+  .footnote{font-size:10.5px;color:var(--textMuted);text-align:center;margin:22px 0 6px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="collapse">‹</div>
+    <div class="brand"><div class="mark"><span class="b">d</span><span class="e">EE</span><span class="b">p</span></div><div class="slogan">TURN-ON DATA</div></div>
+    <div class="navlabel">Visão Geral</div>
+    <nav class="nav">
+      <a href="#" class="active"><span class="ic">💼</span> Reintegrados <span class="dot"></span></a>
+      <a href="#"><span class="ic">💬</span> Chat</a>
+      <a href="#"><span class="ic">⚙</span> Configurações</a>
+      <a href="#"><span class="ic">📈</span> Uso do painel</a>
+    </nav>
+    <div class="bottom">
+      <div class="sair"><span>↪</span> Sair</div>
+      <div class="statuscard"><div class="on">● Sistema Online</div><div class="t1">Processos Trabalhistas</div><div class="t2">Desiree Nogueira Gonçalves Manoel</div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar"><div class="logoico">☁</div><div><h1>Processos Trabalhistas Bradesco</h1><p>Análise de Reintegrados</p></div></div>
+
+    <div class="filters">
+      <div class="search">🔍 <input placeholder="Buscar advogado da parte autora ou OAB..."></div>
+      <div class="fdrop">Todos os Estados <span class="ar">▼</span></div>
+      <div class="fdrop">Todos os motivos do pedido <span class="ar">▼</span></div>
+      <div class="fdrop">Todos os submotivos do pedido <span class="ar">▼</span></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab"><span class="ic">▽</span><span class="lb">Assessment</span></div>
+      <div class="tab"><span class="ic">◎</span><span class="lb">Insights Estratégicos</span></div>
+      <div class="tab"><span class="ic">⊶</span><span class="lb">Timeline</span></div>
+      <div class="tab"><span class="ic">▤</span><span class="lb">Processos</span></div>
+      <div class="tab"><span class="ic">◴</span><span class="lb">Mapa Estratégico</span></div>
+      <div class="tab"><span class="ic">⚖</span><span class="lb">Perfil Jurídico</span></div>
+      <div class="tab"><span class="ic">◷</span><span class="lb">Tempo &amp; Velocidade</span></div>
+      <div class="tab active"><span class="ic">§</span><span class="lb">Perfil Advocatício</span></div>
+      <div class="tab"><span class="ic">▲</span><span class="lb">Perfil de Magistrado</span></div>
+      <div class="tab"><span class="ic">✚</span><span class="lb">Inteligência Pericial</span></div>
+      <div class="tab"><span class="ic">❏</span><span class="lb">Contexto Processual</span></div>
+      <div class="tab"><span class="ic">☖</span><span class="lb">Perfil do Envolvido</span></div>
+      <div class="tab"><span class="ic">¶</span><span class="lb">Leitura Semântica</span></div>
+      <div class="tab"><span class="ic">◔</span><span class="lb">Score de Risco</span></div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpis">
+      <div class="kpi"><div><div class="lb">Advogados da parte autora</div><div class="v">312</div></div><div class="ico" style="background:var(--navy)">§</div></div>
+      <div class="kpi"><div><div class="lb">Sinal de litigância de massa</div><div class="v">27</div></div><div class="ico" style="background:var(--red)">⚑</div></div>
+      <div class="kpi"><div><div class="lb">Taxa de êxito do reclamante</div><div class="v">41%</div></div><div class="ico" style="background:var(--navy)">⚖</div></div>
+      <div class="kpi"><div><div class="lb">Valor médio da causa</div><div class="v">R$ 487 mil</div></div><div class="ico" style="background:var(--red)">$</div></div>
+    </div>
+
+    <!-- ROW 1 -->
+    <div class="grid2">
+      <div class="card">
+        <div class="stitle">Top advogados do reclamante por volume <span class="tag">Concentração</span></div>
+        <div class="hbar"><div class="top"><span class="nm">Dra. Mariana Vasconcelos <span class="badge b-red">massa</span></span><span class="pc">48 · 5,7%</span></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+        <div class="hbar"><div class="top"><span class="nm">Dra. Helena Prado <span class="badge b-red">massa</span></span><span class="pc">41 · 4,9%</span></div><div class="track"><div class="fill" style="width:85%"></div></div></div>
+        <div class="hbar"><div class="top"><span class="nm">Dr. Pedro Martins</span><span class="pc">37 · 4,4%</span></div><div class="track"><div class="fill" style="width:77%"></div></div></div>
+        <div class="hbar alt"><div class="top"><span class="nm">Dr. Rogério Antunes</span><span class="pc">29 · 3,4%</span></div><div class="track"><div class="fill" style="width:60%"></div></div></div>
+        <div class="hbar nv"><div class="top"><span class="nm">Dra. Carla Lima</span><span class="pc">24 · 2,8%</span></div><div class="track"><div class="fill" style="width:50%"></div></div></div>
+        <div class="note">Selo "massa" = volume atípico + advogados associados recorrentes na PI — indício de reintegração abusiva a investigar.</div>
+      </div>
+      <div class="card">
+        <div class="stitle">Detecção de reintegração abusiva <span class="tag">Litigância de massa</span></div>
+        <div class="abuse"><div class="rk">1</div><div class="info"><div class="nm">Dra. Mariana Vasconcelos</div><div class="mt">48 processos · 6 advogados associados recorrentes · 71% via mesma vara</div></div><div class="rgt"><span class="badge b-red">Risco alto</span></div></div>
+        <div class="abuse"><div class="rk">2</div><div class="info"><div class="nm">Dra. Helena Prado</div><div class="mt">41 processos · 4 associados · forte adesão à mesma tese (Doença)</div></div><div class="rgt"><span class="badge b-red">Risco alto</span></div></div>
+        <div class="abuse"><div class="rk">3</div><div class="info"><div class="nm">Dr. Pedro Martins</div><div class="mt">37 processos · 3 associados · padrão geográfico concentrado</div></div><div class="rgt"><span class="badge b-amber">Atenção</span></div></div>
+        <div class="note">Cruza volume do advogado principal + advogados associados extraídos da petição inicial (o GCPJ registra apenas um).</div>
+      </div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="grid2">
+      <div class="card">
+        <div class="stitle">Teses mais utilizadas <span class="tag">Motivo do pedido de reintegração</span></div>
+        <div class="hbar"><div class="top"><span class="nm">Estabilidade Provisória</span><span class="pc">34%</span></div><div class="track"><div class="fill" style="width:90%"></div></div></div>
+        <div class="hbar"><div class="top"><span class="nm">Doença / Incapacidade</span><span class="pc">27%</span></div><div class="track"><div class="fill" style="width:71%"></div></div></div>
+        <div class="hbar"><div class="top"><span class="nm">Dispensa Discriminatória</span><span class="pc">19%</span></div><div class="track"><div class="fill" style="width:50%"></div></div></div>
+        <div class="hbar alt"><div class="top"><span class="nm">Garantia Convencional</span><span class="pc">12%</span></div><div class="track"><div class="fill" style="width:32%"></div></div></div>
+        <div class="hbar nv"><div class="top"><span class="nm">Dispensa Obstativa</span><span class="pc">8%</span></div><div class="track"><div class="fill" style="width:21%"></div></div></div>
+        <div class="note">Um processo pode conter mais de um motivo do pedido de reintegração — por isso a soma pode ultrapassar 100%.</div>
+      </div>
+      <div class="card">
+        <div class="stitle">Relação Advogado × Médico × CID <span class="tag">Rede</span></div>
+        <div class="abuse"><div class="rk" style="background:var(--purpleLight);color:var(--purple)">★</div><div class="info"><div class="nm">M. Vasconcelos × Dr. L. Mendes</div><div class="mt">8 laudos · CID M51 (lombar) · sempre pró-reclamante</div></div><div class="rgt"><span class="badge b-purple">Vínculo forte</span></div></div>
+        <div class="abuse"><div class="rk" style="background:var(--purpleLight);color:var(--purple)">★</div><div class="info"><div class="nm">H. Prado × Dra. P. Rocha</div><div class="mt">6 laudos · CID F32 (depressivo) · estigmatizante (Súmula 443)</div></div><div class="rgt"><span class="badge b-purple">Vínculo forte</span></div></div>
+        <div class="abuse"><div class="rk" style="background:#EEF0F2;color:var(--textSec)">·</div><div class="info"><div class="nm">P. Martins × 5 médicos distintos</div><div class="mt">sem concentração relevante</div></div><div class="rgt"><span class="badge b-gray">Disperso</span></div></div>
+        <div class="note">Mapeamento dos 50 maiores advogados × 50 maiores médicos. Concentração advogado↔médico↔CID sinaliza rede a investigar.</div>
+      </div>
+    </div>
+
+    <!-- ROW 3 -->
+    <div class="grid2">
+      <div class="card">
+        <div class="stitle">Concentração geográfica <span class="tag">Onde atuam</span></div>
+        <div class="hbar nv"><div class="top"><span class="nm">São Paulo / SP (TRT-2)</span><span class="pc">112</span></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+        <div class="hbar nv"><div class="top"><span class="nm">Osasco / SP (TRT-2)</span><span class="pc">63</span></div><div class="track"><div class="fill" style="width:56%"></div></div></div>
+        <div class="hbar nv"><div class="top"><span class="nm">Campinas / SP (TRT-15)</span><span class="pc">48</span></div><div class="track"><div class="fill" style="width:43%"></div></div></div>
+        <div class="hbar nv"><div class="top"><span class="nm">Rio de Janeiro / RJ (TRT-1)</span><span class="pc">41</span></div><div class="track"><div class="fill" style="width:37%"></div></div></div>
+        <div class="hbar nv"><div class="top"><span class="nm">Belo Horizonte / MG (TRT-3)</span><span class="pc">35</span></div><div class="track"><div class="fill" style="width:31%"></div></div></div>
+        <div class="note">Concentração de varas/comarcas por advogado ajuda a antecipar em quais juízos o banco enfrentará cada ator.</div>
+      </div>
+      <div class="card">
+        <div class="stitle">Comportamento processual <span class="tag">Padrão de atuação</span></div>
+        <div class="mc">
+          <div class="mcbox"><div class="v">31%</div><div class="l">Pedem liminar / tutela de urgência</div></div>
+          <div class="mcbox"><div class="v">24%</div><div class="l">Propensão a acordo</div></div>
+        </div>
+        <div class="mc">
+          <div class="mcbox"><div class="v">58%</div><div class="l">Taxa de recurso (quando perdem em 1º grau)</div></div>
+          <div class="mcbox"><div class="v">19%</div><div class="l">Liminar / tutela deferida (quando pedida)</div></div>
+        </div>
+        <div class="note">Insumo estratégico: advogados de baixa propensão a acordo + alta taxa de recurso exigem defesa preparada para o longo prazo.</div>
+      </div>
+    </div>
+
+    <!-- TABELA -->
+    <div class="card">
+      <div class="stitle">Ranking de advogados da parte autora <span class="tag">312 monitorados</span></div>
+      <table>
+        <thead><tr><th>Advogado</th><th>OAB</th><th>Advogados associados</th><th>Nº Proc.</th><th>Êxito reclamante</th><th>Valor médio da causa</th><th>Tese predominante</th><th>Sinal</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><span class="nm">Dra. Mariana Vasconcelos</span></td><td class="oab">SP 198.442</td><td class="num">6</td><td class="num">48</td><td><span class="badge b-red">62%</span></td><td class="num">R$ 720 mil</td><td class="mini">Estabilidade Provisória</td><td><span class="badge b-red">Litigância de massa</span></td><td><button class="seemore" onclick="openModal(0)">👁 Ver Perfil</button></td></tr>
+          <tr><td><span class="nm">Dra. Helena Prado</span></td><td class="oab">SP 221.087</td><td class="num">4</td><td class="num">41</td><td><span class="badge b-red">55%</span></td><td class="num">R$ 540 mil</td><td class="mini">Doença / Incapacidade</td><td><span class="badge b-red">Litigância de massa</span></td><td><button class="seemore" onclick="openModal(1)">👁 Ver Perfil</button></td></tr>
+          <tr><td><span class="nm">Dr. Pedro Martins</span></td><td class="oab">RJ 142.330</td><td class="num">3</td><td class="num">37</td><td><span class="badge b-amber">44%</span></td><td class="num">R$ 410 mil</td><td class="mini">Dispensa Discriminatória</td><td><span class="badge b-amber">Atenção</span></td><td><button class="seemore" onclick="openModal(2)">👁 Ver Perfil</button></td></tr>
+          <tr><td><span class="nm">Dr. Rogério Antunes</span></td><td class="oab">MG 088.901</td><td class="num">2</td><td class="num">29</td><td><span class="badge b-amber">38%</span></td><td class="num">R$ 365 mil</td><td class="mini">Estabilidade Provisória</td><td><span class="badge b-gray">—</span></td><td><button class="seemore" onclick="openModal(3)">👁 Ver Perfil</button></td></tr>
+          <tr><td><span class="nm">Dra. Carla Lima</span></td><td class="oab">SP 173.556</td><td class="num">1</td><td class="num">24</td><td><span class="badge b-green">29%</span></td><td class="num">R$ 298 mil</td><td class="mini">Garantia Convencional</td><td><span class="badge b-gray">—</span></td><td><button class="seemore" onclick="openModal(4)">👁 Ver Perfil</button></td></tr>
+        </tbody>
+      </table>
+      <div class="note">Êxito reclamante = % de decisões deferidas (procedência total/parcial do pedido de reintegração). Advogados associados = quantos advogados constam junto na petição inicial (o GCPJ registra apenas um). OAB é a chave anti-homônimo.</div>
+    </div>
+
+    <div class="footnote">Dados simulados para mockup · Plataforma Reintegrados · DeepCenter</div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="ov">
+  <div class="modal">
+    <div class="mhead">
+      <div class="av" id="m_av">MV</div>
+      <div><h2 id="m_nm">Dra. Mariana Vasconcelos</h2><div class="role" id="m_role">OAB/SP 198.442 · Atuação: TRT-2, TRT-15</div>
+        <div class="tags"><span class="badge b-red">Litigância de massa</span><span class="badge b-blue">48 processos</span><span class="badge b-amber">6 associados na PI</span></div></div>
+      <div class="x" onclick="closeModal()">✕</div>
+    </div>
+    <div class="mbody">
+      <div class="mkpis">
+        <div class="mkpi"><div class="v">48</div><div class="l">Processos ativos</div></div>
+        <div class="mkpi"><div class="v">62%</div><div class="l">Êxito do reclamante</div></div>
+        <div class="mkpi"><div class="v">R$ 720 mil</div><div class="l">Valor médio da causa</div></div>
+        <div class="mkpi"><div class="v">29 dias</div><div class="l">Tempo até liminar / tutela</div></div>
+      </div>
+      <div class="strat"><div class="h">◆ Sugestão de estratégia de defesa</div>
+        <p>Advogada de alto volume (litigância de massa) com êxito do reclamante acima da média (62% vs 41%), concentrada em <b>Estabilidade Provisória</b>, com 6 advogados associados recorrentes na PI e vínculo forte com o perito Dr. L. Mendes. Recomenda-se: (1) tratar como padrão de massa — montar tese de defesa replicável e impugnar a estabilidade já na contestação; (2) acionar assistente técnico nas perícias com este perito; (3) baixa propensão a acordo + alta taxa de recurso: preparar defesa para o longo prazo, já estruturando razões recursais.</p>
+      </div>
+      <div style="margin-bottom:20px">
+        <div class="msub">Tempo por fase processual (desta advogada)</div>
+        <div class="hbar"><div class="top"><span class="nm">Ajuizamento → liminar / tutela de urgência</span><span class="pc">29 dias</span></div><div class="track"><div class="fill" style="width:10%"></div></div></div>
+        <div class="hbar"><div class="top"><span class="nm">Ajuizamento → sentença (1º grau)</span><span class="pc">10,4 meses</span></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+        <div class="hbar alt"><div class="top"><span class="nm">Recurso no TRT (sentença → acórdão)</span><span class="pc">8,1 meses</span></div><div class="track"><div class="fill" style="width:78%"></div></div></div>
+        <div class="hbar nv"><div class="top"><span class="nm">Trânsito em julgado / início da execução</span><span class="pc">5,0 meses</span></div><div class="track"><div class="fill" style="width:48%"></div></div></div>
+        <div class="note">Consegue liminar mais rápido que a média (29 vs 38 dias) — a reintegração provisória tende a ocorrer cedo nos casos dela, o que reforça a defesa robusta logo na contestação.</div>
+      </div>
+
+      <div class="mgrid2">
+        <div>
+          <div class="msub">Advogados associados (extraídos da PI)</div>
+          <div class="xcard"><div class="l">Dr. C. Vasconcelos<small>OAB/SP 198.443 · 31 processos juntos</small></div><div class="r"><span class="badge b-red">recorrente</span></div></div>
+          <div class="xcard"><div class="l">Dr. R. Tavares<small>OAB/SP 240.118 · 22 processos juntos</small></div><div class="r"><span class="badge b-amber">recorrente</span></div></div>
+          <div class="xcard"><div class="l">Dra. F. Lima<small>OAB/SP 251.900 · 9 processos juntos</small></div><div class="r"><span class="badge b-gray">eventual</span></div></div>
+          <div class="msub" style="margin-top:16px">Cruzamento Advogado × Médico × CID</div>
+          <div class="xcard"><div class="l">Dr. L. Mendes (ortopedia)<small>CID M51 · 8 laudos pró-reclamante</small></div><div class="r"><span class="badge b-purple">vínculo forte</span></div></div>
+        </div>
+        <div>
+          <div class="msub">Cruzamento Advogado × Magistrado / Vara</div>
+          <div class="xcard"><div class="l">Juíza A. Ferreira<small>14ª VT São Paulo</small></div><div class="r"><span class="badge b-red">71% fav. recl.</span><div class="mini">14 processos</div></div></div>
+          <div class="xcard"><div class="l">Juiz R. Camargo<small>3ª VT Osasco</small></div><div class="r"><span class="badge b-amber">48% fav. recl.</span><div class="mini">9 processos</div></div></div>
+          <div class="xcard"><div class="l">Juiz M. Tavares<small>8ª VT Campinas</small></div><div class="r"><span class="badge b-green">22% fav. recl.</span><div class="mini">6 processos</div></div></div>
+        </div>
+      </div>
+      <div class="tesepanel">
+        <div class="msub" style="margin-bottom:14px">Teses &amp; desempenho da advogada <span style="font-weight:400;color:var(--textMuted);text-transform:none;letter-spacing:0">— uso × êxito do reclamante por motivo do pedido</span></div>
+        <div class="tese-row"><div class="tnm">Estabilidade Provisória</div><div class="ttrack"><div class="tfill" style="width:71%"></div></div><div class="tmt"><b>71%</b> êxito · 58% dos casos</div></div>
+        <div class="tese-row"><div class="tnm">Doença / Incapacidade</div><div class="ttrack"><div class="tfill" style="width:60%"></div></div><div class="tmt"><b>60%</b> êxito · 22% dos casos</div></div>
+        <div class="tese-row"><div class="tnm">Dispensa Discriminatória</div><div class="ttrack"><div class="tfill" style="width:48%"></div></div><div class="tmt"><b>48%</b> êxito · 14% dos casos</div></div>
+        <div class="tese-row"><div class="tnm">Garantia Convencional</div><div class="ttrack"><div class="tfill" style="width:30%"></div></div><div class="tmt"><b>30%</b> êxito · 6% dos casos</div></div>
+        <div class="note">Barra = taxa de êxito do reclamante naquela tese; ao lado, o quanto a advogada a utiliza. Mostra onde concentra esforço e onde é mais eficaz — orienta onde a defesa do banco precisa ser mais robusta.</div>
+      </div>
+
+      <div class="mgrid2">
+        <div class="insight ins-red"><div class="h"><span class="ic">!</span> Pontos de cuidado</div>
+          <ul><li>Padrão de litigância de massa com associados recorrentes.</li><li>Vínculo forte com perito — perícia decisiva nesses casos.</li><li>Êxito do reclamante 21 p.p. acima da média geral.</li></ul></div>
+        <div class="insight ins-purple"><div class="h"><span class="ic">◆</span> Recomendações</div>
+          <ul><li>Defesa padronizada para Estabilidade Provisória desta advogada.</li><li>Assistente técnico nas perícias com Dr. L. Mendes.</li><li>Antecipar provisionamento — baixa propensão a acordo.</li></ul></div>
+      </div>
+      <div class="footnote">Dados simulados para mockup · Insumos da base vetorial (indexação em tempo real)</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ADV=[
+    {av:"MV",nm:"Dra. Mariana Vasconcelos",role:"OAB/SP 198.442 · Atuação: TRT-2, TRT-15"},
+    {av:"HP",nm:"Dra. Helena Prado",role:"OAB/SP 221.087 · Atuação: TRT-2"},
+    {av:"PM",nm:"Dr. Pedro Martins",role:"OAB/RJ 142.330 · Atuação: TRT-1"},
+    {av:"RA",nm:"Dr. Rogério Antunes",role:"OAB/MG 088.901 · Atuação: TRT-3"},
+    {av:"CL",nm:"Dra. Carla Lima",role:"OAB/SP 173.556 · Atuação: TRT-2"}
+  ];
+  function openModal(i){const a=ADV[i];document.getElementById('m_av').textContent=a.av;document.getElementById('m_nm').textContent=a.nm;document.getElementById('m_role').textContent=a.role;document.getElementById('ov').classList.add('show');}
+  function closeModal(){document.getElementById('ov').classList.remove('show');}
+  document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')closeModal();});
+</script>
+</body>
+</html>
