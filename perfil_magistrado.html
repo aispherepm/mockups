@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil de Magistrado — Reintegrados | DeepCenter</title>
+<style>
+  :root{
+    --red:#CC092F; --redMid:#E84667; --redLight:#FDE8EC;
+    --purple:#7B2D8E; --purpleLight:#F3E8F7;
+    --green:#2E7D32; --greenLight:#E8F5E9;
+    --amber:#F57F17; --amberLight:#FFF8E1;
+    --blue:#1565C0; --blueLight:#E3F2FD;
+    --navy:#1a1a2e; --bg:#F5F6FA; --white:#fff; --border:#E8EAED;
+    --text:#1a1a2e; --textSec:#5f6368; --textMuted:#9AA0A6;
+    --shadow:0 1px 3px rgba(0,0,0,0.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+  .app{display:flex;min-height:100vh}
+  .side{width:232px;background:var(--white);border-right:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;padding:16px 0}
+  .collapse{align-self:flex-end;margin:0 14px 8px;width:24px;height:24px;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--textMuted);font-size:12px;cursor:pointer}
+  .brand{padding:0 20px 14px}
+  .brand .mark{font-size:27px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+  .brand .mark .b{color:#41719C}.brand .mark .e{color:#8C8C8C}
+  .brand .slogan{font-size:8px;letter-spacing:3px;color:#8C8C8C;margin-top:3px}
+  .navlabel{font-size:10px;letter-spacing:1px;color:var(--textMuted);padding:10px 20px 6px;text-transform:uppercase}
+  .nav{padding:0 12px}
+  .nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;color:var(--textSec);text-decoration:none;font-size:13.5px;margin-bottom:3px}
+  .nav a .ic{width:18px;text-align:center;font-size:15px}
+  .nav a:hover{background:var(--bg)}
+  .nav a.active{background:var(--red);color:#fff;font-weight:600}
+  .nav a.active .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:#fff;opacity:.9}
+  .bottom{margin-top:auto;padding:0 16px}
+  .sair{display:flex;align-items:center;gap:9px;border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--textSec);font-size:13px;margin-bottom:12px;cursor:pointer}
+  .statuscard{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+  .statuscard .on{font-size:11px;color:var(--green);font-weight:600;margin-bottom:7px}
+  .statuscard .t1{font-size:11px;color:var(--textSec)} .statuscard .t2{font-size:11px;color:var(--text);font-weight:600;margin-top:2px}
+  .main{flex:1;padding:20px 26px;overflow-x:hidden}
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logoico{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--red),var(--redMid));display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+  .topbar h1{font-size:20px;font-weight:800;color:var(--navy)} .topbar p{font-size:12px;color:var(--textSec);margin-top:1px}
+  .filters{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .search{flex:1;min-width:240px;display:flex;align-items:center;gap:9px;background:var(--white);border:1px solid var(--border);border-radius:24px;padding:10px 16px;color:var(--textMuted)}
+  .search input{border:0;outline:0;flex:1;font-size:13px;background:transparent;color:var(--text)}
+  .fdrop{display:flex;align-items:center;gap:12px;background:var(--white);border:1px solid var(--border);border-radius:24px;padding:10px 16px;font-size:13px;color:var(--textSec);min-width:200px;justify-content:space-between;cursor:pointer}
+  .fdrop .ar{font-size:10px;color:var(--textMuted)}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:18px}
+  .tab{flex:0 0 auto;min-width:90px;background:var(--white);border:1px solid var(--border);border-radius:11px;padding:12px 10px;text-align:center;color:var(--textMuted);cursor:pointer}
+  .tab .ic{font-size:16px;display:block;margin-bottom:6px} .tab .lb{font-size:10.5px;font-weight:600;line-height:1.2}
+  .tab.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 5px 14px rgba(204,9,47,.28)}
+  .tab:not(.active):hover{background:#FFF5F6;color:var(--textSec)}
+  .banner{display:flex;gap:11px;align-items:flex-start;background:var(--amberLight);border:1px solid #FCE4B6;border-left:4px solid var(--amber);border-radius:10px;padding:13px 16px;margin-bottom:16px;font-size:12.5px;color:#7a5a12}
+  .banner b{color:#5f4410}
+  .segment{display:inline-flex;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:16px;gap:4px}
+  .segment button{border:0;background:transparent;padding:8px 18px;border-radius:7px;font-size:13px;color:var(--textSec);cursor:pointer;font-weight:600}
+  .segment button.on{background:var(--red);color:#fff}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+  .kpi{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:flex-start}
+  .kpi .lb{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--textSec);margin-bottom:10px;max-width:150px}
+  .kpi .v{font-size:29px;font-weight:800;color:var(--navy);line-height:1} .kpi .sub{font-size:12px;margin-top:8px}
+  .kpi .ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:22px 24px;box-shadow:var(--shadow)}
+  .stitle{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:18px}
+  .stitle::before{content:"";width:4px;height:17px;background:var(--red);border-radius:2px}
+  .stitle .tag{margin-left:auto;font-size:10px;font-weight:600;color:var(--textMuted);text-transform:uppercase;letter-spacing:.5px}
+  .hbar{margin-bottom:13px}
+  .hbar .top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
+  .hbar .top .nm{color:var(--text);font-weight:600} .hbar .top .pc{color:var(--textSec);font-variant-numeric:tabular-nums}
+  .hbar .track{height:9px;background:var(--bg);border-radius:5px;overflow:hidden}
+  .hbar .fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--redMid))}
+  .hbar.alt .fill{background:var(--purple)} .hbar.gr .fill{background:var(--green)} .hbar.nv .fill{background:var(--navy)}
+  .note{font-size:10.5px;color:var(--textMuted);font-style:italic;margin-top:12px}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600}
+  .b-red{background:var(--redLight);color:var(--red)} .b-purple{background:var(--purpleLight);color:var(--purple)}
+  .b-green{background:var(--greenLight);color:var(--green)} .b-amber{background:var(--amberLight);color:var(--amber)} .b-blue{background:var(--blueLight);color:var(--blue)} .b-gray{background:#EEF0F2;color:var(--textSec)}
+  .donutwrap{display:flex;align-items:center;gap:24px}
+  .legend{display:flex;gap:16px;font-size:11px;color:var(--textSec);margin-top:10px;flex-wrap:wrap} .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+  /* accordion geo */
+  .acc{border:1px solid var(--border);border-radius:9px;margin-bottom:10px;overflow:hidden}
+  .acc .ah{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg);cursor:pointer;font-size:13px;font-weight:600}
+  .acc .ab{padding:12px 14px}
+  table{width:100%;border-collapse:collapse}
+  thead th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--textSec);padding:10px 12px;border-bottom:2px solid var(--border)}
+  tbody td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+  tbody tr:hover{background:#FFF5F6}
+  td .nm{font-weight:600;color:var(--text)} td .oab{font-size:11px;color:var(--textMuted)} .num{font-variant-numeric:tabular-nums}
+  .seemore{border:1px solid var(--border);background:var(--white);border-radius:7px;padding:6px 11px;font-size:12px;color:var(--red);font-weight:600;cursor:pointer;white-space:nowrap} .seemore:hover{background:var(--redLight)}
+  .insight{border-radius:10px;padding:18px 20px}
+  .insight .h{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px;margin-bottom:12px}
+  .insight .ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .insight ul{list-style:none;font-size:12.5px;line-height:1.55} .insight li{padding-left:16px;position:relative;margin-bottom:8px}
+  .insight li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%}
+  .ins-green{background:var(--greenLight)} .ins-green .ic{background:#fff;color:var(--green)} .ins-green .h{color:var(--green)} .ins-green li::before{background:var(--green)}
+  .ins-red{background:var(--redLight)} .ins-red .ic{background:#fff;color:var(--red)} .ins-red .h{color:var(--red)} .ins-red li::before{background:var(--red)}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;padding:30px;overflow-y:auto} .overlay.show{display:block}
+  .modal{background:var(--white);border-radius:14px;max-width:1080px;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+  .mhead{background:#fff;padding:24px 26px 20px;display:flex;align-items:center;gap:16px;position:relative;border-bottom:1px solid var(--border)}
+  .mhead::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--red),var(--redMid) 55%,#F8C8D4)}
+  .mhead .av{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--red),var(--redMid));display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800;color:#fff}
+  .mhead h2{font-size:19px;font-weight:800;color:var(--navy)} .mhead .role{font-size:12px;color:var(--textSec);margin-top:3px}
+  .mhead .tags{margin-top:8px;display:flex;gap:7px;flex-wrap:wrap}
+  .mhead .x{position:absolute;top:20px;right:20px;cursor:pointer;font-size:18px;color:var(--textSec);background:#F1F2F4;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .mhead .x:hover{background:#E4E6E9}
+  .mbody{padding:24px 26px;max-height:72vh;overflow-y:auto}
+  .mkpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .mkpi{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+  .mkpi .v{font-size:22px;font-weight:800;color:var(--navy)} .mkpi .l{font-size:10px;color:var(--textSec);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+  .strat{background:linear-gradient(120deg,#FFF8F9,#fff);border:1px solid var(--redLight);border-left:4px solid var(--red);border-radius:10px;padding:16px 18px;margin-bottom:20px}
+  .strat .h{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--red);font-size:13px;margin-bottom:8px} .strat p{font-size:13px;line-height:1.6}
+  .mgrid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  .msub{font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+  .xcard{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px 14px;margin-bottom:9px}
+  .xcard .l{font-size:12.5px;font-weight:600} .xcard .l small{display:block;font-size:11px;color:var(--textMuted);font-weight:400} .mini{font-size:11px;color:var(--textSec)}
+  .div-row{display:flex;align-items:center;font-size:12px;margin-bottom:9px}
+  .div-row .lbl{width:160px;color:var(--text);font-weight:600}
+  .div-row .bars{flex:1;display:flex;align-items:center;height:16px;background:var(--bg);border-radius:4px;overflow:hidden}
+  .div-row .def{height:100%;background:var(--red)} .div-row .ind{height:100%;background:var(--navy);opacity:.55}
+  .histtable td{padding:8px 10px;font-size:12px}.histtable th{font-size:9px;padding:8px 10px}
+  .footnote{font-size:10.5px;color:var(--textMuted);text-align:center;margin:22px 0 6px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="collapse">‹</div>
+    <div class="brand"><div class="mark"><span class="b">d</span><span class="e">EE</span><span class="b">p</span></div><div class="slogan">TURN-ON DATA</div></div>
+    <div class="navlabel">Visão Geral</div>
+    <nav class="nav">
+      <a href="#" class="active"><span class="ic">💼</span> Reintegrados <span class="dot"></span></a>
+      <a href="#"><span class="ic">💬</span> Chat</a>
+      <a href="#"><span class="ic">⚙</span> Configurações</a>
+      <a href="#"><span class="ic">📈</span> Uso do painel</a>
+    </nav>
+    <div class="bottom">
+      <div class="sair"><span>↪</span> Sair</div>
+      <div class="statuscard"><div class="on">● Sistema Online</div><div class="t1">Processos Trabalhistas</div><div class="t2">Desiree Nogueira Gonçalves Manoel</div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar"><div class="logoico">☁</div><div><h1>Processos Trabalhistas Bradesco</h1><p>Análise de Reintegrados</p></div></div>
+
+    <div class="filters">
+      <div class="search">🔍 <input placeholder="Buscar magistrado, vara ou comarca..."></div>
+      <div class="fdrop">Todos os Estados <span class="ar">▼</span></div>
+      <div class="fdrop">Todos os motivos do pedido <span class="ar">▼</span></div>
+      <div class="fdrop">Todos os submotivos do pedido <span class="ar">▼</span></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab"><span class="ic">▽</span><span class="lb">Assessment</span></div>
+      <div class="tab"><span class="ic">◎</span><span class="lb">Insights Estratégicos</span></div>
+      <div class="tab"><span class="ic">⊶</span><span class="lb">Timeline</span></div>
+      <div class="tab"><span class="ic">▤</span><span class="lb">Processos</span></div>
+      <div class="tab"><span class="ic">◴</span><span class="lb">Mapa Estratégico</span></div>
+      <div class="tab"><span class="ic">⚖</span><span class="lb">Perfil Jurídico</span></div>
+      <div class="tab"><span class="ic">◷</span><span class="lb">Tempo &amp; Velocidade</span></div>
+      <div class="tab"><span class="ic">§</span><span class="lb">Análise Advocatícia</span></div>
+      <div class="tab active"><span class="ic">▲</span><span class="lb">Perfil de Magistrado</span></div>
+      <div class="tab"><span class="ic">✚</span><span class="lb">Inteligência Pericial</span></div>
+      <div class="tab"><span class="ic">❏</span><span class="lb">Contexto Processual</span></div>
+      <div class="tab"><span class="ic">☖</span><span class="lb">Perfil do Envolvido</span></div>
+      <div class="tab"><span class="ic">¶</span><span class="lb">Leitura Semântica</span></div>
+      <div class="tab"><span class="ic">◔</span><span class="lb">Score de Risco</span></div>
+    </div>
+
+    <div class="banner"><span style="font-size:16px">🔒</span><div><b>Visão de uso interno do DEJUR.</b> Análise jurimétrica sobre dados processuais públicos, destinada à estratégia de defesa. Tom de exibição e nível de acesso a serem alinhados com o Victor (Operações) antes de exposição mais ampla.</div></div>
+
+    <div class="segment">
+      <button class="on">1º Grau — Juiz</button>
+      <button>2º Grau — Desembargador (relator)</button>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><div><div class="lb">Magistrados monitorados</div><div class="v">168</div><div class="sub" style="color:var(--textSec)">1º grau · base ativa</div></div><div class="ico" style="background:var(--navy)">▲</div></div>
+      <div class="kpi"><div><div class="lb">Taxa média deferida (reclamante)</div><div class="v">37%</div><div class="sub" style="color:var(--red)">favorável ao reclamante</div></div><div class="ico" style="background:var(--red)">⚖</div></div>
+      <div class="kpi"><div><div class="lb">Tempo médio até sentença</div><div class="v">14,2 m</div><div class="sub" style="color:var(--textSec)">da distribuição à sentença</div></div><div class="ico" style="background:var(--navy)">◷</div></div>
+      <div class="kpi"><div><div class="lb">Índice médio de reforma no TRT</div><div class="v">23%</div><div class="sub" style="color:var(--amber)">sentenças modificadas em 2º grau</div></div><div class="ico" style="background:var(--red)">↻</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="stitle">Decisões agregadas <span class="tag">1º grau</span></div>
+        <div class="donutwrap">
+          <svg viewBox="0 0 220 220" width="190" height="190">
+            <circle cx="110" cy="110" r="60" fill="none" stroke="#1a1a2e" stroke-width="22"/>
+            <circle cx="110" cy="110" r="60" fill="none" stroke="#CC092F" stroke-width="22" stroke-dasharray="139.5 237.5" transform="rotate(-90 110 110)"/>
+            <text x="110" y="104" font-size="26" font-weight="800" fill="#1a1a2e" text-anchor="middle">37%</text>
+            <text x="110" y="124" font-size="10" fill="#5f6368" text-anchor="middle">deferida</text>
+          </svg>
+          <div>
+            <div style="margin-bottom:14px"><span class="legend"><i style="background:#CC092F"></i><b>Deferida</b> — favorável ao reclamante · 37%</span></div>
+            <div><span class="legend"><i style="background:#1a1a2e"></i><b>Indeferida</b> — favorável ao banco · 63%</span></div>
+            <div class="note" style="margin-top:18px">Procedência total ou parcial do pedido de reintegração em 1º grau, antes de eventual recurso ao TRT.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="stitle">Taxa deferida × Reforma no TRT <span class="tag">Oportunidade de recurso</span></div>
+        <svg viewBox="0 0 460 260" width="100%" height="230">
+          <line x1="46" y1="20" x2="46" y2="214" stroke="#E8EAED"/><line x1="46" y1="214" x2="440" y2="214" stroke="#E8EAED"/>
+          <line x1="46" y1="166" x2="440" y2="166" stroke="#F0F1F4"/><line x1="46" y1="118" x2="440" y2="118" stroke="#F0F1F4"/><line x1="46" y1="70" x2="440" y2="70" stroke="#F0F1F4"/>
+          <text x="40" y="218" font-size="9" fill="#9AA0A6" text-anchor="end">0%</text><text x="40" y="170" font-size="9" fill="#9AA0A6" text-anchor="end">20%</text><text x="40" y="122" font-size="9" fill="#9AA0A6" text-anchor="end">40%</text><text x="40" y="74" font-size="9" fill="#9AA0A6" text-anchor="end">60%</text>
+          <rect x="250" y="20" width="190" height="98" fill="#F3E8F7" opacity=".55"/><text x="345" y="36" font-size="9" fill="#7B2D8E" text-anchor="middle" font-weight="700">DEFERE MUITO + REFORMA ALTA</text>
+          <circle cx="380" cy="58" r="13" fill="#7B2D8E" opacity=".75"/><text x="380" y="42" font-size="8" fill="#5f6368" text-anchor="middle">Juíza Ferreira</text>
+          <circle cx="300" cy="92" r="11" fill="#7B2D8E" opacity=".7"/><circle cx="200" cy="120" r="10" fill="#E84667" opacity=".65"/>
+          <circle cx="150" cy="150" r="9" fill="#CC092F" opacity=".7"/><circle cx="110" cy="175" r="8" fill="#CC092F" opacity=".6"/>
+          <circle cx="260" cy="150" r="9" fill="#E84667" opacity=".6"/><circle cx="330" cy="130" r="10" fill="#7B2D8E" opacity=".6"/>
+          <text x="243" y="234" font-size="9" fill="#5f6368" text-anchor="middle">Índice de reforma no TRT →</text>
+          <text x="20" y="120" font-size="9" fill="#5f6368" text-anchor="middle" transform="rotate(-90 20 120)">Taxa deferida ↑</text>
+        </svg>
+        <div class="note">Juízes que deferem muito e têm reforma alta no TRT indicam bom retorno em recurso — priorizar 2ª instância nesses casos.</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="stitle">Postura frente à prova pericial <span class="tag">Top varas</span></div>
+        <div class="hbar"><div class="top"><span class="nm">Acata o laudo (segue o perito)</span><span class="pc">68%</span></div><div class="track"><div class="fill" style="width:68%"></div></div></div>
+        <div class="hbar alt"><div class="top"><span class="nm">Diverge do laudo</span><span class="pc">21%</span></div><div class="track"><div class="fill" style="width:21%"></div></div></div>
+        <div class="hbar gr"><div class="top"><span class="nm">Dispensa a perícia</span><span class="pc">11%</span></div><div class="track"><div class="fill" style="width:11%"></div></div></div>
+        <div class="note">Quando o magistrado tende a acatar o laudo, a estratégia pericial (assistente técnico, quesitos) ganha peso decisivo.</div>
+      </div>
+      <div class="card">
+        <div class="stitle">Desdobramento geográfico <span class="tag">Região › Comarca</span></div>
+        <div class="acc">
+          <div class="ah"><span>Sudeste · TRT-2 (SP)</span><span><span class="badge b-red">48% deferida</span> ▼</span></div>
+          <div class="ab">
+            <div class="hbar nv"><div class="top"><span class="nm">São Paulo / Capital</span><span class="pc">52 proc.</span></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+            <div class="hbar nv"><div class="top"><span class="nm">Osasco</span><span class="pc">31 proc.</span></div><div class="track"><div class="fill" style="width:60%"></div></div></div>
+          </div>
+        </div>
+        <div class="acc">
+          <div class="ah"><span>Sudeste · TRT-3 (MG)</span><span><span class="badge b-amber">31% deferida</span> ▼</span></div>
+          <div class="ab"><div class="mini">Inclui sinalização de <b>migração entre comarcas</b> (ex.: magistrado que atuou em Juiz de Fora e migrou) para não fragmentar o histórico.</div></div>
+        </div>
+        <div class="note">Desdobramento Região › Comarca › Cidade, além do Estado. Migração de comarca é rastreada para consolidar a performance do magistrado.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="stitle">Ranking de magistrados <span class="tag">168 monitorados · 1º grau</span></div>
+      <table>
+        <thead><tr><th>Magistrado</th><th>Vara / Comarca</th><th>TRT</th><th>Nº Proc.</th><th>Taxa deferida (recl.)</th><th>Tempo médio</th><th>Reforma TRT</th><th>Migração</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><span class="nm">Juíza A. Ferreira</span></td><td>14ª VT São Paulo</td><td class="oab">TRT-2</td><td class="num">52</td><td><span class="badge b-red">58%</span></td><td class="num">16,1 m</td><td><span class="badge b-purple">41%</span></td><td><span class="badge b-gray">—</span></td><td><button class="seemore" onclick="openModal(0)">👁 Ver Perfil</button></td></tr>
+          <tr><td><span class="nm">Juiz R. Camargo</span></td><td>3ª VT Osasco</td><td class="oab">TRT-2</td><td class="num">44</td><td><span class="badge b-amber">43%</span></td><td class="num">15,3 m</td><td><span class="badge b-amber">27%</span></td><td><span class="badge b-gray">—</span></td><td><button class="seemore" onclick="openModal(1)">👁 Ver Perfil</button></td></tr>
+          <tr><td><span class="nm">Juiz M. Tavares</span></td><td>8ª VT Campinas</td><td class="oab">TRT-15</td><td class="num">38</td><td><span class="badge b-green">24%</span></td><td class="num">12,9 m</td><td><span class="badge b-green">14%</span></td><td><span class="badge b-gray">—</span></td><td><button class="seemore" onclick="openModal(2)">👁 Ver Perfil</button></td></tr>
+          <tr><td><span class="nm">Juíza L. Nogueira</span></td><td>2ª VT Rio de Janeiro</td><td class="oab">TRT-1</td><td class="num">31</td><td><span class="badge b-amber">39%</span></td><td class="num">12,4 m</td><td><span class="badge b-amber">22%</span></td><td><span class="badge b-gray">—</span></td><td><button class="seemore" onclick="openModal(3)">👁 Ver Perfil</button></td></tr>
+          <tr><td><span class="nm">Juiz D. Pacheco</span></td><td>5ª VT Belo Horizonte</td><td class="oab">TRT-3</td><td class="num">27</td><td><span class="badge b-green">21%</span></td><td class="num">9,8 m</td><td><span class="badge b-green">12%</span></td><td><span class="badge b-amber">Juiz de Fora → BH</span></td><td><button class="seemore" onclick="openModal(4)">👁 Ver Perfil</button></td></tr>
+        </tbody>
+      </table>
+      <div class="note">Taxa deferida (recl.) = % de sentenças que acolhem (total/parcialmente) o pedido de reintegração. Reforma TRT = % dessas sentenças modificadas em 2º grau. Juiz de 1º grau e desembargador de 2º grau são tratados separadamente.</div>
+    </div>
+
+    <div class="footnote">Dados simulados para mockup · Análise jurimétrica sobre dados processuais públicos · Plataforma Reintegrados · DeepCenter</div>
+  </main>
+</div>
+
+<div class="overlay" id="ov">
+  <div class="modal">
+    <div class="mhead">
+      <div class="av" id="m_av">AF</div>
+      <div><h2 id="m_nm">Juíza A. Ferreira</h2><div class="role" id="m_role">14ª Vara do Trabalho de São Paulo · TRT-2 · 1º grau</div>
+        <div class="tags"><span class="badge b-red">Alta taxa deferida</span><span class="badge b-blue">52 processos</span><span class="badge b-purple">Reforma TRT 41%</span></div></div>
+      <div class="x" onclick="closeModal()">✕</div>
+    </div>
+    <div class="mbody">
+      <div class="mkpis">
+        <div class="mkpi"><div class="v">52</div><div class="l">Processos na base</div></div>
+        <div class="mkpi"><div class="v">58%</div><div class="l">Taxa deferida (recl.)</div></div>
+        <div class="mkpi"><div class="v">16,1 m</div><div class="l">Tempo até sentença</div></div>
+        <div class="mkpi"><div class="v">41%</div><div class="l">Reforma no TRT</div></div>
+      </div>
+      <div class="strat"><div class="h">◆ Sugestão de estratégia de defesa</div>
+        <p>Magistrada com taxa de deferimento ao reclamante bem acima da média (58% vs 37%), forte adesão à tese de <b>Estabilidade Provisória</b> e tendência a <b>acatar o laudo pericial</b>. Em contrapartida, 41% das sentenças são reformadas no TRT-2 — o maior índice da carteira. Recomenda-se: (1) defesa robusta em 1º grau, mas <b>já estruturando a tese recursal desde a contestação</b>, pois o retorno em 2ª instância é estatisticamente alto; (2) assistente técnico e impugnação de quesitos nas perícias; (3) evitar acordos elevados em 1º grau quando houver fundamento de reforma.</p>
+      </div>
+      <div class="mgrid2">
+        <div>
+          <div class="msub">Tendência por tese (motivo do pedido de reintegração)</div>
+          <div class="div-row"><span class="lbl">Estabilidade Provisória</span><div class="bars"><div class="def" style="width:72%"></div><div class="ind" style="width:28%"></div></div></div>
+          <div class="div-row"><span class="lbl">Doença / Incapacidade</span><div class="bars"><div class="def" style="width:64%"></div><div class="ind" style="width:36%"></div></div></div>
+          <div class="div-row"><span class="lbl">Dispensa Discriminatória</span><div class="bars"><div class="def" style="width:48%"></div><div class="ind" style="width:52%"></div></div></div>
+          <div class="div-row"><span class="lbl">Garantia Convencional</span><div class="bars"><div class="def" style="width:30%"></div><div class="ind" style="width:70%"></div></div></div>
+          <div class="legend"><span><i style="background:#CC092F"></i>Defere (reclamante)</span><span><i style="background:#1a1a2e;opacity:.55"></i>Indefere (banco)</span></div>
+        </div>
+        <div>
+          <div class="msub">Cruzamento Magistrado × Perito</div>
+          <div class="xcard"><div class="l">Dr. L. Mendes (ortopedia)<small>Laudo acatado em 9/10 casos</small></div><div class="r"><span class="badge b-red">90% adesão</span></div></div>
+          <div class="xcard"><div class="l">Dra. P. Rocha (psiquiatria)<small>Laudo acatado em 6/8 casos</small></div><div class="r"><span class="badge b-amber">75% adesão</span></div></div>
+          <div class="msub" style="margin-top:16px">Cruzamento Magistrado × Advogado</div>
+          <div class="xcard"><div class="l">Vasconcelos &amp; Associados<small>14 processos nesta vara</small></div><div class="r"><span class="badge b-red">71% fav. recl.</span></div></div>
+          <div class="xcard"><div class="l">Dra. Helena Prado<small>7 processos nesta vara</small></div><div class="r"><span class="badge b-amber">57% fav. recl.</span></div></div>
+        </div>
+      </div>
+      <div class="msub">Histórico de decisões — 1ª instância × TRT (amostra)</div>
+      <table class="histtable">
+        <thead><tr><th>CNJ</th><th>Motivo do pedido</th><th>1º grau</th><th>TRT</th><th>Valor da causa</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1001234-55.2025.5.02.0014</td><td>Estabilidade Provisória</td><td><span class="badge b-red">Deferida</span></td><td><span class="badge b-green">Reformada</span></td><td class="num">R$ 880 mil</td></tr>
+          <tr><td class="num">1006781-09.2024.5.02.0014</td><td>Doença / Incapacidade</td><td><span class="badge b-red">Deferida</span></td><td><span class="badge b-red">Mantida</span></td><td class="num">R$ 470 mil</td></tr>
+          <tr><td class="num">1002390-77.2024.5.02.0014</td><td>Dispensa Discriminatória</td><td><span class="badge b-green">Indeferida</span></td><td><span class="badge b-green">Mantida</span></td><td class="num">R$ 320 mil</td></tr>
+        </tbody>
+      </table>
+      <div class="mgrid2" style="margin-top:20px">
+        <div class="insight ins-red"><div class="h"><span class="ic">!</span> Pontos de cuidado</div>
+          <ul><li>Taxa de deferimento 21 p.p. acima da média da carteira.</li><li>Alta adesão ao laudo pericial — perícia é decisiva nesta vara.</li><li>Tempo de tramitação acima da média, alongando o provisionamento.</li></ul></div>
+        <div class="insight ins-green"><div class="h"><span class="ic">↻</span> Oportunidades</div>
+          <ul><li>41% de reforma no TRT — recurso com bom histórico de êxito.</li><li>Reverte mais em teses de Garantia Convencional e Discriminatória.</li><li>Estruturar razões recursais já na fase de conhecimento.</li></ul></div>
+      </div>
+      <div class="footnote">Dados simulados para mockup · Insumos da base vetorial (indexação em tempo real)</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const MAG=[
+    {av:"AF",nm:"Juíza A. Ferreira",role:"14ª Vara do Trabalho de São Paulo · TRT-2 · 1º grau"},
+    {av:"RC",nm:"Juiz R. Camargo",role:"3ª Vara do Trabalho de Osasco · TRT-2 · 1º grau"},
+    {av:"MT",nm:"Juiz M. Tavares",role:"8ª Vara do Trabalho de Campinas · TRT-15 · 1º grau"},
+    {av:"LN",nm:"Juíza L. Nogueira",role:"2ª Vara do Trabalho do Rio de Janeiro · TRT-1 · 1º grau"},
+    {av:"DP",nm:"Juiz D. Pacheco",role:"5ª Vara do Trabalho de Belo Horizonte · TRT-3 · 1º grau · migrou de Juiz de Fora"}
+  ];
+  function openModal(i){const m=MAG[i];document.getElementById('m_av').textContent=m.av;document.getElementById('m_nm').textContent=m.nm;document.getElementById('m_role').textContent=m.role;document.getElementById('ov').classList.add('show');}
+  function closeModal(){document.getElementById('ov').classList.remove('show');}
+  document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')closeModal();});
+  document.querySelectorAll('.segment button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.segment button').forEach(x=>x.classList.remove('on'));b.classList.add('on');}));
+</script>
+</body>
+</html>
