@@ -10,6 +10,10 @@ body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:#F5F6FA
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:#F0F0F0}
 ::-webkit-scrollbar-thumb{background:#CCC;border-radius:3px}
+.infotip{position:relative;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#E8EAED;color:#5f6368;font-size:9px;font-weight:700;margin-left:6px;cursor:help;vertical-align:middle;text-transform:none}
+.infotip-bubble{display:none;position:absolute;top:160%;left:50%;transform:translateX(-50%);width:240px;background:#1a1a2e;color:#fff;font-size:11px;font-weight:400;line-height:1.45;padding:9px 11px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.28);z-index:3000;text-align:left;letter-spacing:0;text-transform:none}
+.infotip-bubble::after{content:"";position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#1a1a2e}
+.infotip:hover .infotip-bubble{display:block}
 </style>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -40,8 +44,16 @@ const C = {
   shadow: "0 1px 3px rgba(0,0,0,0.08)"
 };
 const font = "'Segoe UI','Roboto',-apple-system,sans-serif";
+const InfoTip = ({
+  text
+}) => /*#__PURE__*/React.createElement("span", {
+  className: "infotip"
+}, "i", /*#__PURE__*/React.createElement("span", {
+  className: "infotip-bubble"
+}, text));
 const SectionTitle = ({
-  title
+  title,
+  tip
 }) => /*#__PURE__*/React.createElement("div", {
   style: {
     display: "flex",
@@ -61,9 +73,13 @@ const SectionTitle = ({
     margin: 0,
     fontSize: 15,
     fontWeight: 700,
-    color: C.text
+    color: C.text,
+    display: "flex",
+    alignItems: "center"
   }
-}, title));
+}, title, tip && /*#__PURE__*/React.createElement(InfoTip, {
+  text: tip
+})));
 const CardStat = ({
   label,
   value,
@@ -186,6 +202,48 @@ const Card = ({
     ...style
   }
 }, children);
+const DistCard = ({
+  title,
+  subtitle,
+  items
+}) => /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(SectionTitle, {
+  title: title
+}), subtitle && /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 11,
+    color: C.textMuted,
+    marginTop: -8,
+    marginBottom: 12
+  }
+}, subtitle), items.map(it => /*#__PURE__*/React.createElement("div", {
+  key: it.label,
+  style: {
+    marginBottom: 10
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: 3
+  }
+}, /*#__PURE__*/React.createElement("span", {
+  style: {
+    fontSize: 12,
+    color: C.text,
+    fontWeight: 600
+  }
+}, it.label), /*#__PURE__*/React.createElement("span", {
+  style: {
+    fontSize: 11,
+    fontWeight: 700,
+    color: it.color
+  }
+}, it.count, " \xB7 ", it.pct, "%")), /*#__PURE__*/React.createElement(MiniBar, {
+  value: it.pct,
+  max: 100,
+  color: it.color,
+  h: 6
+}))));
 const FilterBar = ({
   filters
 }) => {
@@ -491,7 +549,7 @@ const peritosData = [{
   estrategia: {
     rec: "impugnar",
     score: 82,
-    texto: "Taxa favorável ao reclamante em alta contínua (30%→68%) e +20pp acima da média da comarca. Forte viés pró-reclamante. Recomenda-se impugnação.",
+    texto: "Taxa favorável ao reclamante em alta contínua (30%→68%) e +20pp acima da média da comarca. Forte viés pró-reclamante — sinaliza para avaliar impugnação e/ou nomeação de assistente técnico.",
     quesitos: ["Documentar padrão estatístico de viés para fundamentar impugnação", "Preparar perito assistente como contingência"]
   }
 }, {
@@ -749,6 +807,66 @@ const peritosData = [{
     quesitos: ["Quesitos padrão — não alterar estratégia favorável", "Focar em agilizar o processo"]
   }
 }];
+const laudoInd = {
+  nexo: [{
+    label: "Reconhecido",
+    count: 318,
+    pct: 45,
+    color: C.red
+  }, {
+    label: "Parcial",
+    count: 134,
+    pct: 19,
+    color: C.amber
+  }, {
+    label: "Não Reconhecido",
+    count: 253,
+    pct: 36,
+    color: C.green
+  }],
+  grau: [{
+    label: "Nenhuma",
+    count: 240,
+    pct: 34,
+    color: C.green
+  }, {
+    label: "Parcial",
+    count: 198,
+    pct: 28,
+    color: C.amber
+  }, {
+    label: "Temporária",
+    count: 121,
+    pct: 17,
+    color: C.amber
+  }, {
+    label: "Total",
+    count: 96,
+    pct: 14,
+    color: C.red
+  }, {
+    label: "Permanente",
+    count: 50,
+    pct: 7,
+    color: C.red
+  }],
+  legib: [{
+    label: "Legível",
+    count: 560,
+    pct: 79,
+    color: C.green
+  }, {
+    label: "Parcial",
+    count: 110,
+    pct: 16,
+    color: C.amber
+  }, {
+    label: "Ilegível",
+    count: 35,
+    pct: 5,
+    color: C.red
+  }]
+};
 const mediasGerais = {
   fav: 45,
   desfav: 55,
@@ -773,7 +891,7 @@ const estColor = {
     c: C.red,
     bg: C.redLight,
     icon: "🔴",
-    label: "Impugnar Perito"
+    label: "Avaliar Impugnação"
   }
 };
 const alertColor = {
@@ -805,9 +923,6 @@ const alertas = {
   }, {
     tipo: "danger",
     msg: "Queda na taxa favorável para Doenças Estigmatizantes nos últimos 6 meses"
-  }, {
-    tipo: "info",
-    msg: "Advogado João Silva eleva a taxa favorável em +17pp"
   }],
   1: [{
     tipo: "danger",
@@ -815,9 +930,6 @@ const alertas = {
   }, {
     tipo: "danger",
     msg: "+20pp acima da média de Campinas. Outlier estatístico"
-  }, {
-    tipo: "info",
-    msg: "Advogado Carlos Oliveira eleva taxa em +16pp"
   }],
   2: [{
     tipo: "success",
@@ -1032,7 +1144,8 @@ const DetailModal = ({
       marginBottom: 16
     }
   }, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Sugest\xE3o de Estrat\xE9gia Pericial"
+    title: "Sugest\xE3o de Estrat\xE9gia Pericial",
+    tip: "Score de estrat\xE9gia (0\u2013100): \xEDndice de risco do perito para o banco. Combina a taxa favor\xE1vel ao reclamante, o desvio em rela\xE7\xE3o \xE0 m\xE9dia da comarca e a tend\xEAncia recente. Quanto maior, maior o vi\xE9s pr\xF3-reclamante \u2014 orienta a recomenda\xE7\xE3o (Aceitar / Assistente / Avaliar Impugna\xE7\xE3o)."
   }), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -1180,7 +1293,7 @@ const DetailModal = ({
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
-      gridTemplateColumns: "1fr 1fr",
+      gridTemplateColumns: "1fr",
       gap: 14,
       marginBottom: 16
     }
@@ -1193,7 +1306,14 @@ const DetailModal = ({
     }
   }, /*#__PURE__*/React.createElement(SectionTitle, {
     title: "Comparativo Regional"
-  }), dp.regional.map((r, i) => {
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginTop: -8,
+      marginBottom: 12
+    }
+  }, "Taxa favor\xE1vel ao reclamante \xB7 perito vs. m\xE9dia da comarca"), dp.regional.map((r, i) => {
     const m = r.delta <= 0;
     return /*#__PURE__*/React.createElement("div", {
       key: i,
@@ -1249,75 +1369,6 @@ const DetailModal = ({
       color: C.textMuted,
       h: 5
     }))));
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: C.white,
-      borderRadius: 10,
-      border: "1px solid " + C.border,
-      padding: 16
-    }
-  }, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Perito \xD7 Advogado Reclamante"
-  }), dp.advogados.map((a, i) => {
-    const d = a.favCom - a.favSem;
-    return /*#__PURE__*/React.createElement("div", {
-      key: i,
-      style: {
-        marginBottom: 12,
-        padding: 10,
-        background: C.bg,
-        borderRadius: 8
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: "flex",
-        justifyContent: "space-between",
-        marginBottom: 4
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 12,
-        fontWeight: 600,
-        color: C.text
-      }
-    }, a.nome), /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 10,
-        color: C.textMuted
-      }
-    }, a.proc, " proc.")), /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: "flex",
-        gap: 16,
-        alignItems: "center",
-        marginTop: 4
-      }
-    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 10,
-        color: C.textMuted
-      }
-    }, "Com advogado"), /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 16,
-        fontWeight: 800,
-        color: d > 0 ? C.red : C.green
-      }
-    }, a.favCom, "%")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 10,
-        color: C.textMuted
-      }
-    }, "Sem advogado"), /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 16,
-        fontWeight: 800,
-        color: C.textSec
-      }
-    }, a.favSem, "%")), /*#__PURE__*/React.createElement(Badge, {
-      color: d > 0 ? C.red : C.green,
-      bg: d > 0 ? C.redLight : C.greenLight
-    }, d > 0 ? "+" : "", d, "pp")));
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
@@ -1333,8 +1384,16 @@ const DetailModal = ({
       padding: 16
     }
   }, /*#__PURE__*/React.createElement(SectionTitle, {
-    title: "Perito \xD7 Vara / Juiz"
-  }), dp.varas.map((v, i) => /*#__PURE__*/React.createElement("div", {
+    title: "Acolhimento do Laudo por Vara / Juiz",
+    tip: "% das senten\xE7as da vara/juiz que acompanharam a conclus\xE3o do laudo deste perito (converg\xEAncia laudo \u2192 senten\xE7a). Ilustrativo no mock."
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: C.textMuted,
+      marginTop: -8,
+      marginBottom: 12
+    }
+  }, "Acolhimento do laudo pelo ju\xEDzo \xB7 taxa favor\xE1vel ao reclamante ao lado"), dp.varas.map((v, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
     style: {
       display: "flex",
@@ -1354,9 +1413,9 @@ const DetailModal = ({
     style: {
       fontSize: 16,
       fontWeight: 800,
-      color: v.fav >= 50 ? C.red : C.green
+      color: C.blue
     }
-  }, v.fav, "%")), /*#__PURE__*/React.createElement("div", {
+  }, 55 + (v.proc * 7 + v.juiz.length * 3) % 40, "%")), /*#__PURE__*/React.createElement("div", {
     style: {
       flex: 1
     }
@@ -1371,10 +1430,10 @@ const DetailModal = ({
       fontSize: 10,
       color: C.textMuted
     }
-  }, v.juiz, " \xB7 ", v.proc, " proc."), /*#__PURE__*/React.createElement(MiniBar, {
-    value: v.fav,
+  }, v.juiz, " \xB7 ", v.proc, " proc. \xB7 ", v.fav, "% favor\xE1vel"), /*#__PURE__*/React.createElement(MiniBar, {
+    value: 55 + (v.proc * 7 + v.juiz.length * 3) % 40,
     max: 100,
-    color: v.fav >= 50 ? C.red : C.green,
+    color: C.blue,
     h: 4
   }))))), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -1687,7 +1746,7 @@ const PeritosScreen = () => {
       options: ["Todas as Comarcas", "São Paulo", "Campinas", "Santos", "Ribeirão Preto", "Rio de Janeiro", "Osasco", "Guarulhos", "Niterói"]
     }, {
       label: "Recomendação",
-      options: ["Todas as Recomendações", "Aceitar Nomeação", "Nomear Assistente", "Impugnar Perito"]
+      options: ["Todas as Recomendações", "Aceitar Nomeação", "Nomear Assistente", "Avaliar Impugnação"]
     }, {
       label: "Período",
       options: ["Últimos 12 meses", "Últimos 3 meses", "Últimos 6 meses", "Este ano", "Ano anterior", "Personalizado"]
@@ -1748,7 +1807,33 @@ const PeritosScreen = () => {
     style: {
       borderBottom: "2px solid " + C.border
     }
-  }, ["Perito", "Comarca", "Processos", "Favorável", "Desfavorável", "Consist.", "Tempo", "Estratégia", "Tendência", "Ações"].map(h => /*#__PURE__*/React.createElement("th", {
+  }, [{
+    h: "Perito"
+  }, {
+    h: "Comarca"
+  }, {
+    h: "Processos"
+  }, {
+    h: "Favorável"
+  }, {
+    h: "Desfavorável"
+  }, {
+    h: "Consist.",
+    tip: "Índice de consistência (0–100): previsibilidade do perito — o quanto a taxa favorável se mantém estável ao longo do tempo. Alta = comportamento previsível (não significa imparcial); baixa = comportamento volátil."
+  }, {
+    h: "Tempo"
+  }, {
+    h: "Estratégia",
+    tip: "Recomendação derivada do score de risco do perito: Aceitar Nomeação (perfil favorável ao banco), Nomear Assistente (viés moderado) ou Avaliar Impugnação (forte viés pró-reclamante / outlier estatístico)."
+  }, {
+    h: "Tendência",
+    tip: "Direção da taxa favorável ao reclamante deste perito nos últimos 12 meses. Alta = laudos ficando mais favoráveis ao reclamante (mais exposição); Queda = mais favoráveis ao banco; Estável = sem variação relevante."
+  }, {
+    h: "Ações"
+  }].map(({
+    h,
+    tip
+  }) => /*#__PURE__*/React.createElement("th", {
     key: h,
     style: {
       padding: "10px 12px",
@@ -1758,7 +1843,9 @@ const PeritosScreen = () => {
       textAlign: "left",
       textTransform: "uppercase"
     }
-  }, h)))), /*#__PURE__*/React.createElement("tbody", null, peritosData.map((per, i) => {
+  }, h, tip && /*#__PURE__*/React.createElement(InfoTip, {
+    text: tip
+  }))))), /*#__PURE__*/React.createElement("tbody", null, peritosData.map((per, i) => {
     const e2 = estColor[per.estrategia.rec];
     return /*#__PURE__*/React.createElement("tr", {
       key: i,
@@ -1800,15 +1887,15 @@ const PeritosScreen = () => {
         padding: "12px"
       }
     }, /*#__PURE__*/React.createElement(Badge, {
-      color: C.green,
-      bg: C.greenLight
+      color: per.fav >= 50 ? C.red : C.green,
+      bg: per.fav >= 50 ? C.redLight : C.greenLight
     }, per.fav, "%")), /*#__PURE__*/React.createElement("td", {
       style: {
         padding: "12px"
       }
     }, /*#__PURE__*/React.createElement(Badge, {
-      color: C.red,
-      bg: C.redLight
+      color: C.textSec,
+      bg: "#EEF0F4"
     }, per.desfav, "%")), /*#__PURE__*/React.createElement("td", {
       style: {
         padding: "12px"
@@ -1829,7 +1916,7 @@ const PeritosScreen = () => {
     }, /*#__PURE__*/React.createElement(Badge, {
       color: e2.c,
       bg: e2.bg
-    }, e2.label.split(" ")[0])), /*#__PURE__*/React.createElement("td", {
+    }, e2.label)), /*#__PURE__*/React.createElement("td", {
       style: {
         padding: "12px"
       }
@@ -1862,6 +1949,31 @@ const PeritosScreen = () => {
     }, "\uD83D\uDC41 Ver Detalhes")));
   })))), /*#__PURE__*/React.createElement("div", {
     style: {
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, {
+    title: "Indicadores do Laudo (extra\xE7\xE3o)",
+    tip: "Distribui\xE7\xE3o dos campos extra\xEDdos do laudo pericial: nexo causal, grau de incapacidade e legibilidade do documento."
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gap: 14
+    }
+  }, /*#__PURE__*/React.createElement(DistCard, {
+    title: "Nexo Causal",
+    subtitle: "V\xEDnculo entre a doen\xE7a e o trabalho",
+    items: laudoInd.nexo
+  }), /*#__PURE__*/React.createElement(DistCard, {
+    title: "Grau de Incapacidade",
+    subtitle: "Severidade reconhecida no laudo",
+    items: laudoInd.grau
+  }), /*#__PURE__*/React.createElement(DistCard, {
+    title: "Legibilidade do Laudo",
+    subtitle: "Qualidade do documento para captura",
+    items: laudoInd.legib
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr",
       gap: 14
@@ -1881,7 +1993,7 @@ const PeritosScreen = () => {
     bg: C.amberLight,
     icon: "⚠️"
   }, {
-    label: "Impugnar Perito",
+    label: "Avaliar Impugnação",
     count: distEstrategia.impugnar,
     color: C.red,
     bg: C.redLight,
