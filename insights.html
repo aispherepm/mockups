@@ -716,7 +716,7 @@
         <div class="card-icon" style="background:var(--purple-light);color:var(--purple);">🩺</div>
         <div>
           <div class="card-title">Benefícios do INSS — Origem da concessão × Tipo de benefício <span class="sprint-tag new-sprint">★ Nova · Sprint atual</span></div>
-          <div class="card-subtitle">Cada processo classificado uma única vez por tipo (B31/B91) e origem (Atestmed/Presencial) · <span class="sprint-tag source" style="margin:0;">↳ Petição inicial (docs de afastamento anexados)</span></div>
+          <div class="card-subtitle">Cada processo classificado uma única vez por tipo (espécie do benefício) e origem (Atestmed/Presencial) · <span class="sprint-tag source" style="margin:0;">↳ Documentos / INSS (afastamento)</span></div>
         </div>
       </div>
 
@@ -741,26 +741,74 @@
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:var(--text-muted);margin-bottom:12px;">Composição — de cada tipo de benefício, qual a origem da concessão</div>
 
         <!-- B31 -->
-        <div style="margin-bottom:16px;">
+        <div style="margin-bottom:14px;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;">
-            <span style="font-size:13px;font-weight:700;color:var(--text);">B31 <span style="font-weight:400;color:var(--text-sec);font-size:11px;">· Auxílio-doença comum (sem nexo ocupacional)</span></span>
+            <span style="font-size:13px;font-weight:700;color:var(--text);">B31 <span style="font-weight:400;color:var(--text-sec);font-size:11px;">· Auxílio-doença previdenciário (sem nexo ocupacional)</span></span>
             <span style="font-size:11px;color:var(--text-muted);font-weight:600;">355 processos</span>
           </div>
-          <div style="display:flex;height:32px;border-radius:6px;overflow:hidden;">
-            <div style="width:68.2%;background:var(--purple);display:flex;align-items:center;padding:0 12px;color:#fff;font-size:12px;font-weight:600;">Atestmed · 242</div>
-            <div style="width:31.8%;background:var(--red-mid);display:flex;align-items:center;padding:0 12px;color:#fff;font-size:12px;font-weight:600;">Presencial · 113</div>
+          <div style="display:flex;height:30px;border-radius:6px;overflow:hidden;">
+            <div style="width:68.2%;background:var(--purple);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Atestmed · 242</div>
+            <div style="width:31.8%;background:var(--red-mid);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Presencial · 113</div>
           </div>
         </div>
 
         <!-- B91 -->
-        <div>
+        <div style="margin-bottom:14px;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;">
             <span style="font-size:13px;font-weight:700;color:var(--red);">B91 <span style="font-weight:400;color:var(--text-sec);font-size:11px;">· Auxílio-doença acidentário (nexo ocupacional · gera estabilidade)</span></span>
-            <span style="font-size:11px;color:var(--text-muted);font-weight:600;">257 processos</span>
+            <span style="font-size:11px;color:var(--text-muted);font-weight:600;">200 processos</span>
           </div>
-          <div style="display:flex;height:32px;border-radius:6px;overflow:hidden;">
-            <div style="width:60.7%;background:var(--purple);display:flex;align-items:center;padding:0 12px;color:#fff;font-size:12px;font-weight:600;">Atestmed · 156</div>
-            <div style="width:39.3%;background:var(--red-mid);display:flex;align-items:center;padding:0 12px;color:#fff;font-size:12px;font-weight:600;">Presencial · 101</div>
+          <div style="display:flex;height:30px;border-radius:6px;overflow:hidden;">
+            <div style="width:65.0%;background:var(--purple);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Atestmed · 130</div>
+            <div style="width:35.0%;background:var(--red-mid);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Presencial · 70</div>
+          </div>
+        </div>
+
+        <!-- B32 -->
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;">
+            <span style="font-size:13px;font-weight:700;color:var(--text);">B32 <span style="font-weight:400;color:var(--text-sec);font-size:11px;">· Aposentadoria por invalidez previdenciária</span></span>
+            <span style="font-size:11px;color:var(--text-muted);font-weight:600;">25 processos</span>
+          </div>
+          <div style="display:flex;height:30px;border-radius:6px;overflow:hidden;">
+            <div style="width:40.0%;background:var(--purple);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Atestmed · 10</div>
+            <div style="width:60.0%;background:var(--red-mid);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Presencial · 15</div>
+          </div>
+        </div>
+
+        <!-- B92 -->
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;">
+            <span style="font-size:13px;font-weight:700;color:var(--red);">B92 <span style="font-weight:400;color:var(--text-sec);font-size:11px;">· Aposentadoria por invalidez acidentária</span></span>
+            <span style="font-size:11px;color:var(--text-muted);font-weight:600;">18 processos</span>
+          </div>
+          <div style="display:flex;height:30px;border-radius:6px;overflow:hidden;">
+            <div style="width:44.4%;background:var(--purple);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Atestmed · 8</div>
+            <div style="width:55.6%;background:var(--red-mid);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Presencial · 10</div>
+          </div>
+        </div>
+
+        <!-- B94 -->
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;">
+            <span style="font-size:13px;font-weight:700;color:var(--red);">B94 <span style="font-weight:400;color:var(--text-sec);font-size:11px;">· Auxílio-acidente</span></span>
+            <span style="font-size:11px;color:var(--text-muted);font-weight:600;">9 processos</span>
+          </div>
+          <div style="display:flex;height:30px;border-radius:6px;overflow:hidden;">
+            <div style="width:44.4%;background:var(--purple);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Atestmed · 4</div>
+            <div style="width:55.6%;background:var(--red-mid);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Presencial · 5</div>
+          </div>
+        </div>
+
+        <!-- Outro -->
+        <div style="">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;">
+            <span style="font-size:13px;font-weight:700;color:var(--text);">Outro <span style="font-weight:400;color:var(--text-sec);font-size:11px;">· Demais espécies</span></span>
+            <span style="font-size:11px;color:var(--text-muted);font-weight:600;">5 processos</span>
+          </div>
+          <div style="display:flex;height:30px;border-radius:6px;overflow:hidden;">
+            <div style="width:40.0%;background:var(--purple);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Atestmed · 2</div>
+            <div style="width:60.0%;background:var(--red-mid);display:flex;align-items:center;padding:0 10px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;">Presencial · 3</div>
           </div>
         </div>
 
@@ -774,33 +822,69 @@
       <div style="border-top:1px solid var(--border);padding-top:18px;">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:var(--text-muted);margin-bottom:12px;">Risco — taxa de deferimento por combinação, da maior para a menor</div>
 
-        <!-- B91 Atestmed — zona crítica -->
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:11px;">
-          <span style="width:160px;font-size:12px;font-weight:700;color:var(--red);flex-shrink:0;">B91 · Atestmed<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">156 processos</span></span>
-          <div style="flex:1;height:24px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:84%;height:100%;background:var(--red);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">84%</div></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--red);flex-shrink:0;">B91 · Atestmed<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">130 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:84%;height:100%;background:var(--red);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">84%</div></div>
           <span class="badge badge-red" style="flex-shrink:0;">🔴 Zona crítica</span>
         </div>
-        <!-- B91 Presencial -->
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:11px;">
-          <span style="width:160px;font-size:12px;font-weight:700;color:var(--red);flex-shrink:0;">B91 · Presencial<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">101 processos</span></span>
-          <div style="flex:1;height:24px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:70%;height:100%;background:var(--red-mid);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">70%</div></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--red);flex-shrink:0;">B92 · Atestmed<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">8 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:75%;height:100%;background:var(--red-mid);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">75%</div></div>
           <span style="width:96px;flex-shrink:0;"></span>
         </div>
-        <!-- B31 Atestmed -->
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:11px;">
-          <span style="width:160px;font-size:12px;font-weight:700;color:var(--text);flex-shrink:0;">B31 · Atestmed<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">242 processos</span></span>
-          <div style="flex:1;height:24px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:65%;height:100%;background:var(--amber);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">65%</div></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--red);flex-shrink:0;">B91 · Presencial<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">70 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:70%;height:100%;background:var(--red-mid);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">70%</div></div>
           <span style="width:96px;flex-shrink:0;"></span>
         </div>
-        <!-- B31 Presencial -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--red);flex-shrink:0;">B94 · Atestmed<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">4 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:68%;height:100%;background:var(--amber);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">68%</div></div>
+          <span style="width:96px;flex-shrink:0;"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--text);flex-shrink:0;">B31 · Atestmed<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">242 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:65%;height:100%;background:var(--amber);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">65%</div></div>
+          <span style="width:96px;flex-shrink:0;"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--text);flex-shrink:0;">B32 · Atestmed<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">10 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:60%;height:100%;background:var(--amber);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">60%</div></div>
+          <span style="width:96px;flex-shrink:0;"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--red);flex-shrink:0;">B92 · Presencial<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">10 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:58%;height:100%;background:var(--amber);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">58%</div></div>
+          <span style="width:96px;flex-shrink:0;"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--text);flex-shrink:0;">B31 · Presencial<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">113 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:50%;height:100%;background:var(--purple);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">50%</div></div>
+          <span style="width:96px;flex-shrink:0;"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--text);flex-shrink:0;">B32 · Presencial<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">15 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:47%;height:100%;background:var(--purple);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">47%</div></div>
+          <span style="width:96px;flex-shrink:0;"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--text);flex-shrink:0;">Outro · Atestmed<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">2 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:45%;height:100%;background:var(--purple);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">45%</div></div>
+          <span style="width:96px;flex-shrink:0;"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px;">
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--red);flex-shrink:0;">B94 · Presencial<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">5 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:42%;height:100%;background:var(--purple);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">42%</div></div>
+          <span style="width:96px;flex-shrink:0;"></span>
+        </div>
         <div style="display:flex;align-items:center;gap:12px;">
-          <span style="width:160px;font-size:12px;font-weight:700;color:var(--text);flex-shrink:0;">B31 · Presencial<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">113 processos</span></span>
-          <div style="flex:1;height:24px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:50%;height:100%;background:var(--purple);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">50%</div></div>
+          <span style="width:150px;font-size:12px;font-weight:700;color:var(--text);flex-shrink:0;">Outro · Presencial<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">3 processos</span></span>
+          <div style="flex:1;height:22px;background:var(--bg);border-radius:5px;overflow:hidden;"><div style="width:38%;height:100%;background:var(--purple);border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;">38%</div></div>
           <span style="width:96px;flex-shrink:0;"></span>
         </div>
 
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:10px 14px;background:var(--bg);border-radius:6px;font-size:11px;">
-          <span style="color:var(--text-sec);">Total · 612 processos com benefício INSS (398 Atestmed · 214 presencial)</span>
+          <span style="color:var(--text-sec);">Total · 612 processos com benefício INSS (396 Atestmed · 216 presencial)</span>
           <span style="color:var(--text);font-weight:700;">68% deferimento geral</span>
         </div>
       </div>
