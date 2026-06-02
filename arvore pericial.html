@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Árvore Pericial — 4 Opções de Visualização</title>
+<style>
+  :root{
+    --red:#CC092F; --redMid:#E84667; --green:#2E7D32; --amber:#F57F17;
+    --blue:#1565C0; --blueLight:#E3F2FD; --amberLight:#FFF8E1;
+    --navy:#1a1a2e; --bg:#F5F6FA; --white:#fff;
+    --border:#E8EAED; --text:#1a1a2e; --textSec:#5f6368; --textMuted:#9AA0A6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:24px;line-height:1.4}
+  .wrap{max-width:1060px;margin:0 auto}
+  .topbar{display:flex;align-items:center;justify-content:space-between;background:var(--white);border:1px solid var(--border);border-left:5px solid var(--red);border-radius:10px;padding:14px 20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .topbar .crumb{font-size:12px;color:var(--textSec)}
+  .topbar .brand{font-size:13px;font-weight:800;color:var(--red);letter-spacing:.5px}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:16px}
+  .optlabel{display:inline-block;font-size:11px;font-weight:800;color:#fff;background:var(--navy);border-radius:6px;padding:3px 10px;margin-bottom:10px;letter-spacing:.5px}
+  .sectitle{display:flex;align-items:stretch;gap:10px;margin-bottom:6px}
+  .sectitle .vbar{width:4px;background:var(--red);border-radius:2px;flex-shrink:0}
+  .sectitle h2{font-size:16px;font-weight:800}
+  .sub{font-size:12px;color:var(--textSec);margin:2px 0 16px 14px;line-height:1.5}
+
+  .info{position:relative;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#E8EAED;color:#5f6368;font-size:9px;font-weight:700;cursor:help;margin-left:5px;vertical-align:middle;flex-shrink:0}
+  .info .bubble{display:none;position:absolute;top:160%;left:0;width:240px;max-width:240px;box-sizing:border-box;background:var(--navy);color:#fff;font-size:11px;font-weight:400;line-height:1.5;padding:10px 12px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.28);z-index:200;text-align:left;text-transform:none;letter-spacing:0;white-space:normal;word-break:break-word}
+  .info:hover .bubble{display:block}
+
+  /* MATRIX */
+  table.mx{border-collapse:separate;border-spacing:3px;width:100%}
+  table.mx th{font-size:10px;font-weight:700;color:var(--textSec);text-transform:uppercase;letter-spacing:.3px;padding:6px 6px;text-align:center;vertical-align:bottom}
+  table.mx th.rowh{text-align:left;white-space:nowrap;font-size:12px;font-weight:700;color:var(--text);text-transform:none;letter-spacing:0;padding:8px 10px;border-radius:6px;background:var(--bg)}
+  table.mx td{text-align:center;font-size:13px;font-weight:700;height:46px;border-radius:6px;font-variant-numeric:tabular-nums}
+  table.mx td.empty{color:var(--textMuted);background:#FAFBFC;font-weight:400}
+  table.mx td.tot,table.mx th.tot{background:var(--navy);color:#fff;font-size:13px;font-weight:800;border-radius:6px}
+  table.mx tr.totrow td,table.mx tr.totrow th{background:#EEF0F4;color:var(--text);font-weight:800;font-size:12px}
+  table.mx tr.totrow td.grand{background:var(--navy);color:#fff}
+
+  /* TREEMAP */
+  .tm{display:flex;gap:3px;height:400px}
+  .tmcol{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .tmhead{height:30px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;border-radius:5px;overflow:hidden;white-space:nowrap;padding:0 4px}
+  .tmbody{flex:1;display:flex;flex-direction:column;gap:2px;min-height:0}
+  .tmcell{flex-basis:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:5px;overflow:hidden;color:#fff;text-align:center;padding:2px;min-height:0}
+  .tmcell span{font-size:10px;font-weight:600;opacity:.95;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .tmcell b{font-size:13px;font-weight:800}
+
+  .mxbar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .mxbar .lbl{font-size:11px;font-weight:700;color:var(--textSec);text-transform:uppercase;letter-spacing:.5px}
+  .toggle{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .toggle button{border:none;background:#fff;padding:6px 13px;font-size:12px;font-weight:600;color:var(--textSec);cursor:pointer;font-family:inherit}
+  .toggle button.active{background:var(--red);color:#fff}
+  .tmgrau{flex-basis:0;display:flex;flex-direction:column;border-radius:5px;overflow:hidden;min-height:0}
+  .tmglabel{font-size:8px;font-weight:700;color:#fff;text-align:center;padding:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tmgrow{flex:1;display:flex;gap:2px;min-height:0;padding:2px}
+  .tmleaf{flex-basis:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:4px;color:#fff;overflow:hidden;text-align:center;padding:1px;min-width:0}
+  .tmleaf span{font-size:8px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;opacity:.95}
+  .tmleaf b{font-size:11px;font-weight:800}
+  /* TREE */
+  .branch{position:relative}
+  .branch>.children{display:none;margin-left:26px;border-left:2px solid var(--border)}
+  .branch.open>.children{display:block}
+  .branch>.children>.branch{padding-left:22px}
+  .branch>.children>.branch::before{content:'';position:absolute;left:-2px;top:22px;width:22px;height:2px;background:var(--border)}
+  .node{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:8px;margin:5px 0;background:var(--white)}
+  .node .chev{font-size:9px;color:var(--textMuted);width:11px;transition:transform .15s;user-select:none}
+  .branch.open>.node .chev{transform:rotate(90deg)}
+  .node .nm{font-weight:700;white-space:nowrap}
+  .node .barwrap{flex:1;height:7px;background:var(--bg);border-radius:4px;overflow:hidden;min-width:70px}
+  .node .barfill{height:100%;border-radius:4px}
+  .node .val{font-size:12px;font-weight:800;min-width:78px;text-align:right;font-variant-numeric:tabular-nums}
+  .node.root{background:var(--navy);color:#fff}
+  .node.root .barwrap{background:rgba(255,255,255,.15)}
+  .node.nexo{border:1px solid var(--border);border-left:4px solid var(--ac,#ccc)}
+  .node.nexo .nm{color:var(--ac)}
+  .node.mid{border:1px solid var(--border)}
+  .node.leaf{padding:6px 11px;background:var(--bg)}
+  .node.leaf .nm{font-weight:600;color:var(--textSec)}
+  .node .dot{width:6px;height:6px;border-radius:50%;background:var(--textMuted);margin:0 2px}
+  .chip{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:2px 7px;border-radius:10px;background:var(--blueLight);color:var(--blue);white-space:nowrap}
+
+  /* legend */
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+  .leg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--textSec)}
+  .leg .sw{width:11px;height:11px;border-radius:3px}
+  .note{font-size:12px;line-height:1.55;border-left:3px solid var(--amber);background:var(--amberLight);padding:11px 13px;border-radius:6px}
+  .note b{font-weight:700}
+  .foot{font-size:10px;color:var(--textMuted);text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="crumb">Plataforma Reintegrados · Inteligência Pericial · <strong>Taxonomia do Laudo</strong></div>
+    <div class="brand">DeepCenter</div>
+  </div>
+
+  <div class="card">
+    <div class="sectitle"><div class="vbar"></div><h2>Árvore Pericial — 4 formatos para avaliar</h2></div>
+    <p class="sub">Mesma informação (nexo × grau × doença), quatro representações. Cor = tipo de nexo; tamanho/intensidade = volume. Escolha a que comunicar melhor.</p>
+  </div>
+
+  <div class="card">
+    <span class="optlabel">OPÇÃO A</span>
+    <div class="sectitle"><div class="vbar"></div><h2>Matriz Nexo × Grau (mapa de calor)</h2></div>
+    <p class="sub">Grade cruzando nexo com grau <em>ou</em> doença (alterne nas colunas). Intensidade = volume; matiz = nexo.</p>
+    <div class="mxbar"><span class="lbl">Colunas</span><div class="toggle" id="mxtoggle"><button class="active" data-dim="grau">Grau</button><button data-dim="doenca">Doença</button></div></div>
+    <div id="matrix"></div>
+    <div class="legend" id="legA"></div>
+  </div>
+
+  <div class="card">
+    <span class="optlabel">OPÇÃO B</span>
+    <div class="sectitle"><div class="vbar"></div><h2>Treemap — Nexo › Grau</h2></div>
+    <p class="sub">Coluna = nexo (largura = volume); faixas = graus (altura); blocos finais = doenças (largura). Os três níveis visíveis de uma vez.</p>
+    <div class="tm" id="treemap"></div>
+    <div class="legend" id="legB"></div>
+  </div>
+
+  <div class="card">
+    <span class="optlabel">OPÇÃO C</span>
+    <div class="sectitle"><div class="vbar"></div><h2>Fluxo / Sankey — Nexo → Grau → Doença</h2></div>
+    <p class="sub">Bandas fluindo entre os três níveis, largura proporcional ao volume. Mostra como os laudos se repartem da conclusão de nexo até a doença.</p>
+    <div id="sankey"></div>
+    <div class="legend" id="legC"></div>
+  </div>
+
+  <div class="card">
+    <span class="optlabel">OPÇÃO D</span>
+    <div class="sectitle"><div class="vbar"></div><h2>Árvore (drill hierárquico)</h2></div>
+    <p class="sub">A árvore que vínhamos desenhando: raiz → nexo → grau → doença, expansível. Boa para navegar a estrutura nó a nó.</p>
+    <div id="tree"></div>
+    <div class="legend" id="legD"></div>
+  </div>
+
+  <div class="card">
+    <div class="note">
+      <b>Comum às quatro:</b> o <b>NTEP</b> vem da <b>espécie do benefício do INSS</b> (acidentário B91/B92/B94), não do laudo — a confirmar com a área médica.
+      <b>Grau</b> = matriz de 2 eixos (extensão × duração). <b>Legibilidade</b> fica como indicador de qualidade à parte.
+      Definição jurídica de cada nexo no <span class="info" style="margin:0">i</span> (Opções A e D).
+    </div>
+  </div>
+
+  <p class="foot">Dados simulados para mockup · DeepCenter · Plataforma Reintegrados</p>
+</div>
+
+<script>
+const NX = {
+  'Causal':          {c:'#CC092F', def:'Conclusão do perito: o trabalho é a causa direta e determinante (Art. 20, Lei 8.213/91). Maior exposição para o banco.'},
+  'Concausal':       {c:'#F57F17', def:'Conclusão do perito: o trabalho é causa concorrente, soma-se a fatores extralaborais (Art. 21, I, Lei 8.213/91).'},
+  'NTEP':            {c:'#E84667', chip:'origem: espécie INSS', def:'Presunção previdenciária por CID × CNAE (Art. 21-A). Vem da espécie acidentária do benefício do INSS (B91/B92/B94), não do laudo. Inverte o ônus da prova.'},
+  'Não Reconhecido': {c:'#2E7D32', def:'O perito afasta o nexo entre doença e trabalho. Favorável ao banco.'},
+  'Inconclusivo':    {c:'#9AA0A6', def:'O laudo não conclui sobre o nexo (perícia incompleta).'}
+};
+const nexosOrder = ['Causal','Concausal','NTEP','Não Reconhecido','Inconclusivo'];
+const grausOrder = ['Total Permanente','Total Temporária','Parcial Permanente','Parcial Temporária','Nenhuma'];
+const grauAbbr = {'Total Permanente':'Total Perm.','Total Temporária':'Total Temp.','Parcial Permanente':'Parcial Perm.','Parcial Temporária':'Parcial Temp.','Nenhuma':'Nenhuma'};
+
+const records = [
+  {nexo:'Causal', grau:'Parcial Permanente', doenca:'LER/DORT', n:64},
+  {nexo:'Causal', grau:'Total Permanente', doenca:'LER/DORT', n:22},
+  {nexo:'Causal', grau:'Total Temporária', doenca:'Transtorno Psíquico', n:38},
+  {nexo:'Causal', grau:'Parcial Permanente', doenca:'Doença de Coluna', n:30},
+  {nexo:'Concausal', grau:'Parcial Permanente', doenca:'LER/DORT', n:40},
+  {nexo:'Concausal', grau:'Parcial Temporária', doenca:'Transtorno Psíquico', n:28},
+  {nexo:'Concausal', grau:'Parcial Permanente', doenca:'Perda Auditiva', n:26},
+  {nexo:'NTEP', grau:'Parcial Permanente', doenca:'LER/DORT', n:33},
+  {nexo:'NTEP', grau:'Parcial Permanente', doenca:'Doença de Coluna', n:18},
+  {nexo:'NTEP', grau:'Total Temporária', doenca:'Transtorno Psíquico', n:12},
+  {nexo:'Não Reconhecido', grau:'Nenhuma', doenca:'Transtorno Psíquico', n:120},
+  {nexo:'Não Reconhecido', grau:'Nenhuma', doenca:'LER/DORT', n:95},
+  {nexo:'Não Reconhecido', grau:'Nenhuma', doenca:'Cardiopatia', n:38},
+  {nexo:'Inconclusivo', grau:'Nenhuma', doenca:'Transtorno Psíquico', n:25},
+  {nexo:'Inconclusivo', grau:'Nenhuma', doenca:'Perda Auditiva', n:16}
+];
+const TOTAL = records.reduce((s,r)=>s+r.n,0);
+const sum = arr => arr.reduce((s,r)=>s+r.n,0);
+function hexA(hex,a){const h=hex.replace('#','');return `rgba(${parseInt(h.substr(0,2),16)},${parseInt(h.substr(2,2),16)},${parseInt(h.substr(4,2),16)},${a})`;}
+function infoSpan(nx){return `<span class="info">i<span class="bubble">${NX[nx].def}</span></span>`;}
+function group(recs, key){const m={};recs.forEach(r=>{(m[r[key]]=m[r[key]]||[]).push(r);});return Object.entries(m).map(([val,rs])=>({val,n:sum(rs),rs})).sort((a,b)=>b.n-a.n);}
+
+// ---------- A: MATRIX ----------
+const doencaOrder=[...new Set(records.map(r=>r.doenca))].map(d=>({d,n:sum(records.filter(r=>r.doenca===d))})).sort((a,b)=>b.n-a.n).map(o=>o.d);
+function renderMatrix(dim){
+  const cols = dim==='grau'?grausOrder:doencaOrder;
+  const other = dim==='grau'?'doenca':'grau';
+  const cell={}; nexosOrder.forEach(nx=>cell[nx]={});
+  records.forEach(r=>{const k=r[dim];const c=cell[r.nexo][k]=cell[r.nexo][k]||{n:0,d:[]};c.n+=r.n;c.d.push(`${r[other]} (${r.n})`);});
+  let maxCell=0; nexosOrder.forEach(nx=>cols.forEach(g=>{const v=(cell[nx][g]||{}).n||0;if(v>maxCell)maxCell=v;}));
+  let h='<table class="mx"><thead><tr><th class="rowh" style="background:transparent"></th>';
+  cols.forEach(g=>h+=`<th>${dim==='grau'?g.replace(' ','<br>'):g}</th>`);
+  h+='<th class="tot">Total</th></tr></thead><tbody>';
+  nexosOrder.forEach(nx=>{
+    const col=NX[nx].c; let rt=0,cells='';
+    cols.forEach(g=>{const c=cell[nx][g];const v=c?c.n:0;rt+=v;
+      if(!v){cells+='<td class="empty">·</td>';return;}
+      const a=0.15+0.85*(v/maxCell);
+      cells+=`<td title="${nx} · ${g}&#10;${v} laudos&#10;${c.d.join(', ')}" style="background:${hexA(col,a)};color:${a>0.5?'#fff':'#1a1a2e'}">${v}</td>`;});
+    h+=`<tr><th class="rowh" style="border-left:4px solid ${col}">${nx}${infoSpan(nx)}</th>${cells}<td class="tot">${rt}</td></tr>`;
+  });
+  h+='<tr class="totrow"><th class="rowh" style="background:#EEF0F4">Total</th>';
+  cols.forEach(g=>{let t=0;nexosOrder.forEach(nx=>t+=(cell[nx][g]||{}).n||0);h+=`<td>${t}</td>`;});
+  h+=`<td class="grand">${TOTAL}</td></tr></tbody></table>`;
+  document.getElementById('matrix').innerHTML=h;
+}
+document.getElementById('mxtoggle').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#mxtoggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderMatrix(b.dataset.dim);});
+renderMatrix('grau');
+
+// ---------- B: TREEMAP ----------
+(function(){
+  const data=nexosOrder.map(nx=>{const rs=records.filter(r=>r.nexo===nx);return {nx,n:sum(rs),c:NX[nx].c,graus:group(rs,'grau')};}).filter(x=>x.n).sort((a,b)=>b.n-a.n);
+  let h='';
+  data.forEach(x=>{
+    const w=(x.n/TOTAL*100).toFixed(2);
+    let body='';
+    x.graus.forEach(g=>{
+      const doe=group(g.rs,'doenca');
+      const leaves=doe.map(d=>`<div class="tmleaf" title="${x.nx} · ${g.val} · ${d.val}&#10;${d.n} laudos" style="flex-grow:${d.n};background:${hexA(x.c,0.55)}"><span>${d.val}</span><b>${d.n}</b></div>`).join('');
+      body+=`<div class="tmgrau" style="flex-grow:${g.n};background:${hexA(x.c,0.16)}"><div class="tmglabel" style="background:${hexA(x.c,0.85)}">${grauAbbr[g.val]} · ${g.n}</div><div class="tmgrow">${leaves}</div></div>`;
+    });
+    h+=`<div class="tmcol" style="flex:0 0 ${w}%;"><div class="tmhead" style="background:${x.c}">${x.nx} · ${x.n}</div><div class="tmbody">${body}</div></div>`;
+  });
+  document.getElementById('treemap').innerHTML=h;
+})();
+
+// ---------- C: SANKEY ----------
+(function(){
+  const VBW=960, VBH=410, TOP=26, BOT=12, nodeW=14, padN=8;
+  const usable=VBH-TOP-BOT;
+  const Lx=140, Mx=478, Rx=792;
+  const nexoNodes=nexosOrder.filter(nx=>records.some(r=>r.nexo===nx)).map(nx=>({k:nx,n:sum(records.filter(r=>r.nexo===nx)),color:NX[nx].c}));
+  const grauNodes=grausOrder.filter(g=>records.some(r=>r.grau===g)).map(g=>({k:g,n:sum(records.filter(r=>r.grau===g))}));
+  const doencaNodes=[...new Set(records.map(r=>r.doenca))].map(d=>({k:d,n:sum(records.filter(r=>r.doenca===d))})).sort((a,b)=>b.n-a.n);
+  const maxNodes=Math.max(nexoNodes.length,grauNodes.length,doencaNodes.length);
+  const scale=(usable-(maxNodes-1)*padN)/TOTAL;
+  function layout(nodes){const colH=TOTAL*scale+(nodes.length-1)*padN;let y=TOP+(usable-colH)/2;nodes.forEach(nd=>{nd.y0=y;nd.h=nd.n*scale;nd.y1=y+nd.h;nd.so=0;nd.ti=0;y=nd.y1+padN;});}
+  layout(nexoNodes);layout(grauNodes);layout(doencaNodes);
+  const l1={},l2={};
+  records.forEach(r=>{l1[r.nexo+'|'+r.grau]=(l1[r.nexo+'|'+r.grau]||0)+r.n;l2[r.grau+'|'+r.doenca]=(l2[r.grau+'|'+r.doenca]||0)+r.n;});
+  function band(x1,x2,sy,ty,th,color,label){const sy1=sy+th,ty1=ty+th,cx=(x1+x2)/2;return `<path d="M${x1},${sy} C${cx},${sy} ${cx},${ty} ${x2},${ty} L${x2},${ty1} C${cx},${ty1} ${cx},${sy1} ${x1},${sy1} Z" fill="${color}" fill-opacity="0.32"><title>${label}</title></path>`;}
+  let paths='';
+  nexoNodes.forEach(s=>grauNodes.forEach(t=>{const v=l1[s.k+'|'+t.k];if(!v)return;const th=v*scale;paths+=band(Lx+nodeW,Mx,s.y0+s.so,t.y0+t.ti,th,s.color,`${s.k} → ${t.k}: ${v}`);s.so+=th;t.ti+=th;}));
+  grauNodes.forEach(g=>g.so=0);
+  grauNodes.forEach(s=>doencaNodes.forEach(t=>{const v=l2[s.k+'|'+t.k];if(!v)return;const th=v*scale;paths+=band(Mx+nodeW,Rx,s.y0+s.so,t.y0+t.ti,th,'#9AA0A6',`${s.k} → ${t.k}: ${v}`);s.so+=th;t.ti+=th;}));
+  let rects='';
+  const titles=`<text x="${Lx+nodeW/2}" y="14" text-anchor="middle" font-size="10" font-weight="800" fill="#9AA0A6">NEXO</text>`+
+               `<text x="${Mx+nodeW/2}" y="14" text-anchor="middle" font-size="10" font-weight="800" fill="#9AA0A6">GRAU</text>`+
+               `<text x="${Rx+nodeW/2}" y="14" text-anchor="middle" font-size="10" font-weight="800" fill="#9AA0A6">DOENÇA</text>`;
+  nexoNodes.forEach(nd=>{rects+=`<rect x="${Lx}" y="${nd.y0}" width="${nodeW}" height="${Math.max(1,nd.h)}" rx="2" fill="${nd.color}"/><text x="${Lx-7}" y="${(nd.y0+nd.y1)/2}" text-anchor="end" dominant-baseline="middle" font-size="11" font-weight="700" fill="#1a1a2e">${nd.k} (${nd.n})</text>`;});
+  grauNodes.forEach(nd=>{rects+=`<rect x="${Mx}" y="${nd.y0}" width="${nodeW}" height="${Math.max(1,nd.h)}" rx="2" fill="#B0B4BD"/><text x="${Mx+nodeW/2}" y="${nd.y0-3}" text-anchor="middle" font-size="8.5" font-weight="600" fill="#5f6368">${grauAbbr[nd.k]} (${nd.n})</text>`;});
+  doencaNodes.forEach(nd=>{rects+=`<rect x="${Rx}" y="${nd.y0}" width="${nodeW}" height="${Math.max(1,nd.h)}" rx="2" fill="#7B8794"/><text x="${Rx+nodeW+6}" y="${(nd.y0+nd.y1)/2}" text-anchor="start" dominant-baseline="middle" font-size="10" fill="#5f6368">${nd.k} (${nd.n})</text>`;});
+  document.getElementById('sankey').innerHTML=`<svg viewBox="0 0 ${VBW} ${VBH}" style="width:100%;height:auto">${titles}${paths}${rects}</svg>`;
+})();
+
+// ---------- D: TREE ----------
+(function(){
+  function buildTree(recs,keys){if(!keys.length)return [];const [k,...rest]=keys;return group(recs,k).map(g=>({key:k,val:g.val,n:g.n,children:buildTree(g.rs,rest)}));}
+  function nodeHtml(node,share,acc){
+    const bar=`<div class="barwrap"><div class="barfill" style="width:${share}%;background:${acc}"></div></div>`;
+    const val=`<span class="val">${node.n} · ${share}%</span>`;
+    const kids=node.children&&node.children.length;
+    const chev=kids?`<span class="chev">▶</span>`:`<span class="dot"></span>`;
+    if(node.key==='nexo'){const m=NX[node.val]||{};const chip=m.chip?`<span class="chip">${m.chip}</span>`:'';return `<div class="node nexo" style="--ac:${acc}">${chev}<span class="nm">${node.val}</span>${infoSpan(node.val)}${chip}${bar}${val}</div>`;}
+    return `<div class="node ${kids?'mid':'leaf'}">${chev}<span class="nm">${node.val}</span>${bar}${val}</div>`;
+  }
+  function renderBranch(node,parentN,level,acc){
+    const share=Math.round(node.n/parentN*100);
+    let a=acc; if(level===1) a=(NX[node.val]||{}).c||'#999';
+    const kids=node.children&&node.children.length;
+    const childHtml=kids?`<div class="children">${node.children.map(c=>renderBranch(c,node.n,level+1,a)).join('')}</div>`:'';
+    return `<div class="branch lvl${level}">${nodeHtml(node,share,a)}${childHtml}</div>`;
+  }
+  const roots=buildTree(records,['nexo','grau','doenca']);
+  const rootNode=`<div class="node root"><span class="chev">▶</span><span class="nm">Laudos Periciais</span><div class="barwrap"><div class="barfill" style="width:100%;background:#fff;opacity:.5"></div></div><span class="val">${TOTAL} laudos</span></div>`;
+  const childHtml=`<div class="children" style="margin-left:26px;border-left:2px solid var(--border)">${roots.map(r=>renderBranch(r,TOTAL,1,'')).join('')}</div>`;
+  const tree=document.getElementById('tree');
+  tree.innerHTML=`<div class="branch lvl0 open">${rootNode}${childHtml}</div>`;
+  tree.querySelectorAll('.branch').forEach(b=>{const head=b.querySelector(':scope > .node');if(b.querySelector(':scope > .children')){head.style.cursor='pointer';head.addEventListener('click',e=>{if(e.target.closest('.info'))return;b.classList.toggle('open');});}});
+  const first=tree.querySelector('.lvl0 > .children > .lvl1');if(first){first.classList.add('open');const fg=first.querySelector(':scope > .children > .lvl2');if(fg)fg.classList.add('open');}
+})();
+
+// ---------- legends ----------
+(function(){
+  const html=nexosOrder.map(nx=>`<span class="leg"><span class="sw" style="background:${NX[nx].c}"></span>${nx}</span>`).join('');
+  ['legA','legB','legC','legD'].forEach(id=>document.getElementById(id).innerHTML=html);
+})();
+</script>
+</body>
+</html>
