@@ -3,83 +3,509 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reintegrados — Mockups</title>
+<title>Reintegrados · Performance do Polo Passivo</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:#F5F6FA;min-height:100vh;display:flex;align-items:center;justify-content:center}
-.container{max-width:700px;width:100%;padding:40px 28px}
-h1{font-size:22px;font-weight:800;color:#1a1a2e;margin-bottom:4px}
-.sub{font-size:12px;color:#9AA0A6;margin-bottom:32px}
-.card{background:#fff;border:1px solid #E8EAED;border-radius:12px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;gap:16px;text-decoration:none;color:#1a1a2e;box-shadow:0 1px 3px rgba(0,0,0,0.08);transition:all 0.2s}
-.card:hover{border-color:#CC092F;box-shadow:0 4px 12px rgba(204,9,47,0.12);transform:translateY(-1px)}
-.icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.title{font-size:15px;font-weight:700}
-.desc{font-size:12px;color:#5f6368;margin-top:2px}
-.badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:0.5px}
-.footer{font-size:10px;color:#9AA0A6;text-align:center;margin-top:24px}
+  :root{
+    --red:#CC092F; --redMid:#E84667; --redLight:#FDE8EC; --redDark:#A30726;
+    --purple:#7B2D8E; --purpleLight:#F3E8F7;
+    --green:#2E7D32; --greenLight:#E8F5E9;
+    --amber:#F57F17; --amberLight:#FFF8E1;
+    --blue:#1565C0; --blueLight:#E3F2FD;
+    --navy:#1B1B3A; --title:#1f2147;
+    --bg:#F7F8FB; --white:#fff;
+    --border:#E8EAED; --line:#EEF0F3;
+    --text:#2b2b3a; --textSec:#6b7280; --textMuted:#9AA0A6;
+    --shadow:0 1px 3px rgba(16,24,40,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:var(--bg);color:var(--text);display:flex}
+  /* SIDEBAR */
+  .sidebar{width:212px;min-height:100vh;background:#fff;border-right:1px solid var(--border);padding:18px 0 14px;position:sticky;top:0;flex-shrink:0;display:flex;flex-direction:column}
+  .brand{padding:2px 20px 14px;position:relative}
+  .brand .wm{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1;font-style:italic}
+  .brand .wm .d,.brand .wm .p{color:#41719C} .brand .wm .e{color:#8C8C8C;font-style:normal}
+  .brand .sl{font-size:7.5px;font-weight:700;letter-spacing:2.5px;color:#9AA0A6;margin-top:3px}
+  .collapse{position:absolute;right:-12px;top:24px;width:24px;height:24px;border-radius:50%;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--textMuted);font-size:12px;box-shadow:var(--shadow)}
+  .nav-group{font-size:10px;font-weight:700;color:var(--textMuted);letter-spacing:1px;padding:14px 20px 8px;text-transform:uppercase;display:flex;align-items:center;gap:7px;border-top:1px solid var(--line)}
+  .nav{padding:0 12px}
+  .nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;font-size:13.5px;color:var(--textSec);text-decoration:none;border-radius:9px;margin-bottom:2px}
+  .nav a:hover{background:#FAFAFB}
+  .nav a.active{background:linear-gradient(100deg,var(--red),#E01840);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(204,9,47,.30)}
+  .nav a.active .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:#fff}
+  .nav a .ic{width:18px;text-align:center;font-size:15px}
+  .side-foot{margin-top:auto;padding:14px 14px 0}
+  .btn-sair{display:flex;align-items:center;gap:8px;width:100%;border:1px solid var(--border);background:#fff;border-radius:9px;padding:10px 12px;font-size:13px;color:var(--textSec);cursor:pointer;margin-bottom:12px}
+  .user-card{border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;font-size:11.5px;color:var(--textSec)}
+  .user-card .on{color:var(--green);font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:6px}
+  .user-card .on::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green)}
+  .user-card .nm{color:var(--text);font-weight:600;margin-top:2px}
+  /* MAIN */
+  .main{flex:1;min-width:0;padding:26px 34px 50px}
+  .pagehead{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+  .pagehead .cloud{width:40px;height:34px;display:flex;align-items:center;justify-content:center;color:var(--red);font-size:30px}
+  .pagehead h1{font-size:25px;font-weight:800;color:var(--title)}
+  .pagehead .sub{font-size:13px;color:var(--textSec);margin-top:1px}
+  /* FILTERS */
+  .filters{display:flex;gap:12px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
+  .search{flex:1;min-width:230px;display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--border);border-radius:9px;padding:10px 14px}
+  .search input{border:none;outline:none;flex:1;font-size:13.5px;background:transparent;color:var(--text)}
+  .sel{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border);border-radius:9px;padding:10px 14px;font-size:13.5px;color:var(--textSec);cursor:pointer;white-space:nowrap;justify-content:space-between;min-width:170px}
+  .sel .cv{color:var(--textMuted);font-size:11px}
+  .limpar{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--textSec);cursor:pointer;padding:6px 8px}
+  /* TABS */
+  .tabs{display:flex;gap:9px;margin-bottom:22px;overflow-x:auto;padding-bottom:4px}
+  .tab{flex:1;min-width:96px;display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 8px;border-radius:11px;background:#fff;border:1px solid var(--border);color:var(--textMuted);cursor:pointer;text-align:center}
+  .tab .ti{font-size:16px}
+  .tab .tl{font-size:11px;line-height:1.25;font-weight:600}
+  .tab.active{background:var(--red);border:2px solid var(--navy);color:#fff;box-shadow:0 4px 14px rgba(204,9,47,.30)}
+  .tab.active .ti,.tab.active .tl{color:#fff}
+  /* CARD */
+  .card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:16px}
+  /* HERO */
+  .hero{display:flex;align-items:flex-start;gap:16px}
+  .hero .hi{width:46px;height:46px;border-radius:12px;background:var(--purpleLight);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  .hero .htxt{flex:1}
+  .hero h2{font-size:21px;font-weight:800;color:var(--title)}
+  .hero .hs{font-size:13px;color:var(--textSec);margin:2px 0 8px}
+  .hero .hd{font-size:13px;color:var(--textSec);line-height:1.55;max-width:880px}
+  .hero .hstats{display:flex;gap:12px;flex-shrink:0}
+  .ministat{border:1px solid var(--border);border-radius:11px;padding:12px 16px;text-align:center;min-width:130px}
+  .ministat .l{font-size:11px;color:var(--textSec)}
+  .ministat .v{font-size:16px;font-weight:800;color:var(--blue);margin-top:3px}
+  .ministat .v.r{color:var(--red);font-size:22px}
+  /* SECTION HEADER */
+  .sh{display:flex;align-items:center;gap:11px;margin-bottom:4px}
+  .sh .si{width:30px;height:30px;border-radius:8px;background:var(--redLight);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .sh h3{font-size:15.5px;font-weight:800;color:var(--title)}
+  .sh .hint{font-size:11.5px;color:var(--textMuted);margin-left:auto;font-weight:400}
+  .sub-note{font-size:11.5px;color:var(--textSec);margin:8px 0 16px 41px;line-height:1.5}
+  .sub-note b{color:var(--text)}
+  /* KPI */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+  .kpi{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);position:relative}
+  .kpi .lab{font-size:12px;color:var(--textSec)}
+  .kpi .val{font-size:30px;font-weight:800;color:var(--title);margin:7px 0 3px;line-height:1}
+  .kpi .det{font-size:11.5px;color:var(--textMuted)}
+  .kpi .ic{position:absolute;top:16px;right:18px;width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff;box-shadow:0 4px 10px rgba(0,0,0,.12)}
+  /* TABLE */
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  .table-scroll{max-height:430px;overflow-y:auto;overflow-x:auto;border-radius:8px}
+  thead th{text-align:left;font-size:10px;font-weight:700;color:var(--textSec);text-transform:uppercase;letter-spacing:.6px;padding:11px 10px;border-bottom:1px solid var(--border)}
+  thead th.num,tbody td.num{text-align:right} thead th.ctr,tbody td.ctr{text-align:center}
+  .table-scroll thead th{position:sticky;top:0;background:#fff;z-index:2;box-shadow:inset 0 -1px 0 var(--border)}
+  tbody td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tbody tr:hover{background:#FFF6F8}
+  .escname{font-weight:600;color:var(--title);font-size:13px}
+  .escmeta{font-size:10.5px;color:var(--textMuted);margin-top:2px}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+  .b-grey{background:#EEF0F3;color:var(--textSec)}
+  .delta{font-weight:700;font-size:12px}
+  .bullet{position:relative;height:20px;background:#EEF0F3;border-radius:6px;width:92px;overflow:hidden;display:inline-block}
+  .bullet .fill{position:absolute;left:0;top:0;height:100%;border-radius:6px}
+  .bullet .mk{position:absolute;top:0;height:20px;width:2px;background:var(--navy);opacity:.5}
+  .bullet .v{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10.5px;font-weight:800;color:var(--navy)}
+  .btn-ver{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 11px;font-size:12px;color:var(--textSec);cursor:pointer;white-space:nowrap}
+  .btn-ver:hover{border-color:var(--red);color:var(--red)}
+  .table-scroll::-webkit-scrollbar{width:10px;height:10px}
+  .table-scroll::-webkit-scrollbar-track{background:var(--bg);border-radius:8px}
+  .table-scroll::-webkit-scrollbar-thumb{background:#D8DCE2;border-radius:8px;border:2px solid var(--bg)}
+  .table-scroll::-webkit-scrollbar-thumb:hover{background:var(--redMid)}
+  .table-scroll{scrollbar-width:thin;scrollbar-color:#D8DCE2 var(--bg)}
+  /* GRIDS */
+  .grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  svg{display:block;width:100%}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--textSec);margin-top:10px;padding-left:41px}
+  .legend span{display:flex;align-items:center;gap:6px} .legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+  /* INSIGHTS */
+  .ins{border-radius:14px;padding:20px;border:1px solid var(--border);background:#fff}
+  .ins .ih{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .ins .ih .cir{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .ins .ih h3{font-size:14px;font-weight:800} .ins .ih .ai{margin-left:auto;font-size:9.5px;font-weight:700;letter-spacing:.5px;color:var(--purple);background:var(--purpleLight);padding:3px 8px;border-radius:20px}
+  .ins ul{list-style:none} .ins li{font-size:12.5px;line-height:1.55;color:var(--text);padding-left:16px;position:relative;margin-bottom:9px}
+  .ins li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%}
+  .ins.green li::before{background:var(--green)} .ins.red li::before{background:var(--red)} .ins.purple li::before{background:var(--purple)}
+  /* KPI FRAMEWORK */
+  .kpidef{border:1px solid var(--border);border-radius:11px;padding:16px 18px;background:#fff}
+  .kpidef .eixo{font-size:9.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 9px;border-radius:5px;display:inline-block;margin-bottom:10px}
+  .e-res{background:var(--greenLight);color:var(--green)} .e-eco{background:var(--purpleLight);color:var(--purple)}
+  .e-sla{background:var(--blueLight);color:var(--blue)} .e-pro{background:var(--amberLight);color:var(--amber)} .e-gov{background:var(--redLight);color:var(--red)}
+  .kpidef h4{font-size:13.5px;font-weight:800;color:var(--title);margin-bottom:5px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+  .kpidef .anc{font-size:9.5px;font-weight:700;color:var(--green);background:var(--greenLight);padding:2px 7px;border-radius:20px}
+  .kpidef .pq{font-size:12px;color:var(--textSec);line-height:1.5;margin-bottom:8px}
+  .kpidef .meta{font-size:11px;color:var(--textMuted)} .kpidef .meta b{color:var(--green)}
+  .secline{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--textSec);font-weight:700;margin:22px 0 8px}
+  /* MODAL */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;z-index:50;padding:40px 20px;overflow:auto}
+  .overlay.on{display:flex}
+  .modal{background:#fff;border-radius:14px;max-width:1040px;width:100%;padding:28px 30px;position:relative}
+  .modal .x{position:absolute;top:18px;right:20px;font-size:20px;color:var(--textMuted);cursor:pointer;background:none;border:none}
+  .modal h2{font-size:20px;font-weight:800;color:var(--title)}
+  .modal .mh-meta{font-size:12.5px;color:var(--textSec);margin:4px 0 18px}
+  .mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  .mstat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:13px 15px}
+  .mstat .l{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--textSec);font-weight:600}
+  .mstat .v{font-size:22px;font-weight:800;color:var(--title);margin-top:3px}
+  .mstat .d{font-size:10.5px;color:var(--textMuted);margin-top:1px}
+  footer{padding:18px 34px 30px;font-size:10.5px;color:var(--textMuted);font-style:italic}
 </style>
 </head>
 <body>
-<div class="container">
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
-    <div style="width:40px;height:40px;border-radius:50%;background:#CC092F;display:flex;align-items:center;justify-content:center">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="wm"><span class="d">d</span><span class="e">EE</span><span class="p">p</span></div>
+      <div class="sl">TURN-ON DATA</div>
+      <div class="collapse">‹</div>
     </div>
-    <div>
-      <h1>Plataforma Reintegrados</h1>
-      <div class="sub">Mockups das telas reorganizadas — baseado na ata de 14/05/2026</div>
+    <div class="nav-group">▦ Visão Geral</div>
+    <div class="nav">
+      <a class="active"><span class="ic">💼</span>Reintegrados<span class="dot"></span></a>
+      <a><span class="ic">💬</span>Chat</a>
+      <a><span class="ic">⚙️</span>Configurações</a>
+      <a><span class="ic">📈</span>Uso do painel</a>
     </div>
+    <div class="side-foot">
+      <button class="btn-sair">↪ Sair</button>
+      <div class="user-card">
+        <div class="on">Sistema Online</div>
+        Processos Trabalhistas
+        <div class="nm">Desiree Nogueira Gonçalves Manoel</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="pagehead">
+      <div class="cloud">☁️</div>
+      <div><h1>Processos Trabalhistas Bradesco</h1><div class="sub">Análise de Reintegrados</div></div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="filters">
+      <div class="search">🔍 <input placeholder="Buscar escritório ou advogado do banco..."></div>
+      <div class="sel">Todos os Estados <span class="cv">▾</span></div>
+      <div class="sel">Todos os TRTs <span class="cv">▾</span></div>
+      <div class="sel">Todas as faixas de risco <span class="cv">▾</span></div>
+      <div class="sel">Todas as fases <span class="cv">▾</span></div>
+      <div class="limpar">↺ Limpar</div>
+    </div>
+
+    <!-- TABS (módulos) -->
+    <div class="tabs">
+      <div class="tab"><span class="ti">📊</span><span class="tl">Assessment</span></div>
+      <div class="tab"><span class="ti">💡</span><span class="tl">Insights Estratégicos</span></div>
+      <div class="tab"><span class="ti">📁</span><span class="tl">Processos</span></div>
+      <div class="tab"><span class="ti">🩺</span><span class="tl">Inteligência Pericial</span></div>
+      <div class="tab"><span class="ti">⚖️</span><span class="tl">Perfil Advocatício</span></div>
+      <div class="tab active"><span class="ti">🏛️</span><span class="tl">Performance Passiva</span></div>
+      <div class="tab"><span class="ti">🗺️</span><span class="tl">Mapa Estratégico</span></div>
+      <div class="tab"><span class="ti">⏱️</span><span class="tl">Tempo &amp; Velocidade</span></div>
+      <div class="tab"><span class="ti">🎯</span><span class="tl">Score de Risco</span></div>
+    </div>
+
+    <!-- HERO DO MÓDULO -->
+    <div class="card hero">
+      <div class="hi">🏛️</div>
+      <div class="htxt">
+        <h2>Performance do Polo Passivo</h2>
+        <div class="hs">Análise de performance dos escritórios e advogados contratados pelo banco</div>
+        <div class="hd">Painel de gestão e cobrança dos prestadores que atuam na defesa do banco — taxa de êxito, êxito ajustado ao risco, contenção econômica, eficácia em liminar e mandado de segurança, SLA processual e concentração da base de processos.</div>
+      </div>
+      <div class="hstats">
+        <div class="ministat"><div class="l">Cobertura da base</div><div class="v r" id="ms-cob">—</div></div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpis">
+      <div class="kpi"><div class="ic" style="background:var(--red)">🏛️</div>
+        <div class="lab">Escritórios Contratados</div><div class="val" id="k-esc">—</div><div class="det" id="k-esc-d">prestadores no polo passivo</div></div>
+      <div class="kpi"><div class="ic" style="background:var(--green)">✅</div>
+        <div class="lab">Êxito Global</div><div class="val" id="k-ex">—</div><div class="det" id="k-ex-d">favorável ao banco · decididos</div></div>
+      <div class="kpi"><div class="ic" style="background:var(--blue)">🛡️</div>
+        <div class="lab">Liminar Indeferida</div><div class="val" id="k-lim">—</div><div class="det">tutela de reintegração barrada na origem</div></div>
+      <div class="kpi"><div class="ic" style="background:var(--purple)">💰</div>
+        <div class="lab">Valor Evitado (estim.)</div><div class="val" id="k-ev">—</div><div class="det" id="k-ev-d">de exposição pedida na PI</div></div>
+    </div>
+
+    <!-- RANKING -->
+    <div class="card">
+      <div class="sh"><div class="si">🏆</div><h3>Ranking de Escritórios — Performance Consolidada</h3>
+        <span class="hint">ordenado por volume de processos</span></div>
+      <div class="sub-note">Êxito = % de decisões favoráveis ao banco sobre processos com decisão. Liminar = % de tutelas de reintegração indeferidas (ganho do banco). Valor evitado = exposição contida (valor pedido na petição inicial afastado).</div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th>Escritório</th><th class="num">Base de Proc.</th><th class="num">Êxito</th>
+          <th class="num">Liminar</th><th class="num">MS</th>
+          <th class="num">T. Liminar</th><th class="num">Valor Evitado</th><th></th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- SCATTER + FUNNEL -->
+    <div class="grid2">
+      <div class="card">
+        <div class="sh"><div class="si" style="background:var(--greenLight)">🎯</div><h3>Êxito Ajustado ao Risco</h3><span class="hint">bolha = volume</span></div>
+        <div class="sub-note">Eixo X: dificuldade média da base de processos (score de risco). Eixo Y: taxa de êxito. A linha tracejada é a <b>expectativa</b> do modelo. Acima dela = supera o esperado para a base que recebeu; abaixo = entrega aquém.</div>
+        <div id="scatter"></div>
+        <div class="legend">
+          <span><i style="background:var(--green)"></i> Supera a expectativa</span>
+          <span><i style="background:var(--red)"></i> Abaixo da expectativa</span>
+          <span><i style="background:var(--textMuted)"></i> Dentro do esperado (±5pp)</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sh"><div class="si" style="background:var(--greenLight)">🛡️</div><h3>Etapas da Defesa</h3><span class="hint">% por desfecho</span></div>
+        <div class="sub-note">Cada barra é uma fase processual. <b style="color:var(--green)">Verde = favorável ao banco</b> · <b style="color:var(--red)">vermelho = contra o banco</b>. Mostra onde a defesa segura ou cede o risco.</div>
+        <div id="funnel"></div>
+      </div>
+    </div>
+
+    <!-- KPI FRAMEWORK -->
+    <div class="card">
+      <div class="sh"><div class="si">📐</div><h3>KPIs Recomendados para Cobrança de Escritórios</h3><span class="hint">visão jurídico-estratégica</span></div>
+      <div class="sub-note">Indicadores propostos para o banco acompanhar e cobrar os prestadores do polo passivo. Organizados em 5 eixos. Metas são referências iniciais (calibrar contra a média histórica da base de processos).</div>
+
+      <div class="secline">Eixo 1 · Êxito (resultado processual)</div>
+      <div class="grid3">
+        <div class="kpidef"><span class="eixo e-res">Resultado</span>
+          <h4>Êxito Ajustado ao Risco <span class="anc">KPI-âncora</span></h4>
+          <div class="pq">Taxa de êxito real menos a esperada pela dificuldade da base de processos. Neutraliza o viés de seleção: um escritório que só recebe casos fáceis não pode parecer melhor que outro que defende casos críticos.</div>
+          <div class="meta">Meta: <b>≥ +5 pp</b> acima do esperado · n mínimo 10 decididos</div></div>
+        <div class="kpidef"><span class="eixo e-res">Resultado</span>
+          <h4>Indeferimento de Liminar / Tutela</h4>
+          <div class="pq">% de pedidos de reintegração liminar barrados na origem. Vitória precoce evita o retorno do empregado e os salários retroativos. Ponto de maior alavancagem da defesa.</div>
+          <div class="meta">Meta: <b>≥ 55%</b> · monitorar tempestividade da contestação à tutela</div></div>
+        <div class="kpidef"><span class="eixo e-res">Resultado</span>
+          <h4>Êxito em Mandado de Segurança</h4>
+          <div class="pq">% de MS deferidos contra a reintegração liminar. Atenção ao prazo decadencial de <b>120 dias da ciência/intimação</b> (Art. 23, Lei 12.016/09) — SLA roda da ciência, não da prolação. Perder o prazo é falha grave.</div>
+          <div class="meta">Meta: <b>0 perdas de prazo decadencial</b> · deferimento ≥ 30%</div></div>
+      </div>
+
+      <div class="secline">Eixo 2 · Contenção econômica</div>
+      <div class="grid3">
+        <div class="kpidef"><span class="eixo e-eco">Econômico</span>
+          <h4>Taxa de Contenção / Valor Evitado</h4>
+          <div class="pq">Quanto do <b>valor da causa (pedido na petição inicial)</b> o escritório afastou — exposição contida, não economia de caixa.</div>
+          <div class="meta">Meta: contenção <b>≥ 70%</b> do valor pedido em casos desfavoráveis</div></div>
+        <div class="kpidef"><span class="eixo e-eco">Econômico</span>
+          <h4>Honorários de Sucumbência Gerados</h4>
+          <div class="pq">Custo direto pago quando o banco perde. Boa defesa reduz frequência e percentual arbitrado. Acompanhar valor médio por processo desfavorável.</div>
+          <div class="meta">Meta: abaixo da média da base por TRT</div></div>
+        <div class="kpidef"><span class="eixo e-eco">Econômico</span>
+          <h4>Disciplina de Acordo</h4>
+          <div class="pq">% de acordos e desconto obtido vs. valor pedido. Acordo precoce demais cede valor evitável. Cruzar com a probabilidade de êxito antes do acordo.</div>
+          <div class="meta">Meta: acordo apenas em casos de prob. de êxito &lt; 40%</div></div>
+      </div>
+
+      <div class="secline">Eixo 3 · Diligência processual &amp; SLA</div>
+      <div class="grid3">
+        <div class="kpidef"><span class="eixo e-sla">SLA</span>
+          <h4>Tempestividade de Prazos</h4>
+          <div class="pq">Cumprimento de prazos de contestação, recurso e — crítico — impetração de MS em 120 dias. Indicador de zero tolerância.</div>
+          <div class="meta">Meta: <b>≥ 99%</b> de prazos cumpridos</div></div>
+        <div class="kpidef"><span class="eixo e-sla">SLA</span>
+          <h4>Tempo até Manifestação / Decisão</h4>
+          <div class="pq">Tempo mediano da defesa reagir (proxy de agilidade). Defesa rápida na tutela correlaciona com indeferimento de liminar.</div>
+          <div class="meta">Meta: 1ª manifestação em <b>≤ 10 dias</b> da intimação</div></div>
+        <div class="kpidef"><span class="eixo e-sla">SLA</span>
+          <h4>Recorribilidade Adequada</h4>
+          <div class="pq">Recorreu quando desfavorável e havia tese? Mede omissão e recurso protelatório sem fundamento.</div>
+          <div class="meta">Meta: recurso em ≥ 80% das sentenças desfavoráveis com tese viável</div></div>
+      </div>
+
+      <div class="secline">Eixo 4 · Qualidade técnica &amp; prova · Eixo 5 · Base de processos &amp; governança</div>
+      <div class="grid3">
+        <div class="kpidef"><span class="eixo e-pro">Prova</span>
+          <h4>Engajamento Pericial</h4>
+          <div class="pq">Produção/impugnação de prova pericial e qualidade do laudo. O NTEP (Art. 21-A, Lei 8.213/91) inverte o ônus e nasce da espécie do benefício INSS — a defesa precisa atacar o nexo cedo. Conecta ao módulo Inteligência Pericial.</div>
+          <div class="meta">Meta: impugnação técnica em 100% dos laudos desfavoráveis</div></div>
+        <div class="kpidef"><span class="eixo e-pro">Rastreabilidade</span>
+          <h4>Atualização de Andamentos</h4>
+          <div class="pq">Tempestividade e completude da alimentação dos andamentos no sistema do banco. Sem rastreabilidade não há gestão nem cobrança possível.</div>
+          <div class="meta">Meta: andamento crítico refletido em ≤ 48h</div></div>
+        <div class="kpidef"><span class="eixo e-gov">Governança</span>
+          <h4>Concentração da Base de Processos</h4>
+          <div class="pq">% da base dependente de poucos escritórios. Concentração excessiva é risco operacional e de poder de barganha. Hoje os 2 maiores concentram ~52% dos processos mapeados.</div>
+          <div class="meta">Alerta: nenhum escritório &gt; 30% da base por região</div></div>
+      </div>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="grid3">
+      <div class="ins green">
+        <div class="ih"><div class="cir" style="background:var(--greenLight)">⭐</div><h3 style="color:var(--green)">Destaques</h3><span class="ai">✨ IA + regras</span></div>
+        <ul>
+          <li><b>Cavalcante Ramos</b> e <b>Saratt Moraes</b> entregam muito acima do esperado (+31 e +22 pp), inclusive em liminar e MS — candidatos a ampliar base de processos.</li>
+          <li><b>Armando Canali</b> combina bom volume (57), êxito ajustado +11 pp e o menor tempo de reação (mediana 4 dias).</li>
+          <li><b>Perez e Rezende</b> é o melhor em MS entre os de alto volume (41% de deferimento).</li>
+        </ul>
+      </div>
+      <div class="ins red">
+        <div class="ih"><div class="cir" style="background:var(--redLight)">⚠️</div><h3 style="color:var(--red)">Pontos de Cuidado</h3><span class="ai">✨ IA + regras</span></div>
+        <ul>
+          <li><b>Russomano</b> e <b>Pessoa e Pessoa</b> entregam abaixo do esperado (−17 e −14 pp) para a dificuldade que receberam.</li>
+          <li><b>Concentração:</b> Urbano Vitalino + Perez e Rezende somam ~52% da base mapeada — risco de dependência.</li>
+          <li><b>MS subutilizado:</b> escritórios com 0% de êxito ou nenhum MS impetrado apesar de liminares deferidas — verificar perda do prazo de 120 dias.</li>
+        </ul>
+      </div>
+      <div class="ins purple">
+        <div class="ih"><div class="cir" style="background:var(--purpleLight)">🎯</div><h3 style="color:var(--purple)">Recomendações</h3><span class="ai">✨ IA + regras</span></div>
+        <ul>
+          <li>Adotar o <b>Êxito Ajustado ao Risco</b> como KPI-âncora dos contratos — evita premiar base de processos fácil.</li>
+          <li>Instituir <b>SLA de tutela</b> (manifestação ≤10 dias) e <b>alerta de prazo de MS</b> (120 dias da ciência).</li>
+          <li>Redistribuir parte da base dos sub-performers para os destaques regionais, respeitando especialização por TRT.</li>
+          <li>Padronizar a chave <b>GCPJ ↔ CNJ</b> com a DI — hoje o de/para só casa 4,6% por CNJ; o módulo roda por nome de advogado (75,7%).</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>Dados derivados do cruzamento Base Hiperclassificada (909 processos) × DE/PARA de Advogados BR-161, vinculados por nome do advogado do banco (cobertura 75,7%). Valores e taxas para fins de mockup — sujeitos a validação. "Valor da causa" = valor pedido na petição inicial, não o valor pago pelo banco.</footer>
   </div>
-  <a href="assessment.html" class="card">
-    <div class="icon" style="background:#FDE8EC">📊</div>
-    <div>
-      <div class="title">Assessment <span class="badge" style="background:#FDE8EC;color:#CC092F;margin-left:8px">Modificado</span></div>
-      <div class="desc">Liquidação, Liminar × Sentença, Tipo de Desligamento, Indicador de Reversão, nova estrutura de motivos</div>
+
+  <div class="overlay" id="ov"><div class="modal" id="modal"></div></div>
+
+<script>
+const DATA = {"glob": {"proc": 688, "esc": 24, "adv": 83, "decididos": 495, "exito": 45, "lim": 52, "ms": 27, "vc": 323, "evitado": 225, "cobertura": 75.7}, "rows": [{"escritorio": "Urbano Vitalino Advogados", "n": 188, "decididos": 154, "taxa_exito": 44, "exito_esperado": 35, "delta": 9, "lim_dec": 145, "taxa_lim": 47, "ms_dec": 57, "taxa_ms": 23, "score": 65, "t_lim": 11, "recurso": 31, "vc": 93.4, "evitado": 77.0, "ufs": "BA, PE, PB", "advs": [{"nome": "Carla Elisangela Ferreira Alves Teixeira", "n": 168, "exito": 45, "oab": "40910/ES"}, {"nome": "Felippe Augusto Souza Santos", "n": 4, "exito": 0, "oab": "—"}, {"nome": "Dayana Santos De Oliveira Monteiro", "n": 3, "exito": 33, "oab": "—"}, {"nome": "Adriana Emanuelli De Oliveira Melo", "n": 2, "exito": 0, "oab": "—"}, {"nome": "Luiz Henrique Vieira", "n": 2, "exito": 0, "oab": "55639/GO"}, {"nome": "Wilson Belchior", "n": 2, "exito": 100, "oab": "—"}], "perf": 67}, {"escritorio": "Escritorio De Advocacia Perez E Rezende", "n": 169, "decididos": 131, "taxa_exito": 44, "exito_esperado": 37, "delta": 7, "lim_dec": 119, "taxa_lim": 52, "ms_dec": 29, "taxa_ms": 41, "score": 63, "t_lim": 10, "recurso": 35, "vc": 53.8, "evitado": 38.1, "ufs": "RJ, SP, ES", "advs": [{"nome": "Bruno Borges Perez De Rezende", "n": 37, "exito": 26, "oab": "249094/SP"}, {"nome": "Andre Borges Perez De Rezende", "n": 32, "exito": 59, "oab": "158083/RJ"}, {"nome": "Guilmar Borges De Rezende", "n": 31, "exito": 45, "oab": "22259/RJ"}, {"nome": "Liliana Dahab London", "n": 21, "exito": 43, "oab": "204710/RJ"}, {"nome": "Jose Antonio Martins", "n": 9, "exito": 57, "oab": "114760/RJ"}, {"nome": "Ana Carolina De Souza Maiani", "n": 8, "exito": 83, "oab": "196096/RJ"}], "perf": 64}, {"escritorio": "Pellegrina E Monteiro Soc De Advogados", "n": 84, "decididos": 48, "taxa_exito": 46, "exito_esperado": 37, "delta": 9, "lim_dec": 40, "taxa_lim": 52, "ms_dec": 8, "taxa_ms": 0, "score": 63, "t_lim": 8, "recurso": 18, "vc": 27.4, "evitado": 11.8, "ufs": "SP, RJ, ES", "advs": [{"nome": "Fabio Cabral Silva De Oliveira Monteiro", "n": 69, "exito": 49, "oab": "261844/SP"}, {"nome": "Gabriela Carr", "n": 7, "exito": 25, "oab": "281551/SP"}, {"nome": "Maria Aparecida Pellegrina", "n": 2, "exito": 0, "oab": "26111/SP"}, {"nome": "Nayara Alves Batista De Assuncao", "n": 2, "exito": 100, "oab": "119894/MG"}, {"nome": "Debora Aparecida Cavalcante De Andrade", "n": 1, "exito": 100, "oab": "—"}, {"nome": "Jose Roberto Da Conceicao", "n": 1, "exito": null, "oab": "—"}], "perf": 61}, {"escritorio": "Armando Canali Filho Soc Ind De Adv", "n": 57, "decididos": 49, "taxa_exito": 49, "exito_esperado": 38, "delta": 11, "lim_dec": 43, "taxa_lim": 53, "ms_dec": 13, "taxa_ms": 15, "score": 62, "t_lim": 4, "recurso": 37, "vc": 52.6, "evitado": 41.7, "ufs": "RJ, DF, GO", "advs": [{"nome": "Armando Canali Filho", "n": 51, "exito": 45, "oab": "339/PR"}, {"nome": "Karen Maryelle Ribeiro", "n": 3, "exito": 67, "oab": "—"}, {"nome": "Juliana Bucher Hoerlle Gomes", "n": 1, "exito": 100, "oab": "—"}, {"nome": "Thiago Jorge Marques Malcher Pereira", "n": 1, "exito": null, "oab": "—"}, {"nome": "Walter Alves Franca", "n": 1, "exito": 100, "oab": "—"}], "perf": 70}, {"escritorio": "Freire Gerbasi E Bittencourt Advogados", "n": 26, "decididos": 14, "taxa_exito": 43, "exito_esperado": 29, "delta": 14, "lim_dec": 14, "taxa_lim": 43, "ms_dec": 1, "taxa_ms": 0, "score": 71, "t_lim": 5, "recurso": 0, "vc": 19.1, "evitado": 10.2, "ufs": "BA, CE, RO", "advs": [{"nome": "Gustavo Gerbasi Gomes Dias", "n": 24, "exito": 43, "oab": "49752/CE"}, {"nome": "Anatole Nogueira Sousa Gabriele", "n": 1, "exito": null, "oab": "—"}, {"nome": "Luiz Artur Guerreiro Lameira", "n": 1, "exito": null, "oab": "—"}], "perf": 64}, {"escritorio": "Vidal Ribeiro Poncano Soc De Advogados", "n": 26, "decididos": 19, "taxa_exito": 53, "exito_esperado": 45, "delta": 8, "lim_dec": 19, "taxa_lim": 53, "ms_dec": 1, "taxa_ms": 0, "score": 55, "t_lim": 5, "recurso": 8, "vc": 0.8, "evitado": 0.5, "ufs": "MG", "advs": [{"nome": "Vidal Ribeiro Poncano", "n": 26, "exito": 53, "oab": "473/SP"}], "perf": 65}, {"escritorio": "Saratt Moraes E Associados Advoc E Con", "n": 23, "decididos": 12, "taxa_exito": 58, "exito_esperado": 36, "delta": 22, "lim_dec": 8, "taxa_lim": 75, "ms_dec": 2, "taxa_ms": 100, "score": 64, "t_lim": 10, "recurso": 22, "vc": 13.7, "evitado": 10.6, "ufs": "PR, RS, SC", "advs": [{"nome": "Newton Dorneles Saratt", "n": 23, "exito": 58, "oab": "38023/PR"}], "perf": 81}, {"escritorio": "Fadiga Buosi E Camargo Adv", "n": 22, "decididos": 9, "taxa_exito": 33, "exito_esperado": 33, "delta": 0, "lim_dec": 5, "taxa_lim": 60, "ms_dec": 1, "taxa_ms": 0, "score": 67, "t_lim": 1, "recurso": 23, "vc": 12.3, "evitado": 6.3, "ufs": "PR, SP, SC", "advs": [{"nome": "Rosano De Camargo", "n": 20, "exito": 25, "oab": "128688/SP"}, {"nome": "Edevones Diones Matos", "n": 1, "exito": null, "oab": "271116/SP"}, {"nome": "Luiz Gustavo Mendes De Paula Falleiros", "n": 1, "exito": 100, "oab": "—"}], "perf": 60}, {"escritorio": "Cavalcante Ramos Advogados", "n": 14, "decididos": 9, "taxa_exito": 78, "exito_esperado": 47, "delta": 31, "lim_dec": 9, "taxa_lim": 78, "ms_dec": 2, "taxa_ms": 50, "score": 53, "t_lim": 13, "recurso": 21, "vc": 6.8, "evitado": 5.4, "ufs": "RJ, BA, ES", "advs": [{"nome": "Carlos Eduardo Cavalcante Ramos", "n": 14, "exito": 78, "oab": "030/RJ"}], "perf": 87}, {"escritorio": "Maschietto E De Paula Sociedade De Advog", "n": 13, "decididos": 8, "taxa_exito": 50, "exito_esperado": 38, "delta": 12, "lim_dec": 8, "taxa_lim": 50, "ms_dec": 2, "taxa_ms": 0, "score": 62, "t_lim": 14, "recurso": 8, "vc": 8.8, "evitado": 5.1, "ufs": "BA, PE, PI", "advs": [{"nome": "Gaudio Ribeiro De Paula", "n": 6, "exito": 100, "oab": "080/DF"}, {"nome": "Milena De Oliveira Coelho", "n": 5, "exito": 33, "oab": "—"}, {"nome": "Allisson Amorim Araujo De Lima", "n": 1, "exito": 0, "oab": "—"}, {"nome": "Faber Lima Mesquita De Medeiros", "n": 1, "exito": 0, "oab": "7869/RN"}], "perf": 64}, {"escritorio": "Pessoa E Pessoa Advogados Associados", "n": 11, "decididos": 4, "taxa_exito": 25, "exito_esperado": 39, "delta": -14, "lim_dec": 2, "taxa_lim": 50, "ms_dec": 0, "taxa_ms": null, "score": 61, "t_lim": 2, "recurso": 27, "vc": 7.1, "evitado": 1.3, "ufs": "BA, AL, AM", "advs": [{"nome": "Maria Carolina Almeida Ribeiro De Miranda", "n": 10, "exito": 25, "oab": "15283/BA"}, {"nome": "Thiago Gurjao Carneiro", "n": 1, "exito": null, "oab": "—"}], "perf": 42}, {"escritorio": "Russomano Advocacia Sc", "n": 9, "decididos": 5, "taxa_exito": 20, "exito_esperado": 37, "delta": -17, "lim_dec": 5, "taxa_lim": 20, "ms_dec": 0, "taxa_ms": null, "score": 63, "t_lim": 17, "recurso": 22, "vc": 3.6, "evitado": 2.1, "ufs": "DF, MG, MS", "advs": [{"nome": "Mozart Victor Russomano Neto", "n": 9, "exito": 20, "oab": "340/DF"}], "perf": 37}, {"escritorio": "Maues E Advogados Associados", "n": 8, "decididos": 8, "taxa_exito": 62, "exito_esperado": 48, "delta": 14, "lim_dec": 8, "taxa_lim": 62, "ms_dec": 0, "taxa_ms": null, "score": 52, "t_lim": 33, "recurso": 38, "vc": 2.7, "evitado": 2.7, "ufs": "RJ", "advs": [{"nome": "Silvia Rodrigues Da Rocha Vieira", "n": 4, "exito": 100, "oab": "109370/RJ"}, {"nome": "Henrique Claudio Maues", "n": 3, "exito": 0, "oab": "35707/RJ"}, {"nome": "Renata Segadilha Borges", "n": 1, "exito": 100, "oab": "83083/RJ"}], "perf": 72}, {"escritorio": "Monteiro Nascimento Advogados", "n": 7, "decididos": 5, "taxa_exito": 80, "exito_esperado": 45, "delta": 35, "lim_dec": 5, "taxa_lim": 80, "ms_dec": 2, "taxa_ms": 100, "score": 55, "t_lim": 14, "recurso": 29, "vc": 1.6, "evitado": 1.3, "ufs": "BA", "advs": [{"nome": "Carlos Augusto Monteiro Nascimento", "n": 7, "exito": 80, "oab": "600/SE"}], "perf": 88}, {"escritorio": "Pinto E Soares Advogados Associados", "n": 7, "decididos": 5, "taxa_exito": 80, "exito_esperado": 56, "delta": 24, "lim_dec": 5, "taxa_lim": 80, "ms_dec": 0, "taxa_ms": null, "score": 44, "t_lim": 14, "recurso": 0, "vc": 3.6, "evitado": 1.3, "ufs": "MG, PA, AP", "advs": [{"nome": "Rosalia Maria Lima Soares", "n": 7, "exito": 80, "oab": "987/MG"}], "perf": 74}, {"escritorio": "Cleber Pinheiro Sociedade De Advogados", "n": 6, "decididos": 5, "taxa_exito": 40, "exito_esperado": 41, "delta": -1, "lim_dec": 1, "taxa_lim": 100, "ms_dec": 0, "taxa_ms": null, "score": 59, "t_lim": 5, "recurso": 50, "vc": 5.5, "evitado": 4.8, "ufs": "SP", "advs": [{"nome": "Cleber Piagentini Pinheiro", "n": 5, "exito": 25, "oab": "94092/SP"}, {"nome": "Rodrigo De Souza Rossanezi", "n": 1, "exito": 100, "oab": "177399/SP"}], "perf": 76}, {"escritorio": "Machado Meyer Sendacz E Opice Advogados", "n": 6, "decididos": 3, "taxa_exito": 0, "exito_esperado": 31, "delta": -31, "lim_dec": 2, "taxa_lim": 50, "ms_dec": 0, "taxa_ms": null, "score": 69, "t_lim": null, "recurso": 33, "vc": 1.3, "evitado": 0.5, "ufs": "MG, RJ, SP", "advs": [{"nome": "Rodrigo Seizo Takano", "n": 4, "exito": 0, "oab": "343/SP"}, {"nome": "Isabella Sanglard Pimenta Machado", "n": 2, "exito": 0, "oab": "—"}], "perf": 29}, {"escritorio": "Rocha Marinho E Sales Sociedade De Adv", "n": 4, "decididos": 4, "taxa_exito": 25, "exito_esperado": 33, "delta": -8, "lim_dec": 3, "taxa_lim": 33, "ms_dec": 0, "taxa_ms": null, "score": 67, "t_lim": 43, "recurso": 50, "vc": 0.9, "evitado": 0.8, "ufs": "AL, CE, PI", "advs": [{"nome": "Wilson Sales Belchior", "n": 4, "exito": 25, "oab": "17314/CE"}], "perf": 46}, {"escritorio": "Sanchez E Sanchez Advogados Associados", "n": 2, "decididos": 1, "taxa_exito": 0, "exito_esperado": 47, "delta": -47, "lim_dec": 0, "taxa_lim": null, "ms_dec": 0, "taxa_ms": null, "score": 53, "t_lim": null, "recurso": 0, "vc": 0.7, "evitado": 0.2, "ufs": "SP", "advs": [{"nome": "Luciana Bonasio Dal Mas", "n": 1, "exito": null, "oab": "323640/SP"}, {"nome": "Mauricio Martins Fonseca Reis", "n": 1, "exito": 0, "oab": "155196/SP"}], "perf": 14}, {"escritorio": "Thome E Cucchi Sociedade De Advogados", "n": 2, "decididos": 0, "taxa_exito": null, "exito_esperado": 28, "delta": null, "lim_dec": 0, "taxa_lim": null, "ms_dec": 0, "taxa_ms": null, "score": 72, "t_lim": null, "recurso": 0, "vc": 2.9, "evitado": 0.0, "ufs": "SP", "advs": [{"nome": "Adriane Maria Xavier Biondo", "n": 2, "exito": null, "oab": "133128/SP"}], "perf": 28}, {"escritorio": "Abramides Goncalves E Advogados", "n": 1, "decididos": 0, "taxa_exito": null, "exito_esperado": 28, "delta": null, "lim_dec": 0, "taxa_lim": null, "ms_dec": 0, "taxa_ms": null, "score": 72, "t_lim": null, "recurso": 0, "vc": 0.2, "evitado": 0.0, "ufs": "SP", "advs": [{"nome": "Cristina Aparecida Presente Romero", "n": 1, "exito": null, "oab": "166511/SP"}], "perf": 28}, {"escritorio": "Advocacia Maciel", "n": 1, "decididos": 1, "taxa_exito": 0, "exito_esperado": 18, "delta": -18, "lim_dec": 0, "taxa_lim": null, "ms_dec": 0, "taxa_ms": null, "score": 82, "t_lim": null, "recurso": 0, "vc": 2.5, "evitado": 2.5, "ufs": "DF", "advs": [{"nome": "Jose Alberto Couto Maciel", "n": 1, "exito": 0, "oab": "513/DF"}], "perf": 37}, {"escritorio": "Carminatti E Capello Advogados", "n": 1, "decididos": 0, "taxa_exito": null, "exito_esperado": 22, "delta": null, "lim_dec": 0, "taxa_lim": null, "ms_dec": 0, "taxa_ms": null, "score": 78, "t_lim": null, "recurso": 0, "vc": 0.7, "evitado": 0.0, "ufs": "SP", "advs": [{"nome": "Rodrigo Bonuto Fernandes", "n": 1, "exito": null, "oab": "225863/SP"}], "perf": 28}, {"escritorio": "Fernando Ximenes Advogados", "n": 1, "decididos": 1, "taxa_exito": 0, "exito_esperado": 12, "delta": -12, "lim_dec": 0, "taxa_lim": null, "ms_dec": 0, "taxa_ms": null, "score": 88, "t_lim": null, "recurso": 100, "vc": 0.9, "evitado": 0.9, "ufs": "SP", "advs": [{"nome": "Luciana Moreira Aguiar De Toledo", "n": 1, "exito": 0, "oab": "163048/SP"}], "perf": 41}]};
+const g = DATA.glob, rows = DATA.rows;
+const fmtPct = v => v===null||v===undefined ? '—' : v+'%';
+const fmtMi = v => 'R$ '+v.toFixed(1)+' mi';
+
+document.getElementById('ms-cob').textContent = g.cobertura+'%';
+document.getElementById('k-esc').textContent = g.esc;
+document.getElementById('k-esc-d').textContent = g.proc+' processos · '+g.adv+' advogados';
+document.getElementById('k-ex').textContent = g.exito+'%';
+document.getElementById('k-ex-d').textContent = 'favorável ao banco · '+g.decididos+' decididos';
+document.getElementById('k-lim').textContent = g.lim+'%';
+document.getElementById('k-ev').textContent = 'R$ '+g.evitado+' mi';
+document.getElementById('k-ev-d').textContent = 'de R$ '+g.vc+' mi pedidos na PI';
+
+function deltaBadge(d){
+  if(d===null||d===undefined) return '<span class="badge b-grey">s/ dados</span>';
+  if(d>=5) return '<span class="delta" style="color:var(--green)">▲ +'+d+' pp</span>';
+  if(d<=-5) return '<span class="delta" style="color:var(--red)">▼ '+d+' pp</span>';
+  return '<span class="delta" style="color:var(--textMuted)">≈ '+(d>0?'+':'')+d+' pp</span>';
+}
+function scoreColor(s){ return s>=70?'var(--green)':s>=50?'var(--amber)':'var(--red)'; }
+function bullet(s){ return '<div class="bullet"><div class="fill" style="width:'+s+'%;background:'+scoreColor(s)+'"></div><div class="mk" style="left:60%"></div><div class="v">'+s+'</div></div>'; }
+
+const tb = document.getElementById('tbody');
+const filtered = rows.filter(r=>r.n>=3);
+filtered.forEach((r,i)=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td><div class="escname">${r.escritorio}</div><div class="escmeta">${r.advs.length} adv. · ${r.ufs}</div></td>
+    <td class="num"><b>${r.n}</b><div class="escmeta">${r.decididos} decid.</div></td>
+    <td class="num">${fmtPct(r.taxa_exito)}</td>
+    <td class="num">${fmtPct(r.taxa_lim)}</td>
+    <td class="num">${r.ms_dec>0?fmtPct(r.taxa_ms):'<span class="escmeta">s/ MS</span>'}</td>
+    <td class="num">${r.t_lim!==null?r.t_lim+'d':'—'}</td>
+    <td class="num">${fmtMi(r.evitado)}</td>
+    <td><button class="btn-ver" data-i="${i}">👁 Ver</button></td>`;
+  tb.appendChild(tr);
+});
+
+// SCATTER
+(function(){
+  const W=560,H=340,pad={l:46,r:20,t:16,b:40};
+  const xMin=40,xMax=92;
+  const X=v=>pad.l+(v-xMin)/(xMax-xMin)*(W-pad.l-pad.r);
+  const Y=v=>H-pad.b-(v)/(100)*(H-pad.t-pad.b);
+  let s=`<svg viewBox="0 0 ${W} ${H}">`;
+  for(let gy=0;gy<=100;gy+=25){ s+=`<line x1="${pad.l}" y1="${Y(gy)}" x2="${W-pad.r}" y2="${Y(gy)}" stroke="#EEF0F3"/>`;
+    s+=`<text x="${pad.l-8}" y="${Y(gy)+3}" font-size="9" fill="#9AA0A6" text-anchor="end">${gy}%</text>`; }
+  for(let gx=40;gx<=90;gx+=10){ s+=`<text x="${X(gx)}" y="${H-pad.b+16}" font-size="9" fill="#9AA0A6" text-anchor="middle">${gx}</text>`; }
+  s+=`<line x1="${X(xMin)}" y1="${Y(100-xMin)}" x2="${X(xMax)}" y2="${Y(100-xMax)}" stroke="#9AA0A6" stroke-dasharray="5 4" stroke-width="1.5"/>`;
+  s+=`<text x="${X(82)}" y="${Y(100-82)-6}" font-size="9" fill="#9AA0A6" transform="rotate(-13 ${X(82)} ${Y(100-82)})">expectativa do modelo</text>`;
+  s+=`<text x="${W/2}" y="${H-4}" font-size="10" fill="#6b7280" text-anchor="middle" font-weight="600">Dificuldade da base (score de risco médio) →</text>`;
+  s+=`<text transform="translate(13 ${H/2}) rotate(-90)" font-size="10" fill="#6b7280" text-anchor="middle" font-weight="600">Taxa de êxito (favorável ao banco)</text>`;
+  rows.filter(r=>r.decididos>=8 && r.taxa_exito!==null).forEach(r=>{
+    const cx=X(r.score),cy=Y(r.taxa_exito),rad=Math.max(6,Math.sqrt(r.n)*1.5);
+    const col=r.delta>=5?'#2E7D32':r.delta<=-5?'#CC092F':'#9AA0A6';
+    s+=`<circle cx="${cx}" cy="${cy}" r="${rad}" fill="${col}" fill-opacity="0.55" stroke="${col}" stroke-width="1.5"/>`;
+    s+=`<text x="${cx}" y="${cy-rad-3}" font-size="9" fill="#1f2147" text-anchor="middle" font-weight="600">${r.escritorio.split(' ')[0]}</text>`;
+  });
+  s+='</svg>'; document.getElementById('scatter').innerHTML=s;
+})();
+
+// ETAPAS DA DEFESA — função reutilizável (verde=ganho banco, vermelho=contra)
+function stagesHtml(gates){
+  return gates.map(gt=>{
+    const head=`<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:700;color:var(--title)">${gt.l}</span>
+        <span style="font-size:11px;color:var(--textMuted)">${gt.n?gt.n+' decididos':'—'}</span></div>`;
+    const cap=gt.cap?`<div style="font-size:11px;color:var(--textSec);margin-top:6px;line-height:1.45">${gt.cap}</div>`:'';
+    if(!gt.n){
+      return `<div style="margin-bottom:16px">${head}
+        <div style="height:28px;border-radius:6px;background:#EEF0F3;display:flex;align-items:center;justify-content:center;color:var(--textMuted);font-size:11px">${gt.empty||'sem decisões nesta fase'}</div>${cap}</div>`;
+    }
+    return `<div style="margin-bottom:16px">${head}
+      <div style="display:flex;height:28px;border-radius:6px;overflow:hidden">
+        <div style="width:${gt.win}%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800">${gt.win>=12?gt.win+'%':''}</div>
+        <div style="width:${100-gt.win}%;background:var(--red);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800">${(100-gt.win)>=12?(100-gt.win)+'%':''}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px">
+        <span style="font-size:10.5px;color:var(--green);font-weight:600">● ${gt.winLab}</span>
+        <span style="font-size:10.5px;color:var(--red);font-weight:600">${gt.loseLab} ●</span></div>${cap}</div>`;
+  }).join('');
+}
+(function(){
+  const limDec=rows.reduce((a,r)=>a+r.lim_dec,0);
+  const msDec=rows.reduce((a,r)=>a+r.ms_dec,0);
+  const gates=[
+    {l:'Liminar / Tutela', n:limDec, win:g.lim, winLab:'Indeferida (ganho)', loseLab:'Deferida (reintegração)',
+     cap:'1ª barreira — indeferir a tutela evita o retorno imediato do empregado e a contagem de salários retroativos.'},
+    {l:'Mandado de Segurança', n:msDec, win:g.ms, winLab:'Deferido (ganho)', loseLab:'Indeferido',
+     cap:'Via de reversão quando a liminar foi concedida contra o banco — prazo decadencial de 120 dias da ciência.'},
+    {l:'Mérito (sentença / acórdão)', n:g.decididos, win:g.exito, winLab:'Favorável ao banco', loseLab:'Favorável ao reclamante',
+     cap:'Resultado final do processo, somando 1ª e 2ª instância.'},
+  ];
+  document.getElementById('funnel').innerHTML = stagesHtml(gates);
+})();
+
+// MODAL
+document.querySelectorAll('.btn-ver').forEach(b=>b.addEventListener('click',()=>openModal(filtered[+b.dataset.i])));
+function openModal(r){
+  const egates=[
+    {l:'Liminar / Tutela', n:r.lim_dec, win:r.taxa_lim, winLab:'Indeferida (ganho)', loseLab:'Deferida', empty:'sem liminares decididas'},
+    {l:'Mandado de Segurança', n:r.ms_dec, win:r.taxa_ms, winLab:'Deferido (ganho)', loseLab:'Indeferido', empty:'sem MS decididos'},
+    {l:'Mérito (sentença / acórdão)', n:r.decididos, win:r.taxa_exito, winLab:'Favorável ao banco', loseLab:'Fav. reclamante', empty:'sem decisão de mérito'},
+  ];
+  const advRows=r.advs.map(a=>`<tr>
+    <td style="padding:9px 8px;border-bottom:1px solid var(--line)">${a.nome}</td>
+    <td style="padding:9px 8px;border-bottom:1px solid var(--line);font-size:11px;color:var(--textSec)">OAB ${a.oab}</td>
+    <td class="num" style="padding:9px 8px;border-bottom:1px solid var(--line);text-align:right"><b>${a.n}</b></td>
+    <td style="padding:9px 8px;border-bottom:1px solid var(--line);text-align:right">${a.exito===null?'—':a.exito+'%'}</td></tr>`).join('');
+  document.getElementById('modal').innerHTML=`
+    <button class="x" onclick="document.getElementById('ov').classList.remove('on')">✕</button>
+    <h2>${r.escritorio}</h2>
+    <div class="mh-meta">${r.n} processos · ${r.decididos} decididos · atuação em ${r.ufs} · score de risco médio da base ${r.score}</div>
+    <div class="mgrid">
+      <div class="mstat"><div class="l">Êxito Ajustado</div><div class="v" style="color:${r.delta>=5?'var(--green)':r.delta<=-5?'var(--red)':'var(--title)'}">${r.delta===null?'—':(r.delta>0?'+':'')+r.delta+' pp'}</div><div class="d">real ${fmtPct(r.taxa_exito)} vs esperado ${r.exito_esperado}%</div></div>
+      <div class="mstat"><div class="l">Liminar Indeferida</div><div class="v">${fmtPct(r.taxa_lim)}</div><div class="d">${r.lim_dec} liminares decididas</div></div>
+      <div class="mstat"><div class="l">Êxito em MS</div><div class="v">${r.ms_dec>0?fmtPct(r.taxa_ms):'—'}</div><div class="d">${r.ms_dec} MS decididos</div></div>
+      <div class="mstat"><div class="l">Score Performance</div><div class="v" style="color:${scoreColor(r.perf)}">${r.perf}</div><div class="d">composto (0–100)</div></div>
     </div>
-  </a>
-  <a href="insights.html" class="card">
-    <div class="icon" style="background:#F3E8F7">💡</div>
-    <div>
-      <div class="title">Insights Estratégicos <span class="badge" style="background:#FDE8EC;color:#CC092F;margin-left:8px">Reorganizado</span></div>
-      <div class="desc">Causa Raiz, Doença × Estado, Causa de Ganhar/Perder, INSS Preditor, Dashboard MS, Árvore redirecionada</div>
+    <div class="mgrid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="mstat"><div class="l">Valor da Causa (pedido PI)</div><div class="v">R$ ${r.vc} mi</div></div>
+      <div class="mstat"><div class="l">Valor Evitado (estim.)</div><div class="v">R$ ${r.evitado} mi</div></div>
+      <div class="mstat"><div class="l">Tempo até Liminar</div><div class="v">${r.t_lim!==null?r.t_lim+'d':'—'}</div><div class="d">taxa de recurso ${r.recurso}%</div></div>
     </div>
-  </a>
-  <a href="pericial.html" class="card">
-    <div class="icon" style="background:#E8F5E9">🩺</div>
-    <div>
-      <div class="title">Inteligência Pericial <span class="badge" style="background:#E8F5E9;color:#2E7D32;margin-left:8px">Novo</span></div>
-      <div class="desc">Análise de peritos, consistência, cruzamento advogado/vara, sugestão de estratégia, exposição por TRT</div>
-    </div>
-  </a>
-  <a href="perfil_advocaticio.html" class="card">
-    <div class="icon" style="background:#FDE8EC">💼</div>
-    <div>
-      <div class="title">Perfil Advocatício <span class="badge" style="background:#FDE8EC;color:#CC092F;margin-left:8px">Novo</span></div>
-      <div class="desc">Atuação dos advogados da parte autora: volume, êxito, teses, reintegração abusiva, advogado × médico × CID e perfil completo</div>
-    </div>
-  </a>
-  <a href="rede_advogado_medico.html" class="card">
-    <div class="icon" style="background:#F3E8F7">🕸️</div>
-    <div>
-      <div class="title">Rede Advogado × Médico <span class="badge" style="background:#E8F5E9;color:#2E7D32;margin-left:8px">Novo</span></div>
-      <div class="desc">Concentração advogado ↔ médico atestante da PI: díades atípicas, atestados por médico, diversidade por advogado, matriz de concentração — sinal para a sindicância de Pessoas/Medicina</div>
-    </div>
-  </a>
-  <a href="perfil_magistrado.html" class="card">
-    <div class="icon" style="background:#FFF8E1">⚖️</div>
-    <div>
-      <div class="title">Perfil de Magistrado <span class="badge" style="background:#FFF8E1;color:#F57F17;margin-left:8px">A validar</span></div>
-      <div class="desc">Jurimetria por magistrado: tendência decisória, tempo por fase, reforma no TRT, postura pericial e 1º × 2º grau</div>
-    </div>
-  </a>
-  <a href="uso-painel.html" class="card">
-    <div class="icon" style="background:#E3F2FD">📊</div>
-    <div>
-      <div class="title">Uso do Painel <span class="badge" style="background:#E3F2FD;color:#1565C0;margin-left:8px">Novo</span></div>
-      <div class="desc">Monitoramento de acessos, engajamento por sessão, tempo por módulo, segmentação de usuários, adoção de features</div>
-    </div>
-  </a>
-  <div class="footer">© 2026 Deep — Plataforma Reintegrados · Dados simulados para mockup</div>
-</div>
+    <div class="sh" style="margin:6px 0 12px"><div class="si" style="background:var(--greenLight)">🛡️</div><h3 style="font-size:14px">Etapas da Defesa deste escritório</h3></div>
+    ${stagesHtml(egates)}
+    <div class="sh" style="margin:6px 0 10px"><div class="si">👤</div><h3 style="font-size:14px">Advogados da equipe</h3></div>
+    <table><thead><tr>
+      <th style="padding:8px">Advogado</th><th style="padding:8px">OAB</th><th class="num" style="padding:8px;text-align:right">Processos</th><th style="padding:8px;text-align:right">Êxito</th>
+    </tr></thead><tbody>${advRows}</tbody></table>
+    <div class="sub-note" style="margin:14px 0 0 0">Cobrança sugerida: ${r.delta!==null&&r.delta<=-5 ? 'desempenho <b>abaixo</b> do esperado para a base que recebeu — revisar teses e SLA, considerar redistribuição.' : r.delta>=5 ? 'desempenho <b>acima</b> do esperado — candidato a ampliação de base de processos.' : 'desempenho dentro do esperado — manter monitoramento.'}</div>`;
+  document.getElementById('ov').classList.add('on');
+}
+document.getElementById('ov').addEventListener('click',e=>{ if(e.target.id==='ov') e.currentTarget.classList.remove('on'); });
+</script>
 </body>
 </html>
