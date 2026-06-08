@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rede Advogado × Médico — Reintegrados | DeepCenter</title>
+<style>
+  :root{
+    --red:#CC092F; --redMid:#E84667; --redLight:#FDE8EC;
+    --purple:#7B2D8E; --purpleLight:#F3E8F7;
+    --green:#2E7D32; --greenLight:#E8F5E9;
+    --amber:#F57F17; --amberLight:#FFF8E1;
+    --blue:#1565C0; --blueLight:#E3F2FD;
+    --navy:#1a1a2e; --bg:#F5F6FA; --white:#fff; --border:#E8EAED;
+    --text:#1a1a2e; --textSec:#5f6368; --textMuted:#9AA0A6;
+    --shadow:0 1px 3px rgba(0,0,0,0.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+  .app{display:flex;min-height:100vh}
+  .side{width:232px;background:var(--white);border-right:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;padding:16px 0}
+  .collapse{align-self:flex-end;margin:0 14px 8px;width:24px;height:24px;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--textMuted);font-size:12px;cursor:pointer}
+  .brand{padding:0 20px 14px}
+  .brand .mark{font-size:27px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+  .brand .mark .b{color:#41719C}.brand .mark .e{color:#8C8C8C}
+  .brand .slogan{font-size:8px;letter-spacing:3px;color:#8C8C8C;margin-top:3px}
+  .navlabel{font-size:10px;letter-spacing:1px;color:var(--textMuted);padding:10px 20px 6px;text-transform:uppercase}
+  .nav{padding:0 12px}
+  .nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;color:var(--textSec);text-decoration:none;font-size:13.5px;margin-bottom:3px}
+  .nav a .ic{width:18px;text-align:center;font-size:15px}
+  .nav a:hover{background:var(--bg)}
+  .nav a.active{background:var(--red);color:#fff;font-weight:600}
+  .nav a.active .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:#fff;opacity:.9}
+  .bottom{margin-top:auto;padding:0 16px}
+  .sair{display:flex;align-items:center;gap:9px;border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--textSec);font-size:13px;margin-bottom:12px;cursor:pointer}
+  .statuscard{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+  .statuscard .on{font-size:11px;color:var(--green);font-weight:600;margin-bottom:7px}
+  .statuscard .t1{font-size:11px;color:var(--textSec)} .statuscard .t2{font-size:11px;color:var(--text);font-weight:600;margin-top:2px}
+  .main{flex:1;padding:20px 26px;overflow-x:hidden}
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logoico{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--red),var(--redMid));display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+  .topbar h1{font-size:20px;font-weight:800;color:var(--navy)} .topbar p{font-size:12px;color:var(--textSec);margin-top:1px}
+  .updpill{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--border);border-radius:24px;padding:7px 14px;font-size:11.5px;color:var(--textSec)}
+  .updpill b{color:var(--text)} .updpill .dotg{width:7px;height:7px;border-radius:50%;background:var(--green)}
+  .filters{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .search{flex:1;min-width:240px;display:flex;align-items:center;gap:9px;background:var(--white);border:1px solid var(--border);border-radius:24px;padding:10px 16px;color:var(--textMuted)}
+  .search input{border:0;outline:0;flex:1;font-size:13px;background:transparent;color:var(--text)}
+  .fdrop{display:flex;align-items:center;gap:12px;background:var(--white);border:1px solid var(--border);border-radius:24px;padding:10px 16px;font-size:13px;color:var(--textSec);min-width:190px;justify-content:space-between;cursor:pointer}
+  .fdrop .ar{font-size:10px;color:var(--textMuted)}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:18px}
+  .tab{flex:0 0 auto;min-width:90px;background:var(--white);border:1px solid var(--border);border-radius:11px;padding:12px 10px;text-align:center;color:var(--textMuted);cursor:pointer}
+  .tab .ic{font-size:16px;display:block;margin-bottom:6px} .tab .lb{font-size:10.5px;font-weight:600;line-height:1.2}
+  .tab.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 5px 14px rgba(204,9,47,.28)}
+  .tab:not(.active):hover{background:#FFF5F6;color:var(--textSec)}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+  .kpi{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:flex-start}
+  .kpi .lb{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--textSec);margin-bottom:10px;max-width:155px}
+  .kpi .v{font-size:29px;font-weight:800;color:var(--navy);line-height:1} .kpi .sub{font-size:12px;margin-top:8px}
+  .kpi .ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:16px}
+  .stitle{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:18px}
+  .stitle::before{content:"";width:4px;height:17px;background:var(--red);border-radius:2px}
+  .stitle .tag{margin-left:auto;font-size:10px;font-weight:600;color:var(--textMuted);text-transform:uppercase;letter-spacing:.5px}
+  .hbar{margin-bottom:13px}
+  .hbar .top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
+  .hbar .top .nm{color:var(--text);font-weight:600;display:flex;align-items:center;gap:7px} .hbar .top .pc{color:var(--textSec);font-variant-numeric:tabular-nums}
+  .hbar .track{height:9px;background:var(--bg);border-radius:5px;overflow:hidden}
+  .hbar .fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--red),var(--redMid))}
+  .hbar.alt .fill{background:var(--purple)} .hbar.nv .fill{background:var(--navy)} .hbar.gr .fill{background:var(--green)}
+  .note{font-size:10.5px;color:var(--textMuted);font-style:italic;margin-top:12px}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600}
+  .b-red{background:var(--redLight);color:var(--red)} .b-purple{background:var(--purpleLight);color:var(--purple)}
+  .b-green{background:var(--greenLight);color:var(--green)} .b-amber{background:var(--amberLight);color:var(--amber)} .b-blue{background:var(--blueLight);color:var(--blue)} .b-gray{background:#EEF0F2;color:var(--textSec)}
+  table{width:100%;border-collapse:collapse}
+  thead th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--textSec);padding:10px 12px;border-bottom:2px solid var(--border)}
+  tbody td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+  tbody tr:hover{background:#FFF5F6}
+  td .nm{font-weight:600;color:var(--text)} td .oab{font-size:11px;color:var(--textMuted)} .num{font-variant-numeric:tabular-nums}
+  .seemore{border:1px solid var(--border);background:var(--white);border-radius:7px;padding:6px 11px;font-size:12px;color:var(--red);font-weight:600;cursor:pointer;white-space:nowrap} .seemore:hover{background:var(--redLight)}
+  .insight{border-radius:10px;padding:18px 20px}
+  .insight .h{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px;margin-bottom:12px}
+  .insight .ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .insight ul{list-style:none;font-size:12.5px;line-height:1.55} .insight li{padding-left:16px;position:relative;margin-bottom:8px}
+  .insight li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%}
+  .ins-red{background:var(--redLight)} .ins-red .ic{background:#fff;color:var(--red)} .ins-red .h{color:var(--red)} .ins-red li::before{background:var(--red)}
+  .ins-blue{background:var(--blueLight)} .ins-blue .ic{background:#fff;color:var(--blue)} .ins-blue .h{color:var(--blue)} .ins-blue li::before{background:var(--blue)}
+
+  /* concentração dyad */
+  .dyad{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+  .dyad:last-of-type{border-bottom:0}
+  .dyad .flag{width:30px;height:30px;border-radius:8px;background:var(--redLight);color:var(--red);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .dyad .flag.amb{background:var(--amberLight);color:var(--amber)}
+  .dyad .body{flex:1}
+  .dyad .pair{font-size:13.5px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .dyad .meta{font-size:11.5px;color:var(--textSec);margin-top:3px}
+  .dyad .conc{text-align:center;flex-shrink:0;min-width:92px}
+  .dyad .conc .pct{font-size:22px;font-weight:800;color:var(--red);line-height:1} .dyad .conc.amb .pct{color:var(--amber)}
+  .dyad .conc .cl{font-size:9.5px;color:var(--textMuted);text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+
+  /* coverage strip + pipeline */
+  .cov{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:10px;padding:13px 16px;margin-bottom:16px;font-size:12px;color:var(--textSec);line-height:1.5}
+  .cov .big{font-size:13px;color:var(--navy);font-weight:700;white-space:nowrap}
+  .cov .barwrap{flex:1;min-width:120px;height:8px;background:var(--bg);border-radius:5px;overflow:hidden}
+  .cov .barwrap .f{height:100%;background:linear-gradient(90deg,var(--blue),#5B9BE0);border-radius:5px}
+  .defbar{background:#FBF7FD;border:1px solid var(--purpleLight);border-radius:10px;padding:13px 16px;margin-bottom:16px;font-size:12px;color:var(--textSec);line-height:1.55}
+  .defbar b{color:var(--purple)}
+  .pipe{display:flex;gap:14px;align-items:flex-start}
+  .pipe .step{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:13px 14px;position:relative}
+  .pipe .step .n{font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+  .pipe .step .t{font-size:12.5px;font-weight:600;color:var(--navy)} .pipe .step .d{font-size:11px;color:var(--textSec);margin-top:3px;line-height:1.4}
+  .pipe .arrow{align-self:center;color:var(--textMuted);font-size:16px}
+  .xlink{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--white);border-radius:8px;padding:7px 12px;font-size:12px;color:var(--navy);font-weight:600;cursor:pointer;margin-right:8px}
+  .xlink:hover{background:var(--bg)} .xlink .ic{color:var(--red)}
+
+  /* matriz heatmap */
+  .matrix{overflow-x:auto}
+  .mtx{width:100%;border-collapse:separate;border-spacing:5px;table-layout:fixed}
+  .mtx th{font-size:11px;font-weight:600;color:var(--textSec);padding:6px 4px;border:0;text-transform:none;letter-spacing:0}
+  .mtx col.lbl{width:30%}
+  .mtx th.rowh{text-align:left;font-weight:600;color:var(--navy);font-size:12.5px;padding-left:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mtx th.colh{text-align:center;font-size:10.5px;line-height:1.3;color:var(--textSec)}
+  .mtx td{height:42px;text-align:center;border:0;border-radius:7px;font-size:14px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
+  .mlegend{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:11px;color:var(--textSec);flex-wrap:wrap}
+  .mlegend .sw{width:24px;height:14px;border-radius:3px}
+
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;padding:30px;overflow-y:auto} .overlay.show{display:block}
+  .modal{background:var(--white);border-radius:14px;max-width:1020px;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+  .mhead{background:#fff;padding:24px 26px 20px;display:flex;align-items:center;gap:16px;position:relative;border-bottom:1px solid var(--border)}
+  .mhead::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--purple),#A24FB5 55%,#E3C3EC)}
+  .mhead .av{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--purple),#A24FB5);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff}
+  .mhead h2{font-size:19px;font-weight:800;color:var(--navy)} .mhead .role{font-size:12px;color:var(--textSec);margin-top:3px}
+  .mhead .tags{margin-top:8px;display:flex;gap:7px;flex-wrap:wrap}
+  .mhead .x{position:absolute;top:20px;right:20px;cursor:pointer;font-size:18px;color:var(--textSec);background:#F1F2F4;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .mhead .x:hover{background:#E4E6E9}
+  .mbody{padding:24px 26px;max-height:72vh;overflow-y:auto}
+  .mkpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .mkpi{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+  .mkpi .v{font-size:22px;font-weight:800;color:var(--navy)} .mkpi .l{font-size:10px;color:var(--textSec);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+  .strat{background:linear-gradient(120deg,#FBF7FD,#fff);border:1px solid var(--purpleLight);border-left:4px solid var(--purple);border-radius:10px;padding:16px 18px;margin-bottom:20px}
+  .strat .h{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--purple);font-size:13px;margin-bottom:8px} .strat p{font-size:13px;line-height:1.6}
+  .mgrid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  .msub{font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+  .xcard{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px 14px;margin-bottom:9px}
+  .xcard .l{font-size:12.5px;font-weight:600} .xcard .l small{display:block;font-size:11px;color:var(--textMuted);font-weight:400} .mini{font-size:11px;color:var(--textSec)}
+  .bipbox{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px}
+  .footnote{font-size:10.5px;color:var(--textMuted);text-align:center;margin:22px 0 6px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="collapse">‹</div>
+    <div class="brand"><div class="mark"><span class="b">d</span><span class="e">EE</span><span class="b">p</span></div><div class="slogan">TURN-ON DATA</div></div>
+    <div class="navlabel">Visão Geral</div>
+    <nav class="nav">
+      <a href="#" class="active"><span class="ic">💼</span> Reintegrados <span class="dot"></span></a>
+      <a href="#"><span class="ic">💬</span> Chat</a>
+      <a href="#"><span class="ic">⚙</span> Configurações</a>
+      <a href="#"><span class="ic">📈</span> Uso do painel</a>
+    </nav>
+    <div class="bottom">
+      <div class="sair"><span>↪</span> Sair</div>
+      <div class="statuscard"><div class="on">● Sistema Online</div><div class="t1">Processos Trabalhistas</div><div class="t2">Desiree Nogueira Gonçalves Manoel</div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="logoico">☁</div>
+      <div><h1>Processos Trabalhistas Bradesco</h1><p>Análise de Reintegrados</p></div>
+      <div class="updpill"><span class="dotg"></span> Base atualizada em <b>06/06/2026</b> · <b>909</b> processos</div>
+    </div>
+
+    <div class="filters">
+      <div class="search">🔍 <input placeholder="Buscar médico atestante (CRM), advogado ou OAB..."></div>
+      <div class="fdrop">Todos os Estados / TRT <span class="ar">▼</span></div>
+      <div class="fdrop">Doença / Incapacidade <span class="ar">▼</span></div>
+      <div class="fdrop">Todos os CIDs <span class="ar">▼</span></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab"><span class="ic">▽</span><span class="lb">Assessment</span></div>
+      <div class="tab"><span class="ic">◎</span><span class="lb">Insights Estratégicos</span></div>
+      <div class="tab"><span class="ic">⊶</span><span class="lb">Timeline</span></div>
+      <div class="tab"><span class="ic">▤</span><span class="lb">Processos</span></div>
+      <div class="tab"><span class="ic">◴</span><span class="lb">Mapa Estratégico</span></div>
+      <div class="tab"><span class="ic">⚖</span><span class="lb">Perfil Jurídico</span></div>
+      <div class="tab"><span class="ic">◷</span><span class="lb">Tempo &amp; Velocidade</span></div>
+      <div class="tab"><span class="ic">§</span><span class="lb">Perfil Advocatício</span></div>
+      <div class="tab active"><span class="ic">◈</span><span class="lb">Rede Adv. × Médico</span></div>
+      <div class="tab"><span class="ic">▲</span><span class="lb">Perfil de Magistrado</span></div>
+      <div class="tab"><span class="ic">✚</span><span class="lb">Inteligência Pericial</span></div>
+      <div class="tab"><span class="ic">❏</span><span class="lb">Contexto Processual</span></div>
+      <div class="tab"><span class="ic">☖</span><span class="lb">Perfil do Envolvido</span></div>
+      <div class="tab"><span class="ic">◔</span><span class="lb">Score de Risco</span></div>
+    </div>
+
+    <div class="defbar">
+      <b>Médico atestante</b> = profissional cujo laudo/atestado particular foi juntado pelo polo ativo na petição inicial — <u>não</u> é o perito do juízo nem o perito do INSS. Os indicadores expressam <b>concentração estatística atípica</b> = <b>sinal para apuração</b>, nunca afirmação de irregularidade. Insumo para a sindicância de Pessoas / Medicina do Trabalho.
+    </div>
+
+    <!-- COBERTURA / DENOMINADOR (plataforma sistêmica: honestidade do dado) -->
+    <div class="cov">
+      <div class="big">Cobertura da rede</div>
+      <div class="barwrap"><div class="f" style="width:28%"></div></div>
+      <div><b style="color:var(--navy)">252 de 909</b> processos (28%) têm laudo particular com médico identificado. A rede reflete este subconjunto e <b>cresce a cada atualização da base</b> — não é um retrato fixo.</div>
+    </div>
+
+    <!-- KPIs reais -->
+    <div class="kpis">
+      <div class="kpi"><div><div class="lb">Médicos atestantes (CRM)</div><div class="v">180</div><div class="sub" style="color:var(--textMuted)">distintos, após normalização</div></div><div class="ico" style="background:var(--purple)">✚</div></div>
+      <div class="kpi"><div><div class="lb">Advogados conectados</div><div class="v">142</div><div class="sub" style="color:var(--textMuted)">polo ativo · com atestante</div></div><div class="ico" style="background:var(--navy)">§</div></div>
+      <div class="kpi"><div><div class="lb">Díades em monitoramento</div><div class="v">6</div><div class="sub"><span class="badge b-amber">Limiar configurável</span></div></div><div class="ico" style="background:var(--amber)">⚑</div></div>
+      <div class="kpi"><div><div class="lb">Maior cluster por CRM</div><div class="v">RO-2141</div><div class="sub" style="color:var(--textMuted)">7 proc · 4 adv · CID M75.1</div></div><div class="ico" style="background:var(--red)">◈</div></div>
+    </div>
+
+    <!-- SIGNAL-FIRST: concentração atípica (lidera a tela) -->
+    <div class="card">
+      <div class="stitle">Concentração atípica advogado ↔ médico atestante <span class="tag">Sinal para apuração · dados reais</span></div>
+      <div class="dyad">
+        <div class="flag">⚑</div>
+        <div class="body">
+          <div class="pair">Núcleo Flaviana Garcia + Batista de Oliveira × CRM/RO 2141 <span class="badge b-blue">RO · TRT-14</span></div>
+          <div class="meta">7 processos · 4 advogados (Flaviana 3, Thays 2) · CID único M75.1 (ombro) · 5 de 7 favoráveis ao reclamante · 2 advogados com sobrenome "Batista de Oliveira"</div>
+        </div>
+        <div class="conc"><div class="pct">71%</div><div class="cl">Favoráveis recl.</div></div>
+        <button class="seemore" onclick="openModal(0)">👁 Ver médico</button>
+      </div>
+      <div class="dyad">
+        <div class="flag amb">!</div>
+        <div class="body">
+          <div class="pair">Giuzeppe Martinelli × CRM/BA 12220 <span class="badge b-blue">BA · TRT-5</span></div>
+          <div class="meta">3 processos · 2 advogados · concentração 67% · CID G56.0 (túnel do carpo) · monocausal</div>
+        </div>
+        <div class="conc amb"><div class="pct">67%</div><div class="cl">Concentração</div></div>
+        <button class="seemore" onclick="openModal(1)">👁 Ver médico</button>
+      </div>
+      <div class="dyad">
+        <div class="flag amb">!</div>
+        <div class="body">
+          <div class="pair">Vinicius Ferreira × CRM/BA 12094 <span class="badge b-blue">BA · TRT-5</span></div>
+          <div class="meta">4 processos · 3 advogados · concentração 50% · CID G56.0 (túnel do carpo)</div>
+        </div>
+        <div class="conc amb"><div class="pct">50%</div><div class="cl">Concentração</div></div>
+        <button class="seemore" onclick="openModal(2)">👁 Ver médico</button>
+      </div>
+      <div class="note">Limiar atual: ≥3 processos e concentração ≥50% entram como sinal; volume ≥5 entra em monitoramento mesmo com concentração menor. Limiares são <b>parâmetros configuráveis</b>, reavaliados a cada atualização da base — díades entram e saem desta lista automaticamente. Leitura estatística, sem juízo de mérito.</div>
+    </div>
+
+    <!-- POR MÉDICO / POR ADVOGADO (respostas diretas ao Dr. Mário) -->
+    <div class="grid2">
+      <div class="card" style="margin-bottom:0">
+        <div class="stitle">Por médico atestante <span class="tag">Advogados &amp; atestados</span></div>
+        <div class="hbar alt"><div class="top"><span class="nm">CRM/RO 2141 <span class="badge b-amber">4 adv · 7 atest.</span></span><span class="pc">RO · M75.1</span></div><div class="track"><div class="fill" style="background:var(--purple);width:100%"></div></div></div>
+        <div class="hbar alt"><div class="top"><span class="nm">CRM/BA 12839 <span class="badge b-gray">5 adv · 7 atest.</span></span><span class="pc">BA · M75.1</span></div><div class="track"><div class="fill" style="background:var(--purple);width:100%"></div></div></div>
+        <div class="hbar alt"><div class="top"><span class="nm">CRM/BA 12094 <span class="badge b-amber">3 adv · 4 atest.</span></span><span class="pc">BA · G56.0</span></div><div class="track"><div class="fill" style="background:var(--purple);width:57%"></div></div></div>
+        <div class="hbar alt"><div class="top"><span class="nm">CRM/BA 10590 <span class="badge b-gray">4 adv · 4 atest.</span></span><span class="pc">BA · G56.0</span></div><div class="track"><div class="fill" style="background:var(--purple);width:57%"></div></div></div>
+        <div class="note">Poucos advogados + muitos atestados = funil estreito (CRM/RO 2141, badge âmbar). Muitos advogados = atuação difusa (CRM/BA 12839, cinza). "Atestado" = processo distinto vs. banco em que o laudo do médico fundamenta o pedido.</div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="stitle">Por advogado <span class="tag">Diversidade de médicos</span></div>
+        <div class="hbar"><div class="top"><span class="nm">Flaviana L. R. M. Garcia <span class="badge b-red">3 médicos</span></span><span class="pc">5 proc.</span></div><div class="track"><div class="fill" style="width:30%"></div></div></div>
+        <div class="hbar"><div class="top"><span class="nm">Giuzeppe A. Martinelli <span class="badge b-amber">5 médicos</span></span><span class="pc">7 proc.</span></div><div class="track"><div class="fill" style="width:45%"></div></div></div>
+        <div class="hbar"><div class="top"><span class="nm">Iran B. da Costa Pinto <span class="badge b-gray">8 médicos</span></span><span class="pc">9 proc.</span></div><div class="track"><div class="fill" style="width:80%"></div></div></div>
+        <div class="hbar"><div class="top"><span class="nm">Simone F. Torres Vieira <span class="badge b-gray">10 médicos</span></span><span class="pc">12 proc.</span></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+        <div class="note">Barra = nº de médicos distintos vs. volume. Barra curta com volume relevante = baixa diversidade = sinal (Flaviana: 5 processos, só 3 médicos). Barra cheia = atuação difusa (Simone: 12 processos, 10 médicos diferentes — sem sinal de funil).</div>
+      </div>
+    </div>
+
+    <!-- MATRIZ 50×50 (recorte real) -->
+    <div class="card">
+      <div class="stitle">Matriz de concentração — advogados × médicos atestantes <span class="tag">Recorte real: top 6 × top 6</span></div>
+      <div class="matrix">
+        <table class="mtx">
+          <colgroup><col class="lbl"><col><col><col><col><col><col></colgroup>
+          <thead><tr><th></th>
+            <th class="colh">RO<br>2141</th><th class="colh">BA<br>12839</th><th class="colh">BA<br>10590</th><th class="colh">BA<br>12094</th><th class="colh">RO<br>2511</th><th class="colh">BA<br>12220</th></tr></thead>
+          <tbody>
+            <tr><th class="rowh">Simone F. Torres Vieira</th><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td></tr>
+            <tr><th class="rowh">Iran B. da Costa Pinto</th><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#F18FA6;color:#fff">2</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#F7C6D1;color:#1a1a2e">1</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#F7C6D1;color:#1a1a2e">1</td></tr>
+            <tr><th class="rowh">Vinicius F. S. de Souza</th><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#F18FA6;color:#fff">2</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td></tr>
+            <tr><th class="rowh">Giuzeppe A. Martinelli</th><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#F18FA6;color:#fff">2</td><td style="background:#F7C6D1;color:#1a1a2e">1</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#F18FA6;color:#fff">2</td></tr>
+            <tr><th class="rowh">Thays F. P. Batista de Oliveira</th><td style="background:#F18FA6;color:#fff">2</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#F7C6D1;color:#1a1a2e">1</td><td style="background:#FDE8EC;color:#9AA0A6">0</td></tr>
+            <tr><th class="rowh">Flaviana L. R. M. Garcia</th><td style="background:#D63653;color:#fff">3</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#FDE8EC;color:#9AA0A6">0</td><td style="background:#F7C6D1;color:#1a1a2e">1</td><td style="background:#FDE8EC;color:#9AA0A6">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mlegend">
+        <span>Nº de atestados na díade:</span>
+        <span class="sw" style="background:#FDE8EC"></span> 0
+        <span class="sw" style="background:#F7C6D1"></span> 1
+        <span class="sw" style="background:#F18FA6"></span> 2
+        <span class="sw" style="background:#D63653"></span> 3+
+        <span style="margin-left:8px">·</span> Versão completa: 50 × 50 com scroll e ordenação por concentração.
+      </div>
+      <div class="note">A matriz real é majoritariamente esparsa — 88% dos médicos atestantes aparecem em 1 só processo. As células quentes (Flaviana↔RO-2141, Giuzeppe↔BA-12220) são os poucos funis a investigar. É exatamente por isso que o destaque da tela é a lista de sinais acima, não um grafo cheio.</div>
+    </div>
+
+    <!-- TABELA ranking médicos -->
+    <div class="card">
+      <div class="stitle">Ranking de médicos atestantes <span class="tag">180 distintos · dados reais</span></div>
+      <table>
+        <thead><tr><th>Médico (CRM)</th><th>UF / TRT</th><th>CID predom.</th><th>Nº advogados</th><th>Nº atestados</th><th>Concentração</th><th>Sinal</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><span class="nm">CRM/RO 2141</span></td><td class="mini">RO · TRT-14</td><td><span class="badge b-blue">M75.1</span></td><td class="num">4</td><td class="num">7</td><td><span class="badge b-amber">43%</span></td><td><span class="badge b-amber">Monitorar · volume</span></td><td><button class="seemore" onclick="openModal(0)">👁 Ver perfil</button></td></tr>
+          <tr><td><span class="nm">CRM/BA 12839</span></td><td class="mini">BA · TRT-5</td><td><span class="badge b-blue">M75.1</span></td><td class="num">5</td><td class="num">7</td><td><span class="badge b-gray">29%</span></td><td><span class="badge b-gray">Difuso</span></td><td><button class="seemore" onclick="openModal(3)">👁 Ver perfil</button></td></tr>
+          <tr><td><span class="nm">CRM/BA 12094</span></td><td class="mini">BA · TRT-5</td><td><span class="badge b-blue">G56.0</span></td><td class="num">3</td><td class="num">4</td><td><span class="badge b-amber">50%</span></td><td><span class="badge b-amber">Sinal p/ apuração</span></td><td><button class="seemore" onclick="openModal(2)">👁 Ver perfil</button></td></tr>
+          <tr><td><span class="nm">CRM/BA 12220</span></td><td class="mini">BA · TRT-5</td><td><span class="badge b-blue">G56.0</span></td><td class="num">2</td><td class="num">3</td><td><span class="badge b-red">67%</span></td><td><span class="badge b-red">Sinal p/ apuração</span></td><td><button class="seemore" onclick="openModal(1)">👁 Ver perfil</button></td></tr>
+          <tr><td><span class="nm">CRM/RJ 526217</span></td><td class="mini">RJ · TRT-1</td><td><span class="badge b-blue">M65</span></td><td class="num">3</td><td class="num">3</td><td><span class="badge b-gray">33%</span></td><td><span class="badge b-gray">Difuso</span></td><td><button class="seemore" onclick="openModal(4)">👁 Ver perfil</button></td></tr>
+        </tbody>
+      </table>
+      <div class="note">Concentração do médico = % dos seus atestados que alimentam um único advogado/escritório. CRM (UF+nº) é a chave anti-homônimo. Dados sensíveis de saúde (CID) tratados conforme LGPD — finalidade restrita à apuração de padrão.</div>
+    </div>
+
+    <div class="footnote">Dados reais da Base Hiperclassificada (909 processos) · Concentração estatística — não constitui afirmação de irregularidade · Plataforma Reintegrados · DeepCenter</div>
+  </main>
+</div>
+
+<!-- MODAL médico (a rede focada vive AQUI, sob demanda) -->
+<div class="overlay" id="ov">
+  <div class="modal">
+    <div class="mhead">
+      <div class="av" id="m_av">RO</div>
+      <div><h2 id="m_nm">CRM/RO 2141</h2><div class="role" id="m_role">Rondônia · TRT-14 · CID predominante M75.1 (lesão de ombro)</div>
+        <div class="tags"><span class="badge b-purple">Médico atestante</span><span class="badge b-blue" id="m_at">7 atestados</span><span class="badge b-amber" id="m_cc">43% concentração</span></div></div>
+      <div class="x" onclick="closeModal()">✕</div>
+    </div>
+    <div class="mbody">
+      <div class="mkpis">
+        <div class="mkpi"><div class="v" id="k_at">7</div><div class="l">Atestados vs. banco</div></div>
+        <div class="mkpi"><div class="v" id="k_ad">4</div><div class="l">Advogados conectados</div></div>
+        <div class="mkpi"><div class="v" id="k_cid">M75.1</div><div class="l">CID predominante</div></div>
+        <div class="mkpi"><div class="v" id="k_cc">71%</div><div class="l">Favoráveis ao reclamante</div></div>
+      </div>
+      <div class="strat"><div class="h">◆ Leitura do padrão (sinal para apuração)</div>
+        <p id="m_strat">Médico atestante de pequena comarca em Rondônia, com 7 atestados concentrados em 4 advogados — sendo 3 da Dra. Flaviana Garcia e 2 da Dra. Thays Batista de Oliveira (há núcleo familiar "Batista de Oliveira"). CID único M75.1 (ombro) e 71% de decisões favoráveis ao reclamante. As fontes médicas divergem em parte dos casos (3 convergentes, 2 divergentes, 2 parciais entre atestante × perito/INSS). <b>Não constitui prova de irregularidade.</b> Recomenda-se: (1) encaminhar à sindicância de Pessoas/Medicina; (2) requerer perícia judicial com quesitos sobre nexo e contemporaneidade; (3) explorar a divergência de fontes médicas na contestação.</p>
+      </div>
+      <div class="mgrid2">
+        <div>
+          <div class="msub">Rede focada — advogados conectados</div>
+          <div class="bipbox">
+            <svg viewBox="0 0 440 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rede do médico">
+              <line x1="92" y1="115" x2="320" y2="40"  stroke="#CC092F" stroke-width="7" opacity="0.85"/>
+              <line x1="92" y1="115" x2="320" y2="95"  stroke="#E84667" stroke-width="5" opacity="0.8"/>
+              <line x1="92" y1="115" x2="320" y2="150" stroke="#9AA0A6" stroke-width="2.5" opacity="0.7"/>
+              <line x1="92" y1="115" x2="320" y2="200" stroke="#9AA0A6" stroke-width="2.5" opacity="0.7"/>
+              <circle cx="92" cy="115" r="34" fill="#7B2D8E"/>
+              <text x="92" y="111" text-anchor="middle" fill="#fff" font-size="10" font-weight="800" font-family="Segoe UI">RO-2141</text>
+              <text x="92" y="125" text-anchor="middle" fill="#fff" font-size="8" font-family="Segoe UI">7 atest.</text>
+              <g font-family="Segoe UI">
+                <circle cx="320" cy="40" r="17" fill="#CC092F"/><text x="320" y="44" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">FG</text>
+                <text x="344" y="38" fill="#1a1a2e" font-size="10.5" font-weight="600">Flaviana Garcia</text><text x="344" y="50" fill="#5f6368" font-size="9">3 atestados</text>
+                <circle cx="320" cy="95" r="14" fill="#E84667"/><text x="320" y="99" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">TB</text>
+                <text x="341" y="93" fill="#1a1a2e" font-size="10.5" font-weight="600">Thays B. de Oliveira</text><text x="341" y="105" fill="#5f6368" font-size="9">2 atestados · núcleo familiar</text>
+                <circle cx="320" cy="150" r="11" fill="#9AA0A6"/><text x="320" y="154" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">EA</text>
+                <text x="336" y="150" fill="#1a1a2e" font-size="10.5" font-weight="600">Elton J. Assis</text><text x="336" y="162" fill="#5f6368" font-size="9">1 atestado</text>
+                <circle cx="320" cy="200" r="11" fill="#9AA0A6"/><text x="320" y="204" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">NL</text>
+                <text x="336" y="200" fill="#1a1a2e" font-size="10.5" font-weight="600">Norieh L. S. Dias</text><text x="336" y="212" fill="#5f6368" font-size="9">1 atestado</text>
+              </g>
+            </svg>
+          </div>
+          <div class="note">Espessura da linha = nº de atestados na díade. A rede focada aparece sob demanda, ao abrir um médico — não como painel fixo (88% dos médicos teriam só 1 conexão).</div>
+        </div>
+        <div>
+          <div class="msub">Distribuição & fontes médicas</div>
+          <div class="hbar alt"><div class="top"><span class="nm">CID M75.1 — lesão de ombro</span><span class="pc">100%</span></div><div class="track"><div class="fill" style="background:var(--purple);width:100%"></div></div></div>
+          <div class="msub" style="margin-top:16px">Convergência atestante × perito / INSS</div>
+          <div class="xcard"><div class="l">Convergente<small>atestante confirmado pelo perito/INSS</small></div><div class="r"><span class="badge b-green">3</span></div></div>
+          <div class="xcard"><div class="l">Divergente<small>atestante contrariado — alvo de defesa</small></div><div class="r"><span class="badge b-red">2</span></div></div>
+          <div class="xcard"><div class="l">Parcial<small>convergência incompleta</small></div><div class="r"><span class="badge b-amber">2</span></div></div>
+          <div class="note">A divergência entre o laudo particular e o perito do juízo / INSS é munição direta para a contestação.</div>
+        </div>
+      </div>
+      <div class="mgrid2">
+        <div class="insight ins-red"><div class="h"><span class="ic">!</span> Pontos de cuidado</div>
+          <ul><li>CID único (M75.1) em todos os atestados — monocausalidade.</li><li>Núcleo de advogados com sobrenome comum (possível mesmo escritório).</li><li>71% favorável ao reclamante — acima da média geral.</li></ul></div>
+        <div class="insight ins-blue"><div class="h"><span class="ic">↪</span> Handoff sindicância</div>
+          <ul><li>Encaminhar dossiê ao comitê de Pessoas/Medicina.</li><li>Verificar registro CRM/RO e regularidade dos laudos.</li><li>Cruzar com afastamentos e benefícios INSS (B91/B31).</li></ul></div>
+      </div>
+      <div class="footnote">Dados reais da Base Hiperclassificada · Concentração estatística — não constitui afirmação de irregularidade · Insumo para apuração interna</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const MED=[
+    {av:"RO",nm:"CRM/RO 2141",role:"Rondônia · TRT-14 · CID predominante M75.1 (lesão de ombro)",at:"7 atestados",cc:"43% concentração",k_at:"7",k_ad:"4",k_cid:"M75.1",k_cc:"71%",
+     strat:"Médico atestante de pequena comarca em Rondônia, com 7 atestados concentrados em 4 advogados — 3 da Dra. Flaviana Garcia e 2 da Dra. Thays Batista de Oliveira (núcleo familiar 'Batista de Oliveira'). CID único M75.1 e 71% favorável ao reclamante. Fontes médicas divergem em parte (3 convergentes, 2 divergentes, 2 parciais). <b>Não constitui prova de irregularidade.</b> Recomenda-se: (1) sindicância de Pessoas/Medicina; (2) perícia judicial com quesitos de nexo/contemporaneidade; (3) explorar a divergência de fontes na contestação."},
+    {av:"BA",nm:"CRM/BA 12220",role:"Bahia · TRT-5 · CID predominante G56.0 (túnel do carpo)",at:"3 atestados",cc:"67% concentração",k_at:"3",k_ad:"2",k_cid:"G56.0",k_cc:"67%",
+     strat:"Médico atestante com a maior concentração relativa da base (67% em um único advogado, Dr. Giuzeppe Martinelli), CID G56.0 (síndrome do túnel do carpo). Volume baixo (3 processos), mas funil estreito — sinal para apuração que deve ser reavaliado conforme a base cresce. <b>Não constitui prova de irregularidade.</b> Encaminhar à sindicância e monitorar evolução do volume."},
+    {av:"BA",nm:"CRM/BA 12094",role:"Bahia · TRT-5 · CID predominante G56.0 (túnel do carpo)",at:"4 atestados",cc:"50% concentração",k_at:"4",k_ad:"3",k_cid:"G56.0",k_cc:"50%",
+     strat:"Médico atestante com 50% dos atestados no Dr. Vinicius Ferreira, CID G56.0. Concentração moderada, monocausal. <b>Não constitui prova de irregularidade.</b> Monitorar; cruzar com os demais CRMs de túnel do carpo na Bahia — pode haver padrão regional de CID."},
+    {av:"BA",nm:"CRM/BA 12839",role:"Bahia · TRT-5 · CID predominante M75.1 (lesão de ombro)",at:"7 atestados",cc:"29% concentração",k_at:"7",k_ad:"5",k_cid:"M75.1",k_cc:"29%",
+     strat:"Volume relevante (7 atestados) porém distribuído entre 5 advogados distintos (concentração 29%) — perfil de médico com clientela ampla, sem indício de funil exclusivo. Contraste útil: mesmo volume que CRM/RO 2141, mas comportamento difuso. Sem prioridade de apuração."},
+    {av:"RJ",nm:"CRM/RJ 526217",role:"Rio de Janeiro · TRT-1 · CID predominante M65 (sinovite/tenossinovite)",at:"3 atestados",cc:"33% concentração",k_at:"3",k_ad:"3",k_cid:"M65",k_cc:"33%",
+     strat:"Atuação difusa (3 atestados, 3 advogados distintos). Sem sinal de concentração. Listado para referência."}
+  ];
+  function openModal(i){const m=MED[i];
+    document.getElementById('m_av').textContent=m.av;
+    document.getElementById('m_nm').textContent=m.nm;
+    document.getElementById('m_role').textContent=m.role;
+    document.getElementById('m_at').textContent=m.at;
+    document.getElementById('m_cc').textContent=m.cc;
+    document.getElementById('k_at').textContent=m.k_at;
+    document.getElementById('k_ad').textContent=m.k_ad;
+    document.getElementById('k_cid').textContent=m.k_cid;
+    document.getElementById('k_cc').textContent=m.k_cc;
+    document.getElementById('m_strat').innerHTML=m.strat;
+    document.getElementById('ov').classList.add('show');}
+  function closeModal(){document.getElementById('ov').classList.remove('show');}
+  document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')closeModal();});
+</script>
+</body>
+</html>
