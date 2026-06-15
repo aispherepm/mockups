@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcha Processual + Funil da Liminar</title>
+<style>
+  :root{
+    --red:#CC092F; --redLight:#FDE8EC; --purple:#7B2D8E; --indef:#2B3A91;
+    --neutral:#AEB4BD; --neutralLight:#EEF0F3; --green:#2E7D32; --greenLight:#E8F5E9;
+    --amber:#F57F17; --blue:#1565C0; --blueLight:#E3F2FD;
+    --bg:#F5F6FA; --white:#FFF; --border:#E8EAED;
+    --text:#1a1a2e; --textSec:#5f6368; --textMuted:#9AA0A6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:28px 36px}
+  .ctx{font-size:12px;color:var(--textMuted);margin-bottom:14px} .ctx b{color:var(--textSec)}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:26px 28px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:18px}
+  .secTitle{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700}
+  .secTitle::before{content:"";width:4px;height:18px;background:var(--red);border-radius:2px}
+  .total{margin-left:10px;font-size:12px;font-weight:700;color:var(--red);background:var(--redLight);padding:3px 11px;border-radius:20px}
+  .secSub{font-size:12px;color:var(--textSec);margin:6px 0 0 14px} .secSub b{color:var(--text)}
+  .badgeLive{float:right;font-size:11px;font-weight:600;color:var(--green);background:var(--greenLight);padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:6px}
+  .badgeLive::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}
+  .legend{display:flex;gap:18px;align-items:center;font-size:12px;margin:18px 0 4px;justify-content:flex-end}
+  .lg{display:inline-flex;align-items:center;gap:7px;color:var(--textSec)}
+  .dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .dot.def{background:var(--red)} .dot.ind{background:var(--indef)} .dot.sem{background:var(--neutral)}
+  .timeline{position:relative;display:grid;grid-template-columns:repeat(5,1fr);margin:34px 0 8px;padding-top:8px}
+  .track{position:absolute;top:24px;left:10%;right:10%;height:3px;background:var(--neutral);z-index:0;border-radius:2px}
+  .station{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 10px}
+  .node{width:34px;height:34px;border-radius:50%;background:var(--white);border:3px solid var(--red);color:var(--red);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 5px var(--white)}
+  .sname{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text);margin-top:14px;line-height:1.3}
+  .sname small{display:block;font-size:10px;font-weight:400;color:var(--textMuted);letter-spacing:.2px;text-transform:none}
+  .scount{font-size:30px;font-weight:800;margin-top:8px;font-variant-numeric:tabular-nums}
+  .spct{font-size:11px;color:var(--textMuted);margin-bottom:12px} .spct b{color:var(--textSec)}
+  .obar{display:flex;height:11px;width:82%;border-radius:4px;overflow:hidden;background:var(--neutralLight)}
+  .obar i{height:100%;display:block} .obar i.def{background:var(--red)} .obar i.ind{background:var(--indef)} .obar i.sem{background:var(--neutral)}
+  .osub{font-size:11px;color:var(--textSec);margin-top:7px;font-weight:600} .osub.wait{color:var(--textMuted);font-weight:400;font-style:italic}
+  .offramp{margin-top:26px;display:flex;align-items:center;gap:14px;border:1px dashed var(--border);border-left:4px solid var(--green);border-radius:8px;padding:14px 18px;background:#FAFCFA}
+  .offramp .ir{font-size:18px;color:var(--green)} .offramp .ot{font-size:13px;color:var(--textSec)} .offramp .ot b{color:var(--text)}
+  .offramp .obig{margin-left:auto;text-align:right}
+  .offramp .obig .n{font-size:26px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums;line-height:1} .offramp .obig .p{font-size:11px;color:var(--textMuted)}
+  .note{font-size:11px;color:var(--textMuted);font-style:italic;margin-top:20px;line-height:1.6;border-top:1px dashed var(--border);padding-top:14px} .note b{color:var(--textSec);font-style:normal}
+
+  /* ---- FUNIL INTERATIVO ---- */
+  .polo{display:inline-flex;gap:4px;background:var(--neutralLight);border-radius:9px;padding:4px;margin:18px 0 6px}
+  .polo button{border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--textSec);padding:7px 16px;border-radius:7px;cursor:pointer}
+  .polo button.active{background:var(--white);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+  .polohint{font-size:11px;color:var(--textMuted);margin:2px 0 8px 2px}
+  .funnel{margin-top:14px}
+  .flevel{display:flex;gap:14px;justify-content:center;align-items:flex-start}
+  .fconn{height:22px;display:flex;align-items:center;justify-content:center;color:var(--neutral);font-size:13px;gap:8px}
+  .fstage{border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:box-shadow .15s;align-self:flex-start}
+  .fstage:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .fhead{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;position:relative}
+  .fhead::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent)}
+  .fhead .ftag{font-size:9px;font-weight:700;letter-spacing:.5px;color:var(--textMuted);text-transform:uppercase}
+  .fhead .flbl{font-size:13px;font-weight:800;color:var(--text)}
+  .fhead .fsub{font-size:10px;color:var(--textMuted);margin-top:1px}
+  .fhead .fnum{margin-left:auto;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--accent)}
+  .fhead .chev{margin-left:6px;color:var(--textMuted);font-size:12px;transition:transform .2s}
+  .fstage.open .chev{transform:rotate(90deg)}
+  .fdetail{max-height:0;overflow:hidden;transition:max-height .25s ease;background:#FCFCFD;border-top:1px solid transparent}
+  .fstage.open .fdetail{max-height:340px;border-top-color:var(--border)}
+  .fdinner{padding:14px 16px}
+  .fdh{font-size:10px;font-weight:700;letter-spacing:.4px;color:var(--textMuted);text-transform:uppercase;margin-bottom:10px}
+  .drow{display:grid;grid-template-columns:120px 1fr 28px;align-items:center;gap:10px;margin-bottom:8px;font-size:11px}
+  .drow .dl{color:var(--textSec);font-weight:600}
+  .dbw{height:9px;background:var(--neutralLight);border-radius:4px;overflow:hidden}
+  .dbw i{display:block;height:100%;border-radius:4px;background:var(--accent)}
+  .drow b{text-align:right;font-variant-numeric:tabular-nums}
+  .sim{font-size:10px;color:var(--textMuted);text-align:right;margin-top:14px}
+</style>
+</head>
+<body>
+  <div class="ctx"><b>Processos Trabalhistas Bradesco</b> › Assessment › <i>nova visão proposta</i></div>
+  <!-- CARD 1 — TIMELINE -->
+  <div class="card">
+    <span class="badgeLive">Dados atualizados</span>
+    <div class="secTitle">Marcha Processual <span class="total">971 processos</span></div>
+    <div class="secSub">Onde os processos estão na jornada pelas instâncias e o resultado do pedido de reintegração em cada estação. <b>817 em tramitação + 154 em acordo.</b></div>
+    <div class="legend">
+      <span class="lg"><span class="dot def"></span>Deferida</span>
+      <span class="lg"><span class="dot ind"></span>Indeferida</span>
+      <span class="lg"><span class="dot sem"></span>Sem decisão</span>
+    </div>
+    <div class="timeline">
+      <div class="track"></div>
+      <div class="station"><div class="node">1</div><div class="sname">Inicial<small>1º grau</small></div><div class="scount">248</div><div class="spct"><b>25,5%</b> do total</div><div class="obar"><i class="sem" style="width:100%"></i></div><div class="osub wait">Aguardando decisão</div></div>
+      <div class="station"><div class="node">2</div><div class="sname">Sentença<small>1º grau</small></div><div class="scount">196</div><div class="spct"><b>20,2%</b> do total</div><div class="obar"><i class="def" style="width:36.2%"></i><i class="ind" style="width:59.7%"></i><i class="sem" style="width:4.1%"></i></div><div class="osub">Def 36,2% · Indef 59,7%</div></div>
+      <div class="station"><div class="node">3</div><div class="sname">2ª Instância<small>TRT · recurso ordinário</small></div><div class="scount">264</div><div class="spct"><b>27,2%</b> do total</div><div class="obar"><i class="def" style="width:36.4%"></i><i class="ind" style="width:61.0%"></i><i class="sem" style="width:2.6%"></i></div><div class="osub">Def 36,4% · Indef 61,0%</div></div>
+      <div class="station"><div class="node">4</div><div class="sname">Inst. Superior<small>TST · recurso de revista</small></div><div class="scount">71</div><div class="spct"><b>7,3%</b> do total</div><div class="obar"><i class="def" style="width:33.8%"></i><i class="ind" style="width:63.4%"></i><i class="sem" style="width:2.8%"></i></div><div class="osub">Def 33,8% · Indef 63,4%</div></div>
+      <div class="station"><div class="node">5</div><div class="sname">Trânsito<small>execução · definitivo</small></div><div class="scount">38</div><div class="spct"><b>3,9%</b> do total</div><div class="obar"><i class="def" style="width:36.8%"></i><i class="ind" style="width:63.2%"></i></div><div class="osub">Def 36,8% · Indef 63,2%</div></div>
+    </div>
+    <div class="offramp"><div class="ir">↳</div><div class="ot"><b>Saída por Acordo</b> — encerramento por transação, possível em qualquer estação da marcha. Não gera deferimento/indeferimento judicial do pedido.</div><div class="obig"><div class="n">154</div><div class="p">15,9% do total</div></div></div>
+    <div class="note"><b>Leitura jurídica:</b> cada estação mostra os processos cuja <b>posição atual</b> é aquela instância. O resultado reflete a <b>decisão mais recente</b> do nível — a evolução da barra entre estações revela a <b>taxa de reforma entre instâncias</b>.</div>
+  </div>
+
+  <!-- CARD 2 — FUNIL INTERATIVO DA LIMINAR -->
+  <div class="card">
+    <span class="badgeLive">Dados atualizados</span>
+    <div class="secTitle">Funil da Liminar de Reintegração <span class="total" id="poloTot">187 pedidos</span></div>
+    <div class="secSub">Indicador transversal. Clique em cada etapa para abrir o detalhe por fase. Filtre por polo no controle abaixo.</div>
+
+    <div class="polo" id="polo">
+      <button data-p="todos" class="active">Todos</button>
+      <button data-p="ativo">Polo Ativo (reclamante)</button>
+      <button data-p="passivo">Polo Passivo (Banco)</button>
+    </div>
+    <div class="polohint" id="poloHint">Liminares pedidas pelo reclamante e pelo Banco (inclui MS).</div>
+
+    <div class="funnel" id="funnel"></div>
+
+    <div class="note"><b>Leitura jurídica:</b> <span id="insightTxt"></span></div>
+    <div class="sim">Dados simulados para mockup · interativo (abre/fecha e troca de polo).</div>
+  </div>
+
+<script>
+const RED="#CC092F", NAVY="#2B3A91", BLUE="#1565C0";
+const FASES4=["Inicial (1º grau)","Na sentença","2ª Instância (TRT)","Inst. Superior (TST)"];
+const FASES3=["Na sentença","2ª Instância (TRT)","Inst. Superior (TST)"];
+const DATA={
+  todos:{hint:"Liminares pedidas pelo reclamante e pelo Banco (inclui MS).",
+    pedido:187, deferida:102, indeferida:85, mantida:71, cassada:31,
+    pedidoF:[133,32,17,5], deferidaF:[71,18,10,3], indeferidaF:[62,14,7,2], mantidaF:[38,27,6], cassadaF:[9,16,6]},
+  ativo:{hint:"Liminar pedida pelo reclamante contra o Banco (caso típico de reintegração).",
+    pedido:150, deferida:88, indeferida:62, mantida:60, cassada:28,
+    pedidoF:[107,25,13,5], deferidaF:[62,15,8,3], indeferidaF:[45,10,5,2], mantidaF:[33,22,5], cassadaF:[8,15,5]},
+  passivo:{hint:"Liminar pedida pelo Banco (em regra via Mandado de Segurança) para suspender reintegração.",
+    pedido:37, deferida:14, indeferida:23, mantida:11, cassada:3,
+    pedidoF:[26,7,4,0], deferidaF:[9,3,2,0], indeferidaF:[17,4,2,0], mantidaF:[5,5,1], cassadaF:[1,1,1]}
+};
+
+
+function insight(p,d){
+  const defR=Math.round(d.deferida/d.pedido*100);
+  const cassR=Math.round(d.cassada/d.deferida*100);
+  const cs=d.cassadaF, ms=d.mantidaF;
+  const rate=i=>Math.round(cs[i]/(cs[i]+ms[i])*100);
+  const cSent=rate(0), cTST=rate(cs.length-1);
+  const trend = cTST>cSent ? "<b>cresce conforme sobe a instância</b>" : "varia entre as instâncias";
+  let polo;
+  if(p==="todos") polo="O recorte por <b>polo</b> separa reclamante × Banco (MS) — semântica a validar com o DEJUR.";
+  else if(p==="ativo") polo="Recorte do <b>reclamante</b> (caso típico de reintegração): deferimento de "+defR+"%.";
+  else polo="Recorte do <b>Banco</b> (em regra via Mandado de Segurança): deferimento mais baixo ("+defR+"%) e menos cassações.";
+  return `A liminar é provisória e transversal às estações. <b>${defR}%</b> dos pedidos são deferidos, com taxa estável entre as fases. Das deferidas, <b>${cassR}%</b> são cassadas depois — e a cassação ${trend}: de ${cSent}% na sentença a ${cTST}% no TST. ${polo}`;
+}
+function detail(title, fases, arr, color){
+  const max=Math.max(...arr,1);
+  let rows=arr.map((v,i)=> v>0 ? `<div class="drow"><span class="dl">${fases[i]}</span><div class="dbw"><i style="width:${(v/max*100).toFixed(0)}%"></i></div><b>${v}</b></div>`:"").join("");
+  return `<div class="fdetail"><div class="fdinner" style="--accent:${color}"><div class="fdh">${title}</div>${rows}</div></div>`;
+}
+function stage(key,tag,lbl,sub,num,color,width,det){
+  return `<div class="fstage" data-key="${key}" style="--accent:${color};width:${width}">
+    <div class="fhead"><div><div class="ftag">${tag}</div><div class="flbl">${lbl}</div><div class="fsub">${sub}</div></div><div class="fnum">${num}</div><div class="chev">▶</div></div>
+    ${det}</div>`;
+}
+function pct(a,b){return (a/(a+b)*100).toFixed(0);}
+function render(p){
+  const d=DATA[p], W=d.pedido;
+  const w=n=>Math.max(28,(n/W*100)).toFixed(1)+"%";
+  const html=`
+    <div class="flevel">
+      ${stage("pedido","Origem","Pedido de Liminar","requereram tutela de urgência",d.pedido,BLUE,"100%",
+        detail("Em qual fase a liminar foi decidida",FASES4,d.pedidoF,BLUE))}
+    </div>
+    <div class="fconn">▼ &nbsp;resultado da tutela</div>
+    <div class="flevel">
+      ${stage("deferida","Resultado","Deferida",pct(d.deferida,d.indeferida)+"% · concedida",d.deferida,RED,w(d.deferida),
+        detail("Deferida — por fase",FASES4,d.deferidaF,RED))}
+      ${stage("indeferida","Resultado","Indeferida",pct(d.indeferida,d.deferida)+"% · negada",d.indeferida,NAVY,w(d.indeferida),
+        detail("Indeferida — por fase",FASES4,d.indeferidaF,NAVY))}
+    </div>
+    <div class="fconn">▼ &nbsp;segue as deferidas</div>
+    <div class="flevel">
+      ${stage("mantida","Destino · das deferidas","Mantida",pct(d.mantida,d.cassada)+"% · em vigor",d.mantida,NAVY,w(d.mantida),
+        detail("Mantida — por fase",FASES3,d.mantidaF,NAVY))}
+      ${stage("cassada","Destino · das deferidas","Cassada",pct(d.cassada,d.mantida)+"% · revogada",d.cassada,RED,w(d.cassada),
+        detail("Cassada — por fase",FASES3,d.cassadaF,RED))}
+    </div>`;
+  document.getElementById("funnel").innerHTML=html;
+  document.getElementById("poloTot").textContent=d.pedido+" pedidos";
+  document.getElementById("poloHint").textContent=d.hint;
+  document.getElementById("insightTxt").innerHTML=insight(p,d);
+  document.querySelectorAll(".fstage .fhead").forEach(h=>h.addEventListener("click",()=>h.parentElement.classList.toggle("open")));
+}
+document.querySelectorAll("#polo button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#polo button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); render(b.dataset.p);
+}));
+render("todos");
+</script>
+</body>
+</html>
