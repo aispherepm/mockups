@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MS — modal mestre-detalhe</title>
+<title>MS — modal com vínculo bidirecional</title>
 <style>
   :root{--red:#CC092F;--redLight:#FDE8EC;--navy:#2B3A91;--navyLight:#EAEDF7;--purple:#7B2D8E;--purpleLight:#F3E8F7;
     --amber:#B7791F;--amberLight:#FDF3E0;--green:#2E7D32;--greenLight:#E8F5E9;--neutral:#AEB4BD;--neutralLight:#EEF0F3;
@@ -16,69 +16,6 @@
   .kpi .ic{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
   .ic.n{background:var(--navy)} .ic.p{background:#B5197A} .ic.r{background:var(--red)}
   .kpi.ms{cursor:pointer;transition:box-shadow .15s,border-color .15s} .kpi.ms:hover{box-shadow:0 4px 14px rgba(0,0,0,.10);border-color:var(--navy)}
-  .ms .split{display:flex;gap:8px;margin-top:10px}
-  .ms .seg{flex:1;border-radius:8px;padding:8px 10px;border:1px solid var(--border);cursor:pointer;transition:.12s}
-  .ms .seg:hover{background:var(--neutralLight)} .ms .seg.pa:hover{border-color:var(--navy)} .ms .seg.at:hover{border-color:var(--purple)}
-  .ms .seg .sn{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
-  .ms .seg .sl{font-size:9.5px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;margin-top:3px}
-  .ms .seg.pa{border-left:3px solid var(--navy)} .ms .seg.pa .sl{color:var(--navy)}
-  .ms .seg.at{border-left:3px solid var(--purple)} .ms .seg.at .sl{color:var(--purple)}
-  .ms .numlink{cursor:pointer;border-radius:6px;padding:0 4px;margin-left:-4px} .ms .numlink:hover{background:var(--neutralLight)}
-  .ms .open-hint{position:absolute;bottom:12px;right:16px;font-size:11px;color:var(--navy);font-weight:600}
-  .sim{font-size:10px;color:var(--textMuted);text-align:right;margin-top:12px}
-
-  /* badges */
-  .badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;display:inline-block}
-  .b-pa{background:var(--navyLight);color:var(--navy)} .b-at{background:var(--purpleLight);color:var(--purple)}
-  .b-def{background:var(--redLight);color:var(--red)} .b-ind{background:var(--navyLight);color:var(--navy)}
-  .b-susp{background:var(--amberLight);color:var(--amber)} .b-ok{background:var(--greenLight);color:var(--green)}
-  .b-neu{background:var(--neutralLight);color:var(--textSec)} .b-pend{background:var(--neutralLight);color:var(--textSec)}
-
-  /* MODAL */
-  .overlay{position:fixed;inset:0;background:rgba(15,20,35,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:24px}
-  .overlay.open{display:flex}
-  .modal{background:var(--white);border-radius:14px;width:100%;max-width:1000px;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.30);overflow:hidden;animation:pop .18s ease}
-  @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .mhead{padding:18px 22px 12px;border-bottom:1px solid var(--border)}
-  .mtop{display:flex;align-items:center;gap:10px}
-  .mtitle{font-size:16px;font-weight:700;display:flex;align-items:center;gap:9px}
-  .mtitle::before{content:"";width:4px;height:17px;background:var(--red);border-radius:2px}
-  .mtot{font-size:12px;font-weight:700;color:var(--red);background:var(--redLight);padding:3px 11px;border-radius:20px}
-  .mclose{margin-left:auto;cursor:pointer;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--textSec);font-size:16px}
-  .mclose:hover{background:var(--neutralLight)}
-  .mfilter{display:inline-flex;gap:4px;background:var(--neutralLight);border-radius:9px;padding:4px;margin-top:12px}
-  .mfilter button{border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--textSec);padding:6px 13px;border-radius:7px;cursor:pointer}
-  .mfilter button.active{background:var(--white);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.12)}
-
-  .panes{display:grid;grid-template-columns:330px 1fr;min-height:0;flex:1}
-  .list{border-right:1px solid var(--border);overflow-y:auto}
-  .li{padding:13px 16px;border-bottom:1px solid #F1F2F4;cursor:pointer;border-left:3px solid transparent}
-  .li:hover{background:#FAFBFC}
-  .li.active{background:#FBF4F6;border-left-color:var(--red)}
-  .li .cnj{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text)}
-  .li .meta{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
-  .li .uf{font-size:10px;color:var(--textMuted);margin-top:6px}
-
-  .detail{overflow-y:auto;padding:20px 24px}
-  .dhead .dcnj{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
-  .dhead .dbadges{display:flex;gap:7px;margin-top:9px}
-  .origem{margin-top:18px;background:#FBFBFD;border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:flex;align-items:center;gap:14px}
-  .origem .ol{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--textMuted)}
-  .origem .ov{font-size:14px;font-weight:700;margin-top:3px}
-  .origem .ostate{margin-left:auto;text-align:right}
-  .origem .ostate .l{font-size:10px;color:var(--textMuted);text-transform:uppercase;letter-spacing:.4px}
-
-  .tlh{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--textMuted);margin:22px 0 14px}
-  .tl{position:relative;margin-left:6px;padding-left:22px;border-left:2px solid var(--border)}
-  .ev{position:relative;padding-bottom:18px}
-  .ev:last-child{padding-bottom:0}
-  .ev::before{content:"";position:absolute;left:-29px;top:1px;width:12px;height:12px;border-radius:50%;background:var(--white);border:2px solid var(--accent,var(--neutral))}
-  .ev .d{font-size:11px;color:var(--textMuted);font-variant-numeric:tabular-nums}
-  .ev .t{font-size:13px;font-weight:700;margin:2px 0 5px}
-  .dfoot{margin-top:20px;border-top:1px solid var(--border);padding-top:14px}
-  .dfoot a{color:var(--navy);font-weight:600;text-decoration:none;font-size:12px}
-
-  /* card MS — barra de proporção clicável */
   .ms .msU{font-size:11px;color:var(--textMuted);margin-left:6px}
   .ms .msTop{margin-top:6px}
   .ms .numlink{font-size:32px;font-weight:800;font-variant-numeric:tabular-nums;cursor:pointer;border-radius:6px;padding:0 4px;margin-left:-4px}
@@ -89,9 +26,75 @@
   .ms .msBar .p{background:var(--navy)} .ms .msBar .t{background:var(--purple);justify-content:flex-end}
   .ms .msCap{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--textSec)}
   .ms .msCap .pa{color:var(--navy)} .ms .msCap .at{color:var(--purple)}
+  .sim{font-size:10px;color:var(--textMuted);text-align:right;margin-top:12px}
+
+  .badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;display:inline-block}
+  .b-pa{background:var(--navyLight);color:var(--navy)} .b-at{background:var(--purpleLight);color:var(--purple)}
+  .b-def{background:var(--redLight);color:var(--red)} .b-ind{background:var(--navyLight);color:var(--navy)}
+  .b-susp{background:var(--amberLight);color:var(--amber)} .b-ok{background:var(--greenLight);color:var(--green)}
+  .b-neu{background:var(--neutralLight);color:var(--textSec)}
+
+  .overlay{position:fixed;inset:0;background:rgba(15,20,35,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:24px}
+  .overlay.open{display:flex}
+  .modal{background:var(--white);border-radius:14px;width:100%;max-width:1000px;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.30);overflow:hidden}
+  .mhead{padding:18px 22px 12px;border-bottom:1px solid var(--border)}
+  .mtop{display:flex;align-items:center;gap:10px}
+  .mtitle{font-size:16px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .mtitle::before{content:"";width:4px;height:17px;background:var(--red);border-radius:2px}
+  .mclose{margin-left:auto;cursor:pointer;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--textSec);font-size:16px}
+  .mclose:hover{background:var(--neutralLight)}
+  .mfilter{display:inline-flex;gap:4px;background:var(--neutralLight);border-radius:9px;padding:4px;margin-top:12px}
+  .mfilter button{border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--textSec);padding:6px 13px;border-radius:7px;cursor:pointer}
+  .mfilter button.active{background:var(--white);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+  .panes{display:grid;grid-template-columns:340px 1fr;min-height:0;flex:1}
+  .list{border-right:1px solid var(--border);overflow-y:auto}
+  .li{padding:13px 16px;border-bottom:1px solid #F1F2F4;cursor:pointer;border-left:3px solid transparent}
+  .li:hover{background:#FAFBFC} .li.active{background:#FBF4F6;border-left-color:var(--red)}
+  .li .cnj{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text)}
+  .li .meta{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+  .li .rec{font-size:10px;color:var(--textMuted);margin-top:6px}
+
+  .detail{overflow-y:auto;padding:20px 24px}
+  .dcnj{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+  .dbadges{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
+  .vinc{margin-top:14px;background:#FBFBFD;border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:12px;color:var(--textSec);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .vinc .arrow{color:var(--textMuted);font-size:14px}
+  .vinc small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--textMuted)}
+  .link{color:var(--navy);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;font-variant-numeric:tabular-nums}
+  .origem{margin-top:14px;background:#FBFBFD;border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:flex;align-items:center;gap:14px}
+  .origem .ol{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--textMuted)}
+  .origem .ov{font-size:14px;font-weight:700;margin-top:3px}
+  .origem .ostate{margin-left:auto;text-align:right}
+  .origem .ostate .l{font-size:10px;color:var(--textMuted);text-transform:uppercase;letter-spacing:.4px}
+  .tlh{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--textMuted);margin:20px 0 14px}
+  .tl{position:relative;margin-left:6px;padding-left:22px;border-left:2px solid var(--border)}
+  .ev{position:relative;padding-bottom:18px} .ev:last-child{padding-bottom:0}
+  .ev::before{content:"";position:absolute;left:-29px;top:1px;width:12px;height:12px;border-radius:50%;background:var(--white);border:2px solid var(--accent,var(--neutral))}
+  .ev .d{font-size:11px;color:var(--textMuted);font-variant-numeric:tabular-nums}
+  .ev .t{font-size:13px;font-weight:700;margin:2px 0 5px}
+  .mention{margin-top:7px}
+  .mlink{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--red);background:var(--redLight);padding:5px 10px;border-radius:7px;cursor:pointer}
+  .mlink.noms{color:var(--textSec);background:var(--neutralLight);cursor:default}
+  .dfoot{margin-top:20px;border-top:1px solid var(--border);padding-top:14px}
+  .dfoot a{color:var(--navy);font-weight:600;text-decoration:none;font-size:12px}
+  .dnote{font-size:11px;color:var(--textMuted);font-style:italic;margin-top:12px;line-height:1.6}
+  .dnote b{color:var(--textSec);font-style:normal}
+
+  .pop{position:fixed;z-index:60;width:310px;background:var(--white);border:1px solid var(--border);border-radius:11px;box-shadow:0 14px 34px rgba(0,0,0,.22);padding:15px;display:none}
+  .pop.open{display:block}
+  .pop .ph{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--textMuted);font-weight:700}
+  .pop .pc{font-weight:800;font-variant-numeric:tabular-nums;font-size:13px;margin:3px 0 9px}
+  .pop .prow{font-size:12px;color:var(--textSec);margin-bottom:5px} .pop .prow b{color:var(--text)}
+  .pop a{color:var(--navy);font-weight:700;text-decoration:none;font-size:11px;display:inline-block;margin-top:8px}
+
+  .dcnj .cnjlink{color:var(--text);text-decoration:none;border-bottom:1.5px solid var(--neutral);transition:color .12s,border-color .12s}
+  .dcnj .cnjlink:hover{color:var(--navy);border-color:var(--navy)}
+
+  .vinc .cnjlink{font-weight:700;font-variant-numeric:tabular-nums;color:var(--text);text-decoration:none;border-bottom:1.5px solid var(--neutral);transition:color .12s,border-color .12s}
+  .vinc .cnjlink:hover{color:var(--navy);border-color:var(--navy)}
 </style></head>
 <body>
-  <div class="ctx"><b>Processos Trabalhistas Bradesco</b> › Assessment › <i>MS — modal mestre-detalhe (lista + linha do tempo)</i></div>
+  <div class="ctx"><b>Processos Trabalhistas Bradesco</b> › Assessment › <i>card MS (barra) + modal com vínculo bidirecional MS ⇄ reclamatória</i></div>
   <div class="kpis">
     <div class="kpi"><div class="lbl">Total de Processos</div><div class="num">569</div><div class="sub">Passivos</div><div class="ic n">📄</div></div>
     <div class="kpi"><div class="lbl">Taxa de Decisão</div><div class="num">54,5%</div><div class="sub">Sobre o total de processos</div><div class="ic p">⚖️</div></div>
@@ -106,7 +109,7 @@
       <div class="msCap"><span class="pa">● Polo Passivo · 69%</span><span class="at">Polo Ativo · 31% ●</span></div>
     </div>
   </div>
-  <div class="sim">Dados simulados · clique no 75, em Polo Passivo ou Polo Ativo. Na lista, clique num processo para ver a linha do tempo.</div>
+  <div class="sim">Dados simulados · clique no 75 / barra azul / barra roxa. Na lista, clique num MS; depois clique nas menções e no vínculo (⇄) para ver o link bidirecional.</div>
 
   <div class="overlay" id="msOverlay"><div class="modal" role="dialog">
     <div class="mhead">
@@ -117,30 +120,42 @@
         <button data-f="ativo">Polo Ativo · 23</button>
       </div>
     </div>
-    <div class="panes">
-      <div class="list" id="msList"></div>
-      <div class="detail" id="msDetail"></div>
-    </div>
+    <div class="panes"><div class="list" id="msList"></div><div class="detail" id="msDetail"></div></div>
   </div></div>
+  <div class="pop" id="pop"></div>
 
 <script>
 const POLO={passivo:["Polo Passivo","b-pa"],ativo:["Polo Ativo","b-at"]};
-const STM={Mantida:"b-ind",Revogada:"b-susp",Pendente:"b-pend"};
+const STM={Deferido:"b-def",Denegado:"b-ind",Pendente:"b-neu","Sem MS":"b-neu"};
 const TONE={def:"#CC092F",ind:"#2B3A91",susp:"#B7791F",ok:"#2E7D32",neu:"#AEB4BD"};
 const BCLS={def:"b-def",ind:"b-ind",susp:"b-susp",ok:"b-ok",neu:"b-neu"};
+// polo: ativo = Banco impetrou o MS (ataca a reintegração) | passivo = empregado impetrou (Banco figura)
 const MS=[
- {cnj:"1000234-55.2024.5.02.0011",polo:"passivo",uf:"SP",status:"Mantida",reint:["Em vigor","b-ok"],origem:"Liminar (1º grau)",
-  tl:[["12/03/2024","Liminar (1º grau)","Deferida — reintegração concedida","def"],["28/05/2024","Sentença (1º grau)","Confirma a reintegração","ind"],["10/09/2024","MS (empregado)","Denegado — reintegração mantida","ind"]]},
- {cnj:"0007788-12.2023.5.09.0005",polo:"ativo",uf:"PR",status:"Mantida",reint:["Suspensa","b-susp"],origem:"Mandado de Segurança",
-  tl:[["05/02/2023","Liminar (1º grau)","Deferida — reintegração concedida","def"],["20/04/2023","MS do Banco","Impetrado contra a reintegração","neu"],["02/05/2023","Liminar no MS","Deferida — suspende reintegração","susp"],["18/11/2023","Acórdão (TRT)","Mantém a suspensão","susp"]]},
- {cnj:"0102345-67.2024.5.01.0027",polo:"passivo",uf:"RJ",status:"Pendente",reint:["Em vigor","b-ok"],origem:"Liminar (1º grau)",
-  tl:[["09/01/2024","Liminar (1º grau)","Deferida — reintegração concedida","def"],["15/03/2024","MS (empregado)","Impetrado","neu"],["—","MS","Pendente de julgamento","neu"]]},
- {cnj:"0033421-09.2023.5.05.0014",polo:"ativo",uf:"BA",status:"Revogada",reint:["Restabelecida","b-ok"],origem:"Mérito do MS",
-  tl:[["11/04/2023","Liminar (1º grau)","Deferida — reintegração concedida","def"],["30/05/2023","Liminar no MS (Banco)","Deferida — suspende reintegração","susp"],["22/09/2023","Mérito do MS","Denegado — reintegração restabelecida","ok"]]},
- {cnj:"0098765-43.2024.5.02.0043",polo:"passivo",uf:"SP",status:"Mantida",reint:["Negada","b-ind"],origem:"Sentença (1º grau)",
-  tl:[["14/02/2024","Liminar (1º grau)","Indeferida","ind"],["30/04/2024","Sentença (1º grau)","Indefere a reintegração","ind"]]},
- {cnj:"0066778-90.2023.5.03.0019",polo:"ativo",uf:"MG",status:"Mantida",reint:["Suspensa","b-susp"],origem:"Mandado de Segurança",
-  tl:[["03/03/2023","Liminar (1º grau)","Deferida — reintegração concedida","def"],["19/06/2023","Liminar no MS (Banco)","Deferida — suspende reintegração","susp"]]}
+ {cnjMS:"1009988-77.2023.5.09.0000",cnjRecl:"0007788-12.2023.5.09.0005",polo:"ativo",impetrante:"Banco",status:"Deferido",
+  efeito:["Suspensa","b-susp"],origem:"Mandado de Segurança",limInfo:"Deferida em 05/02/2023 · hoje suspensa",
+  tl:[["05/02/2023","Liminar (1º grau)","Deferida — reintegração concedida","def",false],
+      ["20/04/2023","MS impetrado pelo Banco","Contra a liminar de reintegração","neu",false],
+      ["02/05/2023","Liminar no MS","Deferida — suspende reintegração","susp",true],
+      ["18/11/2023","Acórdão (TRT)","Mantém a suspensão","susp",false]]},
+ {cnjMS:"1004455-22.2023.5.05.0000",cnjRecl:"0033421-09.2023.5.05.0014",polo:"ativo",impetrante:"Banco",status:"Denegado",
+  efeito:["Restabelecida","b-ok"],origem:"Mérito do MS",limInfo:"Deferida em 11/04/2023 · restabelecida",
+  tl:[["11/04/2023","Liminar (1º grau)","Deferida — reintegração concedida","def",false],
+      ["30/05/2023","Liminar no MS","Deferida — suspende reintegração","susp",true],
+      ["22/09/2023","Mérito do MS","Denegado — reintegração restabelecida","ok",false]]},
+ {cnjMS:"1002233-10.2024.5.01.0000",cnjRecl:"0102345-67.2024.5.01.0027",polo:"passivo",impetrante:"Empregado",status:"Pendente",
+  efeito:["Em vigor","b-ok"],origem:"Liminar (1º grau)",limInfo:"Deferida em 09/01/2024 · em vigor",
+  tl:[["09/01/2024","Liminar (1º grau)","Deferida — reintegração concedida","def",false],
+      ["15/03/2024","MS impetrado pelo Empregado","Não ataca a reintegração","neu",false],
+      ["—","MS","Pendente de julgamento","neu",false]]},
+ {cnjMS:"1007766-33.2023.5.03.0000",cnjRecl:"0066778-90.2023.5.03.0019",polo:"ativo",impetrante:"Banco",status:"Deferido",
+  efeito:["Suspensa","b-susp"],origem:"Mandado de Segurança",limInfo:"Deferida em 03/03/2023 · suspensa",
+  tl:[["03/03/2023","Liminar (1º grau)","Deferida — reintegração concedida","def",false],
+      ["19/06/2023","Liminar no MS","Deferida — suspende reintegração","susp",true]]},
+ {cnjMS:"1001122-44.2024.5.02.0000",cnjRecl:"1000234-55.2024.5.02.0011",polo:"passivo",impetrante:"Empregado",status:"Denegado",
+  efeito:["Mantida","b-ok"],origem:"Liminar (1º grau)",limInfo:"Deferida em 12/03/2024 · mantida",
+  tl:[["12/03/2024","Liminar (1º grau)","Deferida — reintegração concedida","def",false],
+      ["28/05/2024","Sentença (1º grau)","Confirma a reintegração","ind",false],
+      ["10/09/2024","MS (empregado)","Denegado — reintegração mantida","ind",false]]}
 ];
 let cur=0;
 function listRows(f){return MS.map((m,i)=>({m,i})).filter(x=>f==="todos"||x.m.polo===f);}
@@ -148,33 +163,39 @@ function renderList(f){
   const rows=listRows(f);
   document.getElementById("msList").innerHTML=rows.map(({m,i})=>`
     <div class="li ${i===cur?'active':''}" data-i="${i}">
-      <div class="cnj">${m.cnj}</div>
+      <div class="cnj">MS ${m.cnjMS}</div>
       <div class="meta"><span class="badge ${POLO[m.polo][1]}">${POLO[m.polo][0]}</span><span class="badge ${STM[m.status]}">MS ${m.status}</span></div>
-      <div class="uf">${m.uf} · reintegração ${m.reint[0].toLowerCase()}</div>
+      <div class="rec">impetrante: ${m.impetrante} · ⇄ reclamatória ${m.cnjRecl}</div>
     </div>`).join("");
   document.querySelectorAll(".li").forEach(el=>el.addEventListener("click",()=>{cur=+el.dataset.i;renderList(f);renderDetail();}));
 }
 function renderDetail(){
   const m=MS[cur];
+  const ev=m.tl.map(e=>`<div class="ev" style="--accent:${TONE[e[3]]}"><div class="d">${e[0]}</div><div class="t">${e[1]}</div><span class="badge ${BCLS[e[3]]}">${e[2]}</span></div>`).join("");
   document.getElementById("msDetail").innerHTML=`
-    <div class="dhead">
-      <div class="dcnj">${m.cnj}</div>
-      <div class="dbadges"><span class="badge ${POLO[m.polo][1]}">${POLO[m.polo][0]}</span><span class="badge ${STM[m.status]}">MS ${m.status}</span><span class="badge ${m.reint[1]}">Reintegração ${m.reint[0]}</span></div>
-    </div>
-    <div class="origem">
-      <div><div class="ol">Origem do resultado atual</div><div class="ov">${m.origem}</div></div>
-      <div class="ostate"><div class="l">Reintegração hoje</div><div class="ov">${m.reint[0]}</div></div>
-    </div>
+    <div class="dcnj">MS <a class="cnjlink" href="#" title="Abrir o MS no sistema">${m.cnjMS}</a></div>
+    <div class="dbadges"><span class="badge ${POLO[m.polo][1]}">${POLO[m.polo][0]}</span><span class="badge ${STM[m.status]}">MS ${m.status}</span><span class="badge ${m.efeito[1]}">Reintegração ${m.efeito[0]}</span></div>
+    <div class="vinc"><div><small>Mandado de Segurança</small><a class="cnjlink" href="#" title="Abrir o MS no sistema">${m.cnjMS}</a></div><span class="arrow">⇄</span><div><small>Reflete na reintegração da reclamatória</small><span class="link" data-cnj="${m.cnjRecl}">${m.cnjRecl}</span></div></div>
+    <div class="origem"><div><div class="ol">Origem do resultado atual</div><div class="ov">${m.origem}</div></div><div class="ostate"><div class="l">Reintegração hoje</div><div class="ov">${m.efeito[0]}</div></div></div>
     <div class="tlh">Linha do tempo do processo</div>
-    <div class="tl">${m.tl.map(e=>`<div class="ev" style="--accent:${TONE[e[3]]}"><div class="d">${e[0]}</div><div class="t">${e[1]}</div><span class="badge ${BCLS[e[3]]}">${e[2]}</span></div>`).join("")}</div>
-    <div class="dfoot"><a href="#">Abrir processo no sistema →</a></div>`;
+    <div class="tl">${ev}</div>`;
+  document.querySelectorAll(".link[data-cnj]").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();showPop(e,m);}));
 }
+const pop=document.getElementById("pop");
+function showPop(e,m){
+  pop.innerHTML=`<div class="ph">Reclamatória vinculada</div><div class="pc">${m.cnjRecl}</div>
+    <div class="prow">Liminar de reintegração: <b>${m.limInfo}</b></div>
+    <div class="prow">Origem do resultado: <b>${m.origem}</b></div>
+    <a href="#">Abrir reclamatória (visão da liminar) →</a>`;
+  pop.classList.add("open");
+  const x=Math.min(e.clientX,window.innerWidth-326), y=Math.min(e.clientY+12,window.innerHeight-160);
+  pop.style.left=x+"px"; pop.style.top=y+"px";
+}
+document.addEventListener("click",e=>{if(!e.target.closest(".link")&&!e.target.closest("#pop"))pop.classList.remove("open");});
+
 const overlay=document.getElementById("msOverlay");
-function openModal(f){
-  document.querySelectorAll("#msFilter button").forEach(x=>x.classList.toggle("active",x.dataset.f===f));
-  cur=listRows(f)[0].i; renderList(f); renderDetail(); overlay.classList.add("open");
-}
-function close(){overlay.classList.remove("open");}
+function openModal(f){document.querySelectorAll("#msFilter button").forEach(x=>x.classList.toggle("active",x.dataset.f===f));cur=listRows(f)[0].i;renderList(f);renderDetail();overlay.classList.add("open");}
+function close(){overlay.classList.remove("open");pop.classList.remove("open");}
 document.getElementById("msNum").addEventListener("click",e=>{e.stopPropagation();openModal("todos");});
 document.querySelectorAll("#msCard [data-f]").forEach(s=>s.addEventListener("click",e=>{e.stopPropagation();openModal(s.dataset.f);}));
 document.getElementById("msCard").addEventListener("click",()=>openModal("todos"));
