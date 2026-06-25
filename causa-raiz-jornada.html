@@ -35,9 +35,18 @@
 
   .card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
 
-  /* filtro superior (só as fases — sem toggle) */
-  .controls{display:flex;justify-content:flex-end;align-items:center;margin-bottom:22px}
-  .phase-tabs{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+  /* filtro superior */
+  .controls{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+  .result-filter{display:flex;flex-direction:column;gap:5px}
+  .result-filter .rf-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--textMuted)}
+  .rf-seg{display:inline-flex;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:3px}
+  .rf-seg button{border:none;background:transparent;padding:7px 13px;border-radius:7px;font-size:12px;font-weight:600;color:var(--textSec);cursor:pointer;display:flex;align-items:center;gap:6px}
+  .rf-seg button .rf-dot{width:8px;height:8px;border-radius:50%}
+  .rf-seg button.active{color:#fff}
+  .rf-seg button.active.all{background:var(--navy)}
+  .rf-seg button.active.fav{background:var(--green)}
+  .rf-seg button.active.desf{background:var(--red)}
+  .phase-tabs{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-start}
   .phase-tabs button{border:1px solid var(--border);background:var(--white);padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;color:var(--textSec);cursor:pointer;display:flex;align-items:center;gap:6px}
   .phase-tabs button .dot{width:8px;height:8px;border-radius:50%}
   .phase-tabs button.active{border-color:var(--navy);background:var(--navy);color:#fff}
@@ -107,10 +116,21 @@
 
   <div class="card">
     <div class="controls">
-      <div class="phase-tabs" id="phaseTabs"></div>
+      <div class="result-filter">
+        <span class="rf-label">Resultado para o banco</span>
+        <div class="rf-seg" id="resultSeg">
+          <button class="all active" onclick="setResult('all')">Todas as decisões</button>
+          <button class="fav" onclick="setResult('fav')"><span class="rf-dot" style="background:var(--green)"></span>Favoráveis</button>
+          <button class="desf" onclick="setResult('desf')"><span class="rf-dot" style="background:var(--red)"></span>Desfavoráveis</button>
+        </div>
+      </div>
+      <div class="result-filter">
+        <span class="rf-label">Fase processual</span>
+        <div class="phase-tabs" id="phaseTabs"></div>
+      </div>
     </div>
     <div id="content"></div>
-    <p class="note">Clique em qualquer causa para abrir os processos e a trilha da causa raiz pela jornada. As sínteses são geradas do texto de cada peça; um processo pode trazer mais de uma causa, por isso os percentuais não somam 100%. Dados simulados para mockup.</p>
+    <p class="note"><b>Favorável ao banco</b> = pedido de reintegração negado/improcedente; <b>desfavorável</b> = reintegração ou indenização concedida. O filtro recorta as causas raízes pelo desfecho e reordena por relevância no segmento. Clique em qualquer causa para abrir os processos e a trilha pela jornada. Um processo pode trazer mais de uma causa, por isso os percentuais não somam 100%. Dados simulados para mockup.</p>
   </div>
 </div>
 
@@ -201,6 +221,32 @@ const TRAIL={
 const TURN={laudo:['Não Reconh.','Concausal'], sent:['Improcedente','Indenização'], acor:['Reforma +','Reforma −']};
 
 let activePhase='all';
+let result='all';
+
+/* propensão de cada causa a desfecho FAVORÁVEL ao banco (pedido negado), por fase, na ordem das causas */
+const FAVBYPHASE={
+  pi:[0.42,0.63,0.80,0.30,0.55,0.70,0.45],
+  cont:[0.72,0.66,0.71,0.58],
+  lim:[0.32,0.28,0.80],
+  laudo:[0.18,0.45,0.86,0.34,0.60],
+  sent:[0.06,0.96,0.12,0.50],
+  acor:[0.55,0.06,0.95,0.55]
+};
+ORDER.forEach(k=>PHASES[k].causas.forEach((c,i)=>c.fav=FAVBYPHASE[k][i]));
+
+/* valores (pct,n) de uma causa conforme o segmento de resultado ativo */
+function segVal(ph,c){
+  if(result==='all') return {pct:c.pct,n:c.n};
+  const wfav=ph.causas.reduce((s,x)=>s+x.n*x.fav,0)/ph.causas.reduce((s,x)=>s+x.n,0);
+  const frac = result==='fav'? c.fav : 1-c.fav;
+  const share = result==='fav'? wfav : 1-wfav;
+  return {pct:c.pct*frac/share, n:Math.round(c.n*frac)};
+}
+function setResult(r){
+  result=r;
+  document.querySelectorAll('#resultSeg button').forEach(b=>b.classList.toggle('active',b.classList.contains(r)));
+  render();
+}
 
 /* tabs */
 function renderTabs(){
@@ -215,27 +261,30 @@ function render(){
   if(activePhase==='all'){
     let h=`<div class="phase-grid" style="grid-template-columns:repeat(${ORDER.length},1fr)">`;
     ORDER.forEach(k=>{
-      const ph=PHASES[k], max=Math.max(...ph.causas.map(c=>c.pct));
+      const ph=PHASES[k];
+      const items=ph.causas.map(c=>({c,...segVal(ph,c)})).sort((a,b)=>b.pct-a.pct);
+      const max=Math.max(...items.map(it=>it.pct),0.1);
       h+=`<div class="phase-col"><h3><span style="width:8px;height:8px;border-radius:50%;background:${ph.dot};display:inline-block"></span>${ph.label}</h3>
         <div class="lens">${ph.lens}</div><div class="cnt">${ph.causas.length} causas</div>`;
-      ph.causas.forEach(c=>{
-        h+=`<div class="mini" style="border-left-color:${ph.dot}" onclick="openModal('${k}','${esc(c.nm)}')">
-          <div class="top"><span class="pct" style="color:${ph.dot}">${fmt(c.pct)}%</span><span class="n">${c.n}</span></div>
-          <div class="nm">${c.nm}</div>
-          <div class="track"><i style="width:${c.pct/max*100}%;background:${ph.dot}"></i></div></div>`;
+      items.forEach(it=>{
+        h+=`<div class="mini" style="border-left-color:${ph.dot}" onclick="openModal('${k}','${esc(it.c.nm)}')">
+          <div class="top"><span class="pct" style="color:${ph.dot}">${fmt(it.pct)}%</span><span class="n">${it.n}</span></div>
+          <div class="nm">${it.c.nm}</div>
+          <div class="track"><i style="width:${it.pct/max*100}%;background:${ph.dot}"></i></div></div>`;
       });
       h+='</div>';
     });
     h+='</div>'; box.innerHTML=h;
   }else{
     const ph=PHASES[activePhase];
+    const items=ph.causas.map((c,i)=>({c,i,...segVal(ph,c)})).sort((a,b)=>b.pct-a.pct);
     let h=`<div style="margin-bottom:14px;font-size:12.5px;color:var(--textSec)"><b style="color:var(--text)">${ph.label}</b> — <i>${ph.lens}</i></div><div class="big-grid">`;
-    ph.causas.forEach((c,i)=>{
-      const cor=ROT[i%ROT.length];
-      h+=`<div class="big" style="border-left-color:${cor}" onclick="openModal('${activePhase}','${esc(c.nm)}')">
+    items.forEach(it=>{
+      const cor=ROT[it.i%ROT.length];
+      h+=`<div class="big" style="border-left-color:${cor}" onclick="openModal('${activePhase}','${esc(it.c.nm)}')">
         <div class="go">ver processos ›</div>
-        <div class="pct" style="color:${cor}">${fmt(c.pct)}%</div><div class="n">${c.n} processos</div>
-        <div class="nm">${c.nm}</div><div class="desc">${c.desc}</div></div>`;
+        <div class="pct" style="color:${cor}">${fmt(it.pct)}%</div><div class="n">${it.n} processos</div>
+        <div class="nm">${it.c.nm}</div><div class="desc">${it.c.desc}</div></div>`;
     });
     h+='</div>'; box.innerHTML=h;
   }
@@ -247,16 +296,29 @@ function esc(s){return s.replace(/'/g,"\\'")}
 const NAMES=['José A. Santos','Maria R. Oliveira','Carlos E. Lima','Ana P. Costa','Roberto M. Souza','Fernanda L. Alves','Paulo H. Ribeiro','Juliana S. Martins','Marcos V. Pereira','Patrícia N. Gomes','Rafael C. Dias','Camila T. Rocha'];
 const UF=['SP','RJ','MG','PR','BA','RS','SC','PE','CE','GO'];
 function cnj(i){return `00${String(10000+i*37).slice(0,5)}-${String(20+i%80).padStart(2,'0')}.2024.5.0${1+i%9}.000${i%9}`}
-function genProcessos(faseId,qtd){
+function genProcessos(faseId,qtd,seg){
   const arr=[];
   for(let i=0;i<qtd;i++){
     const piV=['Esforço Rep.','Assédio Moral','Esforço Rep.','Assédio Moral','Evento Crítico'][i%5];
     const contV=['Preexistente','Doença Comum','Sem CAT','Metas OK','Preexistente'][i%5];
-    const limV=(i%3===2)?'Indeferida':'Deferida';
-    const laudoV=['Nexo Causal','Concausal','Não Reconh.','Nexo Causal','Concausal','NTEP'][i%6];
-    const sentV= laudoV==='Não Reconh.'?'Improcedente':(laudoV==='Concausal'?'Indenização':'Procedente');
-    const acorV=(i%5===4)?(sentV==='Improcedente'?'Reforma +':'Reforma −'):'Mantida';
-    const j={pi:piV,cont:contV,lim:limV,laudo:laudoV,sent:(i%8===7?'Pendente':sentV),acor:acorV};
+    let limV,laudoV,sentV,acorV;
+    if(seg==='fav'){            // desfecho favorável ao banco (pedido negado)
+      limV=(i%4===0)?'Deferida':'Indeferida';
+      laudoV=['Não Reconh.','Não Reconh.','Inconclusivo','NTEP'][i%4];
+      sentV='Improcedente';
+      acorV=(i%5===4)?'Reforma −':'Mantida';
+    }else if(seg==='desf'){     // desfecho desfavorável ao banco
+      limV='Deferida';
+      laudoV=['Nexo Causal','Concausal','Nexo Causal','NTEP'][i%4];
+      sentV=(i%3===2)?'Indenização':'Procedente';
+      acorV=(i%5===4)?'Reforma +':'Mantida';
+    }else{                       // todas
+      limV=(i%3===2)?'Indeferida':'Deferida';
+      laudoV=['Nexo Causal','Concausal','Não Reconh.','Nexo Causal','Concausal','NTEP'][i%6];
+      sentV= laudoV==='Não Reconh.'?'Improcedente':(laudoV==='Concausal'?'Indenização':'Procedente');
+      acorV=(i%5===4)?(sentV==='Improcedente'?'Reforma +':'Reforma −'):'Mantida';
+    }
+    const j={pi:piV,cont:contV,lim:limV,laudo:laudoV,sent:(seg==='all'&&i%8===7?'Pendente':sentV),acor:acorV};
     arr.push({cnj:cnj(i+faseId.length*5),nome:NAMES[i%NAMES.length],uf:UF[i%UF.length],j});
   }
   return arr;
@@ -283,11 +345,13 @@ function hexA(hex,a){const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255}
 /* modal */
 function openModal(faseId,nome){
   const ph=PHASES[faseId], c=ph.causas.find(x=>x.nm===nome.replace(/\\'/g,"'"));
+  const sv=segVal(ph,c);
+  const segLabel={all:'',fav:' · decisões favoráveis ao banco',desf:' · decisões desfavoráveis ao banco'}[result];
   document.getElementById('mDot').style.background=ph.dot;document.getElementById('mDot').style.color='#fff';
-  document.getElementById('mDot').textContent=fmt(c.pct)+'%';
+  document.getElementById('mDot').textContent=fmt(sv.pct)+'%';
   document.getElementById('mTitle').textContent=c.nm;
-  document.getElementById('mSub').textContent=`${ph.label} · ${c.n} processos · ${ph.lens}`;
-  modalProcs=genProcessos(faseId,Math.min(c.n,14));
+  document.getElementById('mSub').textContent=`${ph.label} · ${sv.n} processos${segLabel} · ${ph.lens}`;
+  modalProcs=genProcessos(faseId,Math.min(sv.n,14),result);
   document.getElementById('mSearch').value='';
   renderRows();
   document.getElementById('overlay').classList.add('show');
