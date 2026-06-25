@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Causa Raiz por Fase — Jornada Completa</title>
+<style>
+  :root{
+    --red:#CC092F; --redMid:#E84667; --redLight:#FDE8EC;
+    --purple:#7B2D8E; --purpleLight:#F3E8F7;
+    --green:#2E7D32; --greenLight:#E8F5E9;
+    --amber:#F57F17; --amberLight:#FFF8E1;
+    --blue:#1565C0; --blueLight:#E3F2FD;
+    --navy:#1a1a2e;
+    --bg:#F5F6FA; --white:#fff; --border:#E8EAED;
+    --text:#1a1a2e; --textSec:#5f6368; --textMuted:#9AA0A6;
+    --shadow:0 1px 3px rgba(0,0,0,0.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:28px;font-size:14px}
+  .wrap{max-width:1360px;margin:0 auto}
+  .sec-title{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .sec-title .bar{width:4px;height:20px;background:var(--red);border-radius:2px}
+  .sec-title h2{font-size:17px;font-weight:700}
+  .sec-sub{color:var(--blue);font-size:12.5px;margin:0 0 18px 14px}
+
+  /* KPIs */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+  .kpi{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .kpi .topbar{position:absolute;top:0;left:0;right:0;height:5px}
+  .kpi .v{font-size:27px;font-weight:700;line-height:1.1;margin-top:4px}
+  .kpi .v.sm{font-size:17px;padding-top:6px}
+  .kpi .l{font-size:11px;color:var(--textSec);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+  .kpi .s{font-size:11.5px;color:var(--textMuted);margin-top:3px}
+
+  .card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+
+  /* filtro superior (só as fases — sem toggle) */
+  .controls{display:flex;justify-content:flex-end;align-items:center;margin-bottom:22px}
+  .phase-tabs{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+  .phase-tabs button{border:1px solid var(--border);background:var(--white);padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;color:var(--textSec);cursor:pointer;display:flex;align-items:center;gap:6px}
+  .phase-tabs button .dot{width:8px;height:8px;border-radius:50%}
+  .phase-tabs button.active{border-color:var(--navy);background:var(--navy);color:#fff}
+
+  /* Todas as Fases — colunas */
+  .phase-grid{display:grid;gap:12px}
+  .phase-col{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:13px}
+  .phase-col h3{font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:6px}
+  .phase-col .lens{font-size:10px;color:var(--textMuted);font-style:italic;line-height:1.3;margin:3px 0}
+  .phase-col .cnt{font-size:10px;color:var(--textSec);font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.3px}
+  .mini{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:8px 9px;margin-bottom:7px;cursor:pointer;transition:.12s;border-left:4px solid}
+  .mini:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+  .mini .top{display:flex;justify-content:space-between;align-items:baseline}
+  .mini .pct{font-size:15px;font-weight:700}
+  .mini .n{font-size:9.5px;color:var(--textMuted)}
+  .mini .nm{font-size:11px;font-weight:600;margin-top:2px;line-height:1.25}
+  .mini .track{height:4px;background:var(--bg);border-radius:2px;margin-top:6px;overflow:hidden}
+  .mini .track>i{display:block;height:100%;border-radius:2px}
+
+  /* Fase específica — cards grandes (estilo print) */
+  .big-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .big{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;cursor:pointer;transition:.12s;border-left:5px solid;position:relative}
+  .big:hover{box-shadow:0 4px 14px rgba(0,0,0,.1);transform:translateY(-2px)}
+  .big .pct{font-size:30px;font-weight:700;line-height:1}
+  .big .n{font-size:11px;color:var(--textMuted);font-weight:600;margin-top:2px}
+  .big .nm{font-size:13px;font-weight:700;margin:8px 0 6px;line-height:1.3}
+  .big .desc{font-size:11.5px;color:var(--textSec);line-height:1.5}
+  .big .go{position:absolute;top:14px;right:14px;font-size:10.5px;color:var(--textMuted)}
+
+  /* MODAL */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;padding:40px 20px;z-index:50;overflow:auto}
+  .overlay.show{display:flex}
+  .modal{background:var(--white);border-radius:14px;max-width:1140px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .modal-head{padding:20px 26px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+  .modal-head .t{font-size:16px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .modal-head .sub{font-size:12px;color:var(--textSec);margin-top:5px}
+  .modal-head .x{border:none;background:var(--bg);width:32px;height:32px;border-radius:8px;font-size:18px;cursor:pointer;color:var(--textSec)}
+  .modal-body{padding:18px 26px 26px}
+  .mfilters{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+  .mfilters input,.mfilters select{border:1px solid var(--border);border-radius:8px;padding:8px 11px;font-size:12.5px;font-family:inherit}
+  .mfilters input{flex:1;min-width:180px}
+  .chk{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--textSec);cursor:pointer;user-select:none}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;color:var(--textSec);padding:8px 10px;border-bottom:1px solid var(--border)}
+  td{padding:11px 10px;border-bottom:1px solid var(--border);font-size:12.5px;vertical-align:middle}
+  tr.row:hover{background:#FFF5F6}
+  .cnj{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue);font-weight:600}
+  a.cnj{text-decoration:none;cursor:pointer;border-bottom:1px solid transparent;white-space:nowrap}
+  a.cnj:hover{border-bottom-color:var(--blue)}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.25s;z-index:80;display:flex;align-items:center;gap:9px}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast .cnj-mono{font-family:'JetBrains Mono',monospace;color:#8FBEF0;font-weight:700}
+  .trail{display:flex;align-items:flex-start;gap:3px;flex-wrap:nowrap}
+  .step{display:flex;flex-direction:column;align-items:center;min-width:70px}
+  .step .pin{padding:3px 7px;border-radius:6px;font-size:9.5px;font-weight:700;text-align:center;line-height:1.2}
+  .step .ph{font-size:8px;color:var(--textMuted);margin-top:3px;text-transform:uppercase;letter-spacing:.3px;text-align:center}
+  .arrow{color:var(--textMuted);font-size:11px;margin-top:5px}
+  .changed{outline:2px solid var(--amber);outline-offset:1px}
+  .note{font-size:11px;color:var(--textMuted);font-style:italic;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="sec-title"><div class="bar"></div><h2>Causa Raiz por Fase Processual</h2></div>
+  <p class="sec-sub">A causa raiz alegada, contestada, periciada e reconhecida em cada etapa da jornada</p>
+
+  <div class="card">
+    <div class="controls">
+      <div class="phase-tabs" id="phaseTabs"></div>
+    </div>
+    <div id="content"></div>
+    <p class="note">Clique em qualquer causa para abrir os processos e a trilha da causa raiz pela jornada. As sínteses são geradas do texto de cada peça; um processo pode trazer mais de uma causa, por isso os percentuais não somam 100%. Dados simulados para mockup.</p>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <div><div class="t"><span id="mDot" class="pin"></span><span id="mTitle"></span></div><div class="sub" id="mSub"></div></div>
+      <button class="x" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mfilters">
+        <input id="mSearch" placeholder="🔍 Buscar por CNJ ou polo ativo..." oninput="renderRows()">
+      </div>
+      <table><thead><tr><th>CNJ</th><th>Polo Ativo</th><th>UF</th><th style="text-align:center">Trilha da Causa Raiz (PI → Acórdão)</th></tr></thead>
+        <tbody id="mRows"></tbody></table>
+      <p class="note" id="mCount"></p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const COL={red:'#CC092F',redMid:'#E84667',amber:'#F57F17',purple:'#7B2D8E',navy:'#1a1a2e',blue:'#1565C0',green:'#2E7D32',muted:'#9AA0A6'};
+const ROT=[COL.red,COL.purple,COL.navy,COL.amber,COL.blue,COL.green,COL.redMid];
+
+/* === FASES (jornada completa) === */
+const PHASES={
+  pi:{label:'Petição Inicial', dot:COL.red, lens:'O que a parte autora aponta como origem do adoecimento',
+    causas:[
+      {nm:'Esforço Repetitivo / Ergonomia', pct:50.7, n:428, desc:'LER/DORT por movimentos repetitivos, digitação intensa, mobiliário inadequado ou posturas forçadas.'},
+      {nm:'Assédio Moral / Pressão por Metas', pct:44.1, n:372, desc:'Adoecimento psíquico (burnout, depressão, ansiedade) por cobrança abusiva de metas e pressão psicológica.'},
+      {nm:'Deficiência / Condição Preexistente', pct:1.8, n:15, desc:'Doença ou deficiência preexistente ou sem nexo causal direto com as atividades.'},
+      {nm:'Evento Crítico no Trabalho (Vitimização Externa)', pct:1.3, n:11, desc:'Adoecimento decorrente de evento crítico de segurança: assalto, sequestro, agressão física.'},
+      {nm:'Sobrecarga de Trabalho', pct:0.9, n:8, desc:'Jornada e volume de trabalho excessivos.'},
+      {nm:'Não Identificado', pct:0.9, n:8, desc:'Nexo não estabelecido ou informação insuficiente na petição.'},
+      {nm:'Doença Física Ocupacional', pct:0.4, n:3, desc:'Doença física não ortopédica com nexo ocupacional (perda auditiva, respiratória, cardíaca).'}
+    ]},
+  cont:{label:'Contestação', dot:COL.redMid, lens:'A contra-narrativa de causa apresentada pela defesa do banco',
+    causas:[
+      {nm:'Quadro Degenerativo / Preexistente', pct:31.8, n:268, desc:'Defesa sustenta doença de origem degenerativa ou anterior ao vínculo, sem nexo com o trabalho.'},
+      {nm:'Ausência de CAT / Afastamento Acidentário', pct:23.3, n:197, desc:'Inexistência de Comunicação de Acidente de Trabalho ou de benefício acidentário (B91).'},
+      {nm:'Doença Comum (não ocupacional)', pct:18.2, n:154, desc:'Defesa caracteriza o quadro como doença comum, sem relação com as atividades laborais.'},
+      {nm:'Metas Dentro da Política / Praxe de Mercado', pct:14.3, n:121, desc:'Defesa nega o assédio: metas seguem a política interna e a praxe do setor.'}
+    ]},
+  lim:{label:'Decisão Liminar', dot:COL.amber, lens:'O que o juízo pondera ao conceder ou negar a tutela de urgência',
+    causas:[
+      {nm:'Verossimilhança do Adoecimento → Deferida', pct:44.2, n:261, desc:'Juízo reconhece a probabilidade do direito e concede a reintegração imediata.'},
+      {nm:'Estabilidade Acidentária Presumida', pct:24.2, n:143, desc:'Concessão com base em benefício B91 / CAT que presume a estabilidade.'},
+      {nm:'Ausência de Prova Inequívoca → Indeferida', pct:31.8, n:188, desc:'Juízo nega a tutela por falta de prova robusta do nexo na cognição sumária.'}
+    ]},
+  laudo:{label:'Laudo Pericial', dot:COL.purple, lens:'O que o perito conclui sobre a relação doença × trabalho',
+    causas:[
+      {nm:'Nexo Causal Reconhecido', pct:31.5, n:189, desc:'Perito reconhece relação direta entre a doença e a atividade laboral.'},
+      {nm:'Nexo Concausal', pct:24.8, n:149, desc:'Trabalho como fator contributivo, somado a fatores extralaborais.'},
+      {nm:'Nexo Não Reconhecido', pct:28.0, n:168, desc:'Perito afasta o nexo: quadro degenerativo, preexistente ou psíquico não ocupacional.'},
+      {nm:'NTEP (Nexo Técnico Epidemiológico)', pct:9.2, n:55, desc:'Nexo presumido por enquadramento CID × CNAE.'},
+      {nm:'Inconclusivo', pct:6.5, n:39, desc:'Laudo sem conclusão definitiva sobre a origem do quadro.'}
+    ]},
+  sent:{label:'Sentença', dot:COL.navy, lens:'O que o juízo reconhece na fundamentação de mérito',
+    causas:[
+      {nm:'Nexo Reconhecido → Reintegração', pct:34.0, n:201, desc:'Juízo reconhece o nexo e a estabilidade; defere a reintegração.'},
+      {nm:'Ausência de Nexo → Improcedente', pct:48.5, n:287, desc:'Juízo afasta o nexo alegado; julga improcedente o pedido.'},
+      {nm:'Conversão em Indenização (Súmula 396 TST)', pct:11.0, n:65, desc:'Reconhecimento com conversão da reintegração em indenização.'},
+      {nm:'Sem Sentença de Mérito', pct:6.5, n:38, desc:'Acordo, extinção sem mérito ou aguardando julgamento.'}
+    ]},
+  acor:{label:'Acórdão (TRT)', dot:COL.blue, lens:'Como a instância recursal mantém ou reforma a leitura da causa',
+    causas:[
+      {nm:'TRT Mantém a Sentença de Origem', pct:55.8, n:198, desc:'Instância recursal confirma a decisão de primeiro grau quanto ao nexo.'},
+      {nm:'Reforma: Reconhece Nexo antes Negado', pct:13.2, n:47, desc:'TRT reconhece nexo que havia sido afastado na sentença.'},
+      {nm:'Reforma: Afasta Nexo antes Reconhecido', pct:10.7, n:38, desc:'TRT afasta nexo que havia sido reconhecido em primeiro grau.'},
+      {nm:'Ajuste do Valor da Condenação', pct:20.3, n:72, desc:'Redução ou majoração do valor sem alterar o mérito do nexo.'}
+    ]}
+};
+const ORDER=['pi','cont','lim','laudo','sent','acor'];
+
+/* rótulos curtos p/ trilha */
+const SHORT={pi:'PI',cont:'Contest.',lim:'Liminar',laudo:'Laudo',sent:'Sentença',acor:'Acórdão'};
+const TRAIL={
+  pi:['Esforço Rep.','Assédio Moral','Evento Crítico','Preexistente'],
+  cont:['Preexistente','Doença Comum','Sem CAT','Metas OK'],
+  lim:['Deferida','Indeferida'],
+  laudo:['Nexo Causal','Concausal','Não Reconh.','NTEP'],
+  sent:['Procedente','Improcedente','Indenização','Pendente'],
+  acor:['Mantida','Reforma +','Reforma −','Ajuste valor']
+};
+const TURN={laudo:['Não Reconh.','Concausal'], sent:['Improcedente','Indenização'], acor:['Reforma +','Reforma −']};
+
+let activePhase='all';
+
+/* tabs */
+function renderTabs(){
+  let h=`<button class="${activePhase==='all'?'active':''}" onclick="setPhase('all')">Todas as Fases</button>`;
+  ORDER.forEach(k=>{h+=`<button class="${activePhase===k?'active':''}" onclick="setPhase('${k}')"><span class="dot" style="background:${PHASES[k].dot}"></span>${PHASES[k].label}</button>`;});
+  document.getElementById('phaseTabs').innerHTML=h;
+}
+function setPhase(p){activePhase=p;renderTabs();render()}
+
+function render(){
+  const box=document.getElementById('content');
+  if(activePhase==='all'){
+    let h=`<div class="phase-grid" style="grid-template-columns:repeat(${ORDER.length},1fr)">`;
+    ORDER.forEach(k=>{
+      const ph=PHASES[k], max=Math.max(...ph.causas.map(c=>c.pct));
+      h+=`<div class="phase-col"><h3><span style="width:8px;height:8px;border-radius:50%;background:${ph.dot};display:inline-block"></span>${ph.label}</h3>
+        <div class="lens">${ph.lens}</div><div class="cnt">${ph.causas.length} causas</div>`;
+      ph.causas.forEach(c=>{
+        h+=`<div class="mini" style="border-left-color:${ph.dot}" onclick="openModal('${k}','${esc(c.nm)}')">
+          <div class="top"><span class="pct" style="color:${ph.dot}">${fmt(c.pct)}%</span><span class="n">${c.n}</span></div>
+          <div class="nm">${c.nm}</div>
+          <div class="track"><i style="width:${c.pct/max*100}%;background:${ph.dot}"></i></div></div>`;
+      });
+      h+='</div>';
+    });
+    h+='</div>'; box.innerHTML=h;
+  }else{
+    const ph=PHASES[activePhase];
+    let h=`<div style="margin-bottom:14px;font-size:12.5px;color:var(--textSec)"><b style="color:var(--text)">${ph.label}</b> — <i>${ph.lens}</i></div><div class="big-grid">`;
+    ph.causas.forEach((c,i)=>{
+      const cor=ROT[i%ROT.length];
+      h+=`<div class="big" style="border-left-color:${cor}" onclick="openModal('${activePhase}','${esc(c.nm)}')">
+        <div class="go">ver processos ›</div>
+        <div class="pct" style="color:${cor}">${fmt(c.pct)}%</div><div class="n">${c.n} processos</div>
+        <div class="nm">${c.nm}</div><div class="desc">${c.desc}</div></div>`;
+    });
+    h+='</div>'; box.innerHTML=h;
+  }
+}
+function fmt(n){return n.toFixed(1).replace('.',',')}
+function esc(s){return s.replace(/'/g,"\\'")}
+
+/* === processos simulados === */
+const NAMES=['José A. Santos','Maria R. Oliveira','Carlos E. Lima','Ana P. Costa','Roberto M. Souza','Fernanda L. Alves','Paulo H. Ribeiro','Juliana S. Martins','Marcos V. Pereira','Patrícia N. Gomes','Rafael C. Dias','Camila T. Rocha'];
+const UF=['SP','RJ','MG','PR','BA','RS','SC','PE','CE','GO'];
+function cnj(i){return `00${String(10000+i*37).slice(0,5)}-${String(20+i%80).padStart(2,'0')}.2024.5.0${1+i%9}.000${i%9}`}
+function genProcessos(faseId,qtd){
+  const arr=[];
+  for(let i=0;i<qtd;i++){
+    const piV=['Esforço Rep.','Assédio Moral','Esforço Rep.','Assédio Moral','Evento Crítico'][i%5];
+    const contV=['Preexistente','Doença Comum','Sem CAT','Metas OK','Preexistente'][i%5];
+    const limV=(i%3===2)?'Indeferida':'Deferida';
+    const laudoV=['Nexo Causal','Concausal','Não Reconh.','Nexo Causal','Concausal','NTEP'][i%6];
+    const sentV= laudoV==='Não Reconh.'?'Improcedente':(laudoV==='Concausal'?'Indenização':'Procedente');
+    const acorV=(i%5===4)?(sentV==='Improcedente'?'Reforma +':'Reforma −'):'Mantida';
+    const j={pi:piV,cont:contV,lim:limV,laudo:laudoV,sent:(i%8===7?'Pendente':sentV),acor:acorV};
+    arr.push({cnj:cnj(i+faseId.length*5),nome:NAMES[i%NAMES.length],uf:UF[i%UF.length],j});
+  }
+  return arr;
+}
+let modalProcs=[];
+function pinColor(fase,val){
+  if(TURN[fase]&&TURN[fase].includes(val)) return COL.amber;
+  if(['Deferida','Procedente','Nexo Causal','NTEP','Reforma +','Mantida'].includes(val)) return COL.green;
+  if(['Indeferida','Improcedente','Não Reconh.','Reforma −'].includes(val)) return COL.red;
+  if(['Concausal','Indenização','Ajuste valor'].includes(val)) return COL.blue;
+  return COL.muted;
+}
+function trailHtml(j){
+  let h='<div class="trail">';
+  ORDER.forEach((f,i)=>{
+    const v=j[f], col=pinColor(f,v), turn=TURN[f]&&TURN[f].includes(v);
+    h+=`<div class="step"><span class="pin ${turn?'changed':''}" style="background:${hexA(col,.14)};color:${col}">${v}</span><span class="ph">${SHORT[f]}</span></div>`;
+    if(i<ORDER.length-1) h+='<span class="arrow">→</span>';
+  });
+  return h+'</div>';
+}
+function hexA(hex,a){const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`}
+
+/* modal */
+function openModal(faseId,nome){
+  const ph=PHASES[faseId], c=ph.causas.find(x=>x.nm===nome.replace(/\\'/g,"'"));
+  document.getElementById('mDot').style.background=ph.dot;document.getElementById('mDot').style.color='#fff';
+  document.getElementById('mDot').textContent=fmt(c.pct)+'%';
+  document.getElementById('mTitle').textContent=c.nm;
+  document.getElementById('mSub').textContent=`${ph.label} · ${c.n} processos · ${ph.lens}`;
+  modalProcs=genProcessos(faseId,Math.min(c.n,14));
+  document.getElementById('mSearch').value='';
+  renderRows();
+  document.getElementById('overlay').classList.add('show');
+}
+function renderRows(){
+  const q=document.getElementById('mSearch').value.toLowerCase();
+  const rows=modalProcs.filter(p=>p.cnj.toLowerCase().includes(q)||p.nome.toLowerCase().includes(q));
+  document.getElementById('mRows').innerHTML=rows.map(p=>`<tr class="row"><td><a class="cnj" href="https://reintegrados.deepcenter.com.br/processos/${p.cnj}" onclick="return openProcesso(event,'${p.cnj}')" title="Abrir detalhamento do processo">${p.cnj} ↗</a></td><td>${p.nome}</td><td>${p.uf}</td><td>${trailHtml(p.j)}</td></tr>`).join('')
+    || `<tr><td colspan="4" style="text-align:center;color:var(--textMuted);padding:24px">Nenhum processo com esses filtros.</td></tr>`;
+  document.getElementById('mCount').textContent=`${rows.length} processo(s) · contorno âmbar = ponto em que a causa raiz mudou de leitura · dados simulados`;
+}
+function closeModal(){document.getElementById('overlay').classList.remove('show')}
+
+/* CNJ → detalhamento do processo (no mockup, simula a navegação) */
+function openProcesso(ev,cnj){
+  ev.preventDefault();
+  const t=document.getElementById('toast');
+  t.innerHTML=`↗ Abrindo o detalhamento do processo <span class="cnj-mono">${cnj}</span>`;
+  t.classList.add('show');
+  clearTimeout(window._tt); window._tt=setTimeout(()=>t.classList.remove('show'),2600);
+  return false;
+}
+
+renderTabs(); render();
+</script>
+</body>
+</html>
