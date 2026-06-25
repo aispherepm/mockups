@@ -1,332 +1,401 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marcha da Reintegração — Jornada Processual</title>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcha Processual da Base — Funil por Instância</title>
 <style>
   :root{
-    --red:#CC092F;--redMid:#E84667;--redLight:#FDE8EC;
-    --navy:#2B3A91;--navyLight:#EAEDF7;--slate:#7C8597;--slateLight:#EEF0F3;
-    --amber:#B7791F;--amberLight:#FDF3E0;
-    --green:#2E7D32;--greenLight:#E8F5E9;
-    --neutral:#AEB4BD;--neutralLight:#EEF0F3;
-    --bg:#F5F6FA;--white:#FFF;--border:#E8EAED;
-    --text:#1a1a2e;--textSec:#5f6368;--textMuted:#9AA0A6;
+    --red:#CC092F; --redLight:#FDE8EC;
+    --navy:#2B3A91; --navyLight:#E7EAF6;
+    --grey:#AEB6C2; --greyLight:#EEF0F3;
+    --amber:#F57F17; --amberLight:#FFF8E1;
+    --blue:#1565C0; --blueLight:#E3F2FD;
+    --bg:#F5F6FA; --white:#fff; --border:#E8EAED;
+    --text:#1a1a2e; --textSec:#5f6368; --textMuted:#9AA0A6;
+    --shadow:0 1px 3px rgba(0,0,0,.08);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:24px 30px;min-height:100vh}
-  .ctx{font-size:12px;color:var(--textMuted);margin-bottom:16px} .ctx b{color:var(--textSec)}
-  .card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px 28px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:18px}
-  .fhead{display:flex;align-items:center;gap:12px;margin-bottom:4px}
-  .ftitle{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700}
-  .ftitle::before{content:"";width:4px;height:18px;background:var(--red);border-radius:2px}
-  .fstatus{margin-left:auto;font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:6px}
-  .fstatus::before{content:"";width:7px;height:7px;background:var(--green);border-radius:50%}
-  .subnote{font-size:12px;color:var(--textSec);margin-top:4px}
-  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
-  .lg{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--textSec)}
-  .dotc{width:11px;height:11px;border-radius:50%;display:inline-block}
-  .dotc.slate{background:var(--slate)} .dotc.navy{background:var(--navy)} .dotc.red{background:var(--red)}
-  .lg.muted{color:var(--textMuted)}
+  body{font-family:'Segoe UI','Roboto',-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:28px;line-height:1.4}
+  .wrap{max-width:920px;margin:0 auto}
 
-  /* ===== JORNADA ===== */
-  .journey{margin-top:16px;width:100%}
-  .jnode{cursor:pointer;transition:opacity .12s}
-  .jnode:hover{opacity:.9}
-  .jcount{font-weight:800;fill:var(--text)}
-  .jname2{font-size:12px;font-weight:600;fill:var(--textSec)}
-  .jexit2{font-size:11px;fill:var(--textMuted)}
+  .stub{background:var(--white);border:1px dashed var(--border);border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:10px;margin-bottom:14px;opacity:.7}
+  .stub .b{width:4px;height:15px;background:var(--red);border-radius:2px}
+  .stub b{font-size:13px}
+  .stub span{font-size:11px;color:var(--textMuted);margin-left:auto;font-style:italic}
 
-  /* ===== INSIGHT IA ===== */
-  .aicard{background:var(--navyLight);border:1px solid #D4DBF0;border-radius:12px;padding:18px 20px;margin-top:14px}
-  .aihead{display:flex;align-items:center;gap:8px}
-  .aispark{width:22px;height:22px;border-radius:6px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
-  .aititle{font-size:12px;font-weight:800;color:var(--navy)}
-  .aitag{margin-left:auto;font-size:9px;font-weight:700;color:var(--navy);background:#fff;border:1px solid #D4DBF0;padding:2px 7px;border-radius:20px}
-  .aibody{font-size:12.5px;line-height:1.65;color:var(--text);margin-top:12px}
-  .aibody b{color:var(--navy);font-weight:800}
-  .aipills{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
-  .aipilllab{font-size:10px;color:var(--textMuted);font-weight:700;text-transform:uppercase;letter-spacing:.3px}
-  .aipill{font-size:11px;font-weight:700;background:#fff;border:1px solid #D4DBF0;border-radius:20px;padding:4px 11px;color:var(--navy)}
-  .aipill b{font-weight:800;font-variant-numeric:tabular-nums}
-  .aidiv{height:1px;background:#D4DBF0;margin:13px 0}
-  .aifoot{font-size:10px;color:var(--textMuted);line-height:1.5}
-  .simnote{font-size:10px;color:var(--textMuted);margin-top:12px;font-style:italic}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:24px 26px}
+  .sect{display:flex;align-items:center;gap:10px}
+  .sect .b{width:4px;height:18px;background:var(--red);border-radius:2px}
+  .sect h2{font-size:16px;font-weight:700}
+  .sect .ic{margin-left:auto;width:30px;height:30px;border-radius:8px;background:var(--navyLight);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:15px}
+  .sub{font-size:12px;color:var(--textMuted);margin:2px 0 18px 14px}
 
-  /* ===== MODAL ===== */
-  .overlay{position:fixed;inset:0;background:rgba(15,20,35,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:24px}
-  .overlay.open{display:flex}
-  .modal{background:var(--white);border-radius:14px;width:100%;max-width:1100px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.30);overflow:hidden}
-  .mhead{padding:18px 22px 12px;border-bottom:1px solid var(--border)}
-  .mtop{display:flex;align-items:center;gap:10px}
-  .mtitle{font-size:16px;font-weight:700;display:flex;align-items:center;gap:9px}
-  .mtitle::before{content:"";width:4px;height:17px;background:var(--red);border-radius:2px}
-  .msub{margin-left:8px;font-size:12px;color:var(--textMuted)}
-  .mclose{margin-left:auto;cursor:pointer;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--textSec);font-size:16px}
-  .mclose:hover{background:var(--neutralLight)}
-  .mfilter{display:inline-flex;gap:4px;background:var(--neutralLight);border-radius:9px;padding:4px;margin-top:12px;flex-wrap:wrap}
-  .mfilter button{border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--textSec);padding:6px 11px;border-radius:7px;cursor:pointer}
-  .mfilter button.active{background:var(--white);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.12)}
-  .mfilter button .ct{font-size:10px;color:var(--textMuted);margin-left:3px;font-weight:600}
-  .panes{display:grid;grid-template-columns:340px 1fr;min-height:0;flex:1}
-  .list{border-right:1px solid var(--border);overflow-y:auto;background:#FAFBFC}
-  .li{padding:13px 16px;border-bottom:1px solid #F1F2F4;cursor:pointer;border-left:3px solid transparent;transition:background .12s}
-  .li:hover{background:#F4F5F7} .li.active{background:var(--white);border-left-color:var(--red)}
-  .li .cnj{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text)}
-  .li .meta{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
-  .detail{overflow-y:auto;padding:22px 26px;background:var(--white)}
-  .dcnj{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px}
-  .dcnj .lab{font-weight:600;color:var(--textSec);font-size:13px}
-  .dcnj .cnjlink{color:var(--navy);text-decoration:none;border-bottom:1.5px solid var(--navy);padding-bottom:1px;display:inline-flex;align-items:center;gap:6px}
-  .dcnj .cnjlink::after{content:"↗";font-size:13px;opacity:.7}
-  .dcnj .cnjlink:hover{opacity:.75}
-  .dbadges{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
-  .instrip{margin-top:14px;border:1px solid var(--border);border-radius:10px;padding:13px 16px;background:#FBFBFD}
-  .instrip .istitle{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--textMuted);margin-bottom:10px}
-  .insteps{display:flex;align-items:center;gap:6px}
-  .istep2{flex:1;text-align:center;border-radius:8px;padding:8px 4px;border:1px solid var(--border)}
-  .istep2 .il{font-size:9px;color:var(--textMuted);text-transform:uppercase;letter-spacing:.3px;font-weight:700}
-  .istep2 .iv{font-size:11px;font-weight:800;margin-top:3px}
-  .istep2.banco{background:var(--navyLight);border-color:#C9D2EE} .istep2.banco .iv{color:var(--navy)}
-  .istep2.recl{background:var(--redLight);border-color:#F4D2DA} .istep2.recl .iv{color:var(--red)}
-  .istep2.pend{background:var(--neutralLight)} .istep2.pend .iv{color:var(--textSec)}
-  .iarrow{color:var(--textMuted);font-size:13px}
-  .vinc{margin-top:14px;background:#FBFBFD;border:1px solid var(--border);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .vinc.has-ms{border-color:#F0D7DD;background:linear-gradient(90deg,#FFFAFB 0%,#FBFBFD 100%)}
-  .vinc .vside{flex:1;min-width:160px}
-  .vinc small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--textMuted);font-weight:700;margin-bottom:4px}
-  .vinc .vcnj{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
-  .vinc .arrow{font-size:18px;color:var(--red);font-weight:700}
-  .vinc.no-ms{background:var(--neutralLight);border-color:var(--border)}
-  .vinc.no-ms .arrow{color:var(--neutral)}
-  .vinc.no-ms .vcnj.dim2{color:var(--textMuted);font-style:italic;font-weight:600}
-  .link{color:var(--navy);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;font-variant-numeric:tabular-nums}
-  .tlh{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--textMuted);margin:20px 0 14px}
-  .tl{position:relative;margin-left:6px;padding-left:22px;border-left:2px solid var(--border)}
-  .ev{position:relative;padding-bottom:18px} .ev:last-child{padding-bottom:0}
-  .ev::before{content:"";position:absolute;left:-29px;top:1px;width:12px;height:12px;border-radius:50%;background:var(--white);border:2px solid var(--accent,var(--neutral))}
-  .ev .d{font-size:11px;color:var(--textMuted);font-variant-numeric:tabular-nums}
-  .ev .t{font-size:13px;font-weight:700;margin:2px 0 5px}
-  .ev .ms-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--red);background:var(--redLight);padding:2px 8px;border-radius:6px;font-weight:700;margin-left:6px;cursor:pointer}
-  .badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;display:inline-block}
-  .b-def{background:var(--redLight);color:var(--red)} .b-ind{background:var(--navyLight);color:var(--navy)}
-  .b-mant{background:var(--greenLight);color:var(--green)} .b-cass{background:var(--amberLight);color:var(--amber)}
-  .b-susp{background:var(--amberLight);color:var(--amber)} .b-vig{background:var(--greenLight);color:var(--green)}
-  .b-pend{background:var(--neutralLight);color:var(--textSec)} .b-ms{background:var(--redLight);color:var(--red)}
-  .b-neu{background:var(--neutralLight);color:var(--textSec)}
-  .pop{position:fixed;z-index:60;width:320px;background:var(--white);border:1px solid var(--border);border-radius:11px;box-shadow:0 14px 34px rgba(0,0,0,.22);padding:15px;display:none}
-  .pop.open{display:block}
-  .pop .ph{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--textMuted);font-weight:700}
-  .pop .pc{font-weight:800;font-variant-numeric:tabular-nums;font-size:13px;margin:3px 0 9px}
-  .pop .prow{font-size:12px;color:var(--textSec);margin-bottom:5px} .pop .prow b{color:var(--text)}
-  .pop a{color:var(--navy);font-weight:700;text-decoration:none;font-size:11px;display:inline-block;margin-top:8px}
-</style></head>
+  /* Funil */
+  .row{display:flex;align-items:stretch;gap:0;margin-bottom:0}
+  .gut{flex:0 0 56px;display:flex;flex-direction:column;align-items:center}
+  .badge{width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;z-index:1}
+  .line{width:2px;flex:1;background:var(--border);margin:3px 0}
+  .rcard{flex:1;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+  .rcard:hover{border-color:var(--navy);box-shadow:0 2px 8px rgba(43,58,145,.10)}
+  .rtop{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .rname{font-size:14px;font-weight:800}
+  .rname small{font-size:10.5px;font-weight:600;color:var(--textMuted);text-transform:uppercase;letter-spacing:.4px;margin-left:8px}
+  .pill{font-size:12px;font-weight:800;border-radius:20px;padding:4px 12px;white-space:nowrap}
+  .pill.good{background:#2E7D32;color:#fff} .pill.warn{background:#B7791F;color:#fff}
+  .rmeta{font-size:11.5px;color:var(--textSec);margin:3px 0 9px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .flegend{display:flex;gap:24px;margin:14px 0 2px;font-size:12px;color:var(--textSec)}
+  .flegend i{width:12px;height:12px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px}
+  .flegend em{color:var(--textMuted);font-style:normal}
+  .rmeta a{color:var(--text);font-weight:700;text-decoration:none;cursor:pointer}
+  .rmeta a:hover{text-decoration:underline}
+  .track{height:24px;background:var(--greyLight);border-radius:6px;overflow:hidden;display:flex}
+  .fill{display:flex;height:100%;border-radius:6px;overflow:hidden}
+  .seg{height:100%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;transition:opacity .15s;min-width:0}
+  .seg:hover{opacity:.82}
+  .seg.nv{background:var(--navy)} .seg.rd{background:var(--red)}
+  .splitline{display:flex;gap:14px;margin-top:7px;font-size:12px;font-weight:700}
+  .splitline a{display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--text);text-decoration:none}
+  .splitline a:hover{text-decoration:underline}
+  .splitline .d{width:9px;height:9px;border-radius:50%}
+  .chev{font-size:11px;color:var(--navy);font-weight:700;margin-left:auto}
+
+  .trans{position:relative;margin:-2px 0 12px 56px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11px;color:var(--textSec);background:var(--bg);border:1px dashed var(--border);border-radius:8px;padding:7px 12px}
+  .trans::before{content:'';position:absolute;left:-29px;top:-8px;bottom:-8px;width:2px;background:var(--border)}
+  .trans .ico{color:var(--navy);font-weight:800}
+  .trans a{cursor:pointer;text-decoration:none;color:var(--text);font-weight:800}
+  .trans a:hover{text-decoration:underline}
+  .trans .dir{color:var(--textMuted)}
+
+  /* situação atual */
+  .sit{display:flex;gap:12px;margin-top:6px}
+  .sitc{flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+  .sitc .v{font-size:20px;font-weight:800}
+  .sitc .l{font-size:10.5px;color:var(--textSec);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+  .sitc a{cursor:pointer;text-decoration:none;color:inherit}
+  .sitc a:hover .v{text-decoration:underline}
+
+  .ai{margin-top:18px;background:var(--white);border:1px solid var(--border);border-radius:11px;padding:15px 17px;position:relative;overflow:hidden}
+  .ai::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#7B2D8E,#1565C0)}
+  .aih{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+  .aiic{width:26px;height:26px;border-radius:7px;background:#F3E8F7;color:#7B2D8E;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800}
+  .aih h3{font-size:13px;font-weight:800}
+  .aitag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#7B2D8E;background:#F3E8F7;border-radius:20px;padding:2px 9px;margin-left:auto}
+  .aitext{font-size:13px;color:var(--text);line-height:1.55}
+  .aitext b.fg{color:#2E7D32} .aitext b.fw{color:#B7791F}
+  .aipills{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .aipill{font-size:11.5px;font-weight:700;border-radius:20px;padding:3px 10px;background:var(--bg);border:1px solid var(--border)}
+  .aipill b.good{color:#2E7D32} .aipill b.warn{color:#B7791F}
+  .ainote{font-size:10px;color:var(--textMuted);font-style:italic;margin-top:10px}
+
+  .foot{font-size:10px;color:var(--textMuted);text-align:center;margin-top:12px;font-style:italic}
+
+  /* Modal */
+  .ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:50;padding:24px}
+  .ov.on{display:flex}
+  .modal{background:var(--white);border-radius:14px;max-width:920px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .mhead{position:sticky;top:0;background:var(--white);border-bottom:1px solid var(--border);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;z-index:2}
+  .mhead .mt{font-size:15px;font-weight:800}
+  .mhead .mt .c{color:var(--textSec);font-weight:700}
+  .x{background:none;border:none;font-size:21px;color:var(--textMuted);cursor:pointer;line-height:1}
+  .mbody{padding:8px 22px 22px}
+  .blocklbl{font-size:11px;font-weight:700;color:var(--textSec);margin:14px 0 6px}
+  table{width:100%;border-collapse:collapse}
+  thead th{text-align:left;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--textSec);padding:11px 8px;border-bottom:1px solid var(--border)}
+  tbody td{font-size:12.5px;padding:11px 8px;border-bottom:1px solid var(--border)}
+  tbody tr:hover{background:#fafbfc}
+  .cnj{color:var(--blue);font-weight:700;text-decoration:none;cursor:pointer}
+  .cnj:hover{text-decoration:underline}
+  .bdg{font-size:10.5px;font-weight:700;border-radius:20px;padding:3px 10px;white-space:nowrap}
+  .bdg.def{background:var(--redLight);color:var(--red)} .bdg.ind{background:var(--navyLight);color:var(--navy)} .bdg.sem{background:var(--greyLight);color:var(--textSec)}
+  .vd{font-size:11px;font-weight:700;color:var(--text);border:1px solid var(--border);background:var(--white);border-radius:7px;padding:5px 11px;cursor:pointer}
+  .vd:hover{background:var(--bg)}
+  .listnote{font-size:10.5px;color:var(--textMuted);font-style:italic;margin-top:12px}
+  .origin{display:flex;height:26px;border-radius:6px;overflow:hidden;border:1px solid var(--border);margin:2px 0 6px}
+  .origin div{display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700}
+  .olegend{font-size:10.5px;color:var(--textSec);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .olegend span{display:flex;align-items:center;gap:6px}
+  .olegend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .entryline{font-size:12px;color:var(--textSec);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px}
+  .back{font-size:12px;color:var(--blue);cursor:pointer;font-weight:700;margin-bottom:4px;display:inline-block}
+  .tl{position:relative;padding-left:22px;margin-top:10px}
+  .tl::before{content:'';position:absolute;left:6px;top:4px;bottom:8px;width:2px;background:var(--border)}
+  .tl .ev{position:relative;padding:0 0 15px 8px}
+  .tl .ev::before{content:'';position:absolute;left:-19px;top:3px;width:11px;height:11px;border-radius:50%;background:var(--white);border:2px solid var(--grey)}
+  .tl .ev.ind::before{border-color:var(--navy)} .tl .ev.def::before{border-color:var(--red)}
+  .tl .ev .ed{font-size:10.5px;color:var(--textMuted)}
+  .tl .ev .et{font-size:12.5px;font-weight:600}
+  .tl .ev .rf{font-size:9.5px;font-weight:800;text-transform:uppercase;color:var(--textMuted);margin-left:6px}
+
+  .bdg.mant{background:var(--greyLight);color:var(--textSec)} .bdg.ref{background:var(--amberLight);color:var(--amber)} .bdg.first{background:var(--blueLight);color:var(--blue)}
+  .pmarcha{display:flex;align-items:flex-start;flex-wrap:wrap;gap:2px;margin:4px 0 4px;padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:10px}
+  .pstep{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:90px}
+  .pdot{width:13px;height:13px;border-radius:50%;background:var(--grey);margin-bottom:6px}
+  .pdot.nv{background:var(--navy)} .pdot.rd{background:var(--red)}
+  .pl{font-size:11.5px;font-weight:800}
+  .pr{font-size:11px;color:var(--textSec);margin-top:1px}
+  .pr.nv{color:var(--navy);font-weight:700} .pr.rd{color:var(--red);font-weight:700}
+  .rel{font-size:9px;font-weight:800;text-transform:uppercase;border-radius:20px;padding:1px 7px;margin-top:4px}
+  .rel.manteve{background:var(--greyLight);color:var(--textSec)} .rel.reformou{background:var(--amberLight);color:var(--amber)}
+  .parrow{color:var(--textMuted);font-size:15px;padding:4px 2px 0}
+  .seclbl{font-size:12px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;margin:6px 0 8px}
+  .newtag{font-size:9.5px;font-weight:800;text-transform:uppercase;background:var(--redLight);color:var(--red);border-radius:20px;padding:2px 8px}
+  .dpnote{font-size:11px;color:var(--blue);background:var(--blueLight);border-radius:8px;padding:9px 12px;margin-bottom:10px}
+  .dpgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .dpgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .dpf{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px 13px}
+  .dpl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--textMuted)}
+  .dpv{font-size:13px;font-weight:600;margin-top:3px}
+  .reconbar{display:flex;height:26px;border-radius:7px;overflow:hidden;border:1px solid var(--border);margin:2px 0 9px}
+  .rseg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;cursor:pointer;color:#fff;transition:opacity .15s;min-width:0}
+  .rseg:hover{opacity:.85}
+  .rseg.mant{background:#64748B} .rseg.ref{background:#B7791F} .rseg.sp{background:#CBD2DC;color:#3c4250}
+  .reconleg{display:flex;gap:18px;flex-wrap:wrap;font-size:11.5px;color:var(--textSec);margin-bottom:7px}
+  .reconleg i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px}
+  .reconleg i.mant{background:#64748B} .reconleg i.ref{background:#B7791F} .reconleg i.sp{background:#CBD2DC}
+  .reconleg b{color:var(--text)}
+  .reconsub{font-size:10.5px;color:var(--textMuted);font-style:italic;margin-bottom:2px}
+</style>
+</head>
 <body>
-  <div class="ctx">Módulo <b>Assessment</b> · plataforma Reintegrados — DeepCenter / Bradesco</div>
+<div class="wrap">
+
+  <div class="stub"><div class="b"></div><b>Decisões do pedido de reintegração</b><span>card já existente — a marcha entra logo abaixo</span></div>
 
   <div class="card">
-    <div class="fhead">
-      <div class="ftitle">Marcha da Reintegração — Jornada Processual</div>
-      <div class="fstatus">Dados simulados</div>
+    <div class="sect"><div class="b"></div><h2>Marcha da Reintegração por Instância</h2><div class="ic">⚖</div></div>
+    <div class="sub">A base inteira, da liminar ao trânsito. A cor de cada barra mostra a favorabilidade; clique para detalhar.</div>
+
+    <div id="funil"></div>
+
+    <div class="flegend">
+      <span><i style="background:var(--navy)"></i>Favorável ao banco <em>(indeferida)</em></span>
+      <span><i style="background:var(--red)"></i>Favorável ao reclamante <em>(deferida)</em></span>
+      <span style="margin-left:auto"><b style="color:#2E7D32">●</b> banco é maioria · <b style="color:#B7791F">●</b> banco é minoria <em>(pílula de favorabilidade)</em></span>
     </div>
-    <div class="subnote">Da liminar ao TST — clique em um nó para abrir o detalhe.</div>
-    <div class="legend">
-      <span class="lg"><i class="dotc navy"></i>Favorável ao banco</span>
-      <span class="lg"><i class="dotc red"></i>Favorável ao reclamante</span>
-      <span class="lg muted">anel = proporção das decisões · círculo = volume</span>
-    </div>
 
-    <svg class="journey" viewBox="0 0 920 232" role="img" aria-label="Jornada da reintegração por instância">
-      <polygon points="130,94 360,97 360,143 130,146" fill="#EEF1F8"/>
-      <polygon points="360,97 600,102 600,138 360,143" fill="#EEF1F8"/>
-      <polygon points="600,102 810,109 810,131 600,138" fill="#EEF1F8"/>
-
-      <line x1="130" y1="172" x2="130" y2="190" stroke="#CBD0D6" stroke-width="1.5"/>
-      <line x1="360" y1="168" x2="360" y2="190" stroke="#CBD0D6" stroke-width="1.5"/>
-      <line x1="600" y1="160" x2="600" y2="190" stroke="#CBD0D6" stroke-width="1.5"/>
-      <line x1="810" y1="148" x2="810" y2="190" stroke="#CBD0D6" stroke-width="1.5"/>
-      <text class="jexit2" x="130" y="206" text-anchor="middle">30 · pendentes</text>
-      <text class="jexit2" x="360" y="206" text-anchor="middle">90 · sem recurso</text>
-      <text class="jexit2" x="600" y="206" text-anchor="middle">110 · sem recurso</text>
-      <text class="jexit2" x="810" y="206" text-anchor="middle">trânsito em julgado</text>
-
-      <g class="jnode">
-        <text class="jname2" x="130" y="58" text-anchor="middle">Liminar</text>
-        <circle cx="130" cy="120" r="46" fill="none" stroke="var(--red)" stroke-width="8"/>
-        <circle cx="130" cy="120" r="46" fill="none" stroke="var(--navy)" stroke-width="8" stroke-dasharray="144.5 289" transform="rotate(-90 130 120)"/>
-        <circle cx="130" cy="120" r="42" fill="#fff" style="cursor:pointer" onclick="openModal('funil','todos')"/>
-        <text class="jcount" x="130" y="120" text-anchor="middle" dominant-baseline="central" style="font-size:22px;cursor:pointer" onclick="openModal('funil','todos')">310</text>
-        <circle cx="130" cy="120" r="46" fill="none" stroke="#000" stroke-opacity="0" stroke-width="16" pointer-events="stroke" style="cursor:pointer" onclick="showRingPop(event,'Favorável ao reclamante',50,140,'funil','deferida')"/>
-        <circle cx="130" cy="120" r="46" fill="none" stroke="#000" stroke-opacity="0" stroke-width="16" stroke-dasharray="144.5 289" transform="rotate(-90 130 120)" pointer-events="stroke" style="cursor:pointer" onclick="showRingPop(event,'Favorável ao banco',50,140,'funil','indeferida')"/>
-      </g>
-      <g class="jnode">
-        <text class="jname2" x="360" y="64" text-anchor="middle">Sentença</text>
-        <circle cx="360" cy="120" r="42" fill="none" stroke="var(--red)" stroke-width="8"/>
-        <circle cx="360" cy="120" r="42" fill="none" stroke="var(--navy)" stroke-width="8" stroke-dasharray="133 264" transform="rotate(-90 360 120)"/>
-        <circle cx="360" cy="120" r="38" fill="#fff" style="cursor:pointer" onclick="openModal('marcha','sen_banco')"/>
-        <text class="jcount" x="360" y="120" text-anchor="middle" dominant-baseline="central" style="font-size:20px;cursor:pointer" onclick="openModal('marcha','sen_banco')">270</text>
-        <circle cx="360" cy="120" r="42" fill="none" stroke="#000" stroke-opacity="0" stroke-width="16" pointer-events="stroke" style="cursor:pointer" onclick="showRingPop(event,'Favorável ao reclamante',50,130,'marcha','sen_recl')"/>
-        <circle cx="360" cy="120" r="42" fill="none" stroke="#000" stroke-opacity="0" stroke-width="16" stroke-dasharray="133 264" transform="rotate(-90 360 120)" pointer-events="stroke" style="cursor:pointer" onclick="showRingPop(event,'Favorável ao banco',50,132,'marcha','sen_banco')"/>
-      </g>
-      <g class="jnode">
-        <text class="jname2" x="600" y="74" text-anchor="middle">Acórdão · TRT</text>
-        <circle cx="600" cy="120" r="34" fill="none" stroke="var(--red)" stroke-width="8"/>
-        <circle cx="600" cy="120" r="34" fill="none" stroke="var(--navy)" stroke-width="8" stroke-dasharray="122 214" transform="rotate(-90 600 120)"/>
-        <circle cx="600" cy="120" r="30" fill="#fff" style="cursor:pointer" onclick="openModal('marcha','aco_banco')"/>
-        <text class="jcount" x="600" y="120" text-anchor="middle" dominant-baseline="central" style="font-size:16px;cursor:pointer" onclick="openModal('marcha','aco_banco')">180</text>
-        <circle cx="600" cy="120" r="34" fill="none" stroke="#000" stroke-opacity="0" stroke-width="15" pointer-events="stroke" style="cursor:pointer" onclick="showRingPop(event,'Favorável ao reclamante',43,76,'marcha','aco_recl')"/>
-        <circle cx="600" cy="120" r="34" fill="none" stroke="#000" stroke-opacity="0" stroke-width="15" stroke-dasharray="122 214" transform="rotate(-90 600 120)" pointer-events="stroke" style="cursor:pointer" onclick="showRingPop(event,'Favorável ao banco',57,101,'marcha','aco_banco')"/>
-      </g>
-      <g class="jnode">
-        <text class="jname2" x="810" y="86" text-anchor="middle">TST</text>
-        <circle cx="810" cy="120" r="22" fill="none" stroke="var(--red)" stroke-width="7"/>
-        <circle cx="810" cy="120" r="22" fill="none" stroke="var(--navy)" stroke-width="7" stroke-dasharray="90 138" transform="rotate(-90 810 120)"/>
-        <circle cx="810" cy="120" r="18.5" fill="#fff" style="cursor:pointer" onclick="openModal('marcha','tst_banco')"/>
-        <text class="jcount" x="810" y="120" text-anchor="middle" dominant-baseline="central" style="font-size:13px;cursor:pointer" onclick="openModal('marcha','tst_banco')">70</text>
-        <circle cx="810" cy="120" r="22" fill="none" stroke="#000" stroke-opacity="0" stroke-width="13" pointer-events="stroke" style="cursor:pointer" onclick="showRingPop(event,'Favorável ao reclamante',35,24,'marcha','tst_recl')"/>
-        <circle cx="810" cy="120" r="22" fill="none" stroke="#000" stroke-opacity="0" stroke-width="13" stroke-dasharray="90 138" transform="rotate(-90 810 120)" pointer-events="stroke" style="cursor:pointer" onclick="showRingPop(event,'Favorável ao banco',65,45,'marcha','tst_banco')"/>
-      </g>
-    </svg>
-
-    <div class="aicard">
-      <div class="aihead"><span class="aispark">✦</span><span class="aititle">Insight de IA</span><span class="aitag">gerado a partir dos dados observados</span></div>
-      <div class="aibody" id="aiBody"></div>
-      <div class="aipills" id="aiPills"></div>
-      <div class="aidiv"></div>
-      <div class="aifoot" id="aiFoot"></div>
-    </div>
-    <div class="simnote">Dados simulados para mockup · números de exemplo para validar o conceito da visão</div>
+    <div class="ai" id="aiInsight"></div>
   </div>
 
-  <div class="overlay" id="ov"><div class="modal" role="dialog">
-    <div class="mhead">
-      <div class="mtop"><div class="mtitle" id="mTitle">Detalhamento</div><div class="msub" id="mSub"></div><div class="mclose" id="mClose">✕</div></div>
-      <div class="mfilter" id="mFilter"></div>
-    </div>
-    <div class="panes"><div class="list" id="mList"></div><div class="detail" id="mDetail"></div></div>
-  </div></div>
-  <div class="pop" id="pop"></div>
+  <div class="foot">Dados simulados para mockup · DeepCenter · Plataforma Reintegrados</div>
+</div>
+
+<div class="ov" id="ov" onclick="if(event.target===this)closeM()">
+  <div class="modal"><div class="mhead"><div class="mt" id="mt">—</div><button class="x" onclick="closeM()">✕</button></div><div class="mbody" id="mbody"></div></div>
+</div>
 
 <script>
-const MARCHA=[{inst:"Liminar",banco:140,recl:140},{inst:"Sentença",banco:132,recl:130},{inst:"Acórdão",banco:101,recl:76},{inst:"TST",banco:45,recl:24}];
-
-const LIM=[
-  {cnj:"0007788-12.2025.5.09.0005",liminar:"deferida",destino:"mantida",sentenca:"reclamante",acordao:null,tst:null,fase:"acordao",reintStatus:["Em vigor","b-vig"],ms:null,origem:"Sentença confirmou (1º grau)",
-   tl:[["10/03/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["15/03/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["28/05/2025","Sentença (1º grau)","Procedente — reintegração confirmada (favorável ao reclamante)","b-def"],["—","Acórdão (TRT)","Aguardando julgamento do recurso ordinário","b-pend"]]},
-  {cnj:"0033421-09.2025.5.05.0014",liminar:"deferida",destino:"cassada",sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Cassada (via MS)","b-cass"],ms:{cnj:"1009988-77.2025.5.05.0000",impetrante:"Banco",status:"Concedido"},origem:"Mérito do MS (TRT)",
-   tl:[["08/04/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["11/04/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["02/05/2025","MS impetrado pelo Banco","Contra a liminar deferida","b-ms",true],["10/09/2025","Mérito do MS (TRT)","Concedido — liminar cassada","b-cass",true],["—","Sentença (1º grau)","Aguardando julgamento do mérito","b-pend"]]},
-  {cnj:"0066778-90.2025.5.03.0019",liminar:"deferida",destino:"suspensa",sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Suspensa","b-susp"],ms:{cnj:"1007766-33.2025.5.03.0000",impetrante:"Banco",status:"Pendente · liminar suspendeu"},origem:"Liminar no MS (efeito suspensivo)",
-   tl:[["28/02/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["03/03/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["02/04/2025","MS impetrado pelo Banco","Contra a liminar deferida","b-ms",true],["19/06/2025","Liminar no MS (TRT)","Deferida — suspende reintegração","b-susp",true],["—","Sentença (1º grau)","Aguardando julgamento do mérito","b-pend"]]},
-  {cnj:"0102345-67.2025.5.01.0027",liminar:"deferida",destino:"mantida",sentenca:"reclamante",acordao:"reclamante",tst:null,fase:"tst",reintStatus:["Em vigor","b-vig"],ms:{cnj:"1002233-10.2025.5.01.0000",impetrante:"Banco",status:"Denegado"},origem:"Acórdão manteve (TRT)",
-   tl:[["05/01/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["09/01/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["20/03/2025","MS impetrado pelo Banco","Contra a liminar deferida","b-ms",true],["12/06/2025","Mérito do MS (TRT)","Denegado — reintegração restabelecida","b-vig",true],["14/08/2025","Sentença (1º grau)","Procedente — reintegração confirmada","b-def"],["05/11/2025","Acórdão (TRT)","Recurso ordinário improvido — reintegração mantida","b-def"],["—","TST","Aguardando recurso de revista","b-pend"]]},
-  {cnj:"0045123-44.2025.5.02.0011",liminar:"indeferida",destino:null,sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Aguardando sentença","b-pend"],ms:null,origem:"Liminar indeferida (1º grau)",
-   tl:[["18/02/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["22/02/2025","Liminar (1º grau)","Indeferida — urgência negada (favorável ao banco)","b-ind"],["—","Sentença (1º grau)","Aguardando julgamento do mérito","b-pend"]]},
-  {cnj:"1000234-55.2025.5.02.0011",liminar:"indeferida",destino:null,sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Aguardando sentença · MS","b-pend"],ms:{cnj:"1001122-44.2025.5.02.0000",impetrante:"Empregado",status:"Pendente"},origem:"Liminar indeferida · MS pendente",
-   tl:[["08/03/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["12/03/2025","Liminar (1º grau)","Indeferida — urgência negada (favorável ao banco)","b-ind"],["28/05/2025","MS impetrado pelo Empregado","Para reverter o indeferimento","b-ms",true],["—","Sentença (1º grau)","Aguardando julgamento do mérito","b-pend"]]},
-  {cnj:"0088123-77.2025.5.04.0012",liminar:"deferida",destino:"mantida",sentenca:"reclamante",acordao:null,tst:null,fase:"acordao",reintStatus:["Em vigor · MS pendente","b-vig"],ms:{cnj:"1004455-22.2025.5.04.0000",impetrante:"Banco",status:"Pendente · sem efeito suspensivo"},origem:"Sentença confirmou (1º grau)",
-   tl:[["15/04/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["20/04/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["10/05/2025","MS impetrado pelo Banco","Contra a liminar deferida","b-ms",true],["25/05/2025","Liminar no MS (TRT)","Indeferida — efeito suspensivo negado","b-vig",true],["30/07/2025","Sentença (1º grau)","Procedente — reintegração confirmada","b-def"],["—","Acórdão (TRT)","Aguardando julgamento do recurso ordinário","b-pend"]]},
-  {cnj:"0021478-33.2025.5.04.0005",liminar:"indeferida",destino:null,sentenca:"banco",acordao:null,tst:null,fase:"acordao",reintStatus:["Negada em sentença","b-ind"],ms:null,origem:"Sentença improcedente (1º grau)",
-   tl:[["02/02/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["08/02/2025","Liminar (1º grau)","Indeferida — urgência negada (favorável ao banco)","b-ind"],["20/06/2025","Sentença (1º grau)","Improcedente — reintegração negada (favorável ao banco)","b-ind"],["—","Acórdão (TRT)","Aguardando recurso ordinário do reclamante","b-pend"]]},
-  {cnj:"0055667-88.2025.5.02.0033",liminar:"pendente",destino:null,sentenca:null,acordao:null,tst:null,fase:"liminar",reintStatus:["Aguardando análise","b-pend"],ms:null,origem:"Distribuição recente · sem decisão",
-   tl:[["18/06/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["—","Liminar (1º grau)","Aguardando análise do juiz","b-pend"]]},
-  {cnj:"0077889-22.2025.5.15.0008",liminar:"pendente",destino:null,sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Análise postergada","b-pend"],ms:null,origem:"Interlocutória · análise postergada",
-   tl:[["12/05/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["20/05/2025","Decisão interlocutória","Análise da liminar postergada para a sentença","b-pend"],["—","Sentença (1º grau)","Aguardando contestação e julgamento","b-pend"]]},
-  {cnj:"0119934-58.2025.5.10.0021",liminar:"deferida",destino:"mantida",sentenca:"reclamante",acordao:"banco",tst:null,fase:"tst",reintStatus:["Reformada no TRT · favorável ao banco","b-ind"],ms:null,origem:"Acórdão reformou (TRT)",
-   tl:[["14/01/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["19/01/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["02/04/2025","Sentença (1º grau)","Procedente — reintegração confirmada (favorável ao reclamante)","b-def"],["18/09/2025","Acórdão (TRT)","Recurso ordinário provido — reintegração reformada (favorável ao banco)","b-ind"],["—","TST","Aguardando recurso de revista do reclamante","b-pend"]]},
-  {cnj:"0140876-12.2025.5.06.0003",liminar:"deferida",destino:"mantida",sentenca:"reclamante",acordao:"reclamante",tst:"banco",fase:"transitado",reintStatus:["Negada no TST · trânsito","b-ind"],ms:null,origem:"TST reformou · trânsito em julgado",
-   tl:[["09/12/2024","Distribuição","Petição inicial com pedido de liminar","b-neu"],["13/12/2024","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["10/03/2025","Sentença (1º grau)","Procedente — reintegração confirmada (favorável ao reclamante)","b-def"],["22/06/2025","Acórdão (TRT)","Recurso ordinário improvido — reintegração mantida","b-def"],["15/10/2025","TST","Recurso de revista provido — reintegração reformada (favorável ao banco)","b-ind"],["28/11/2025","Trânsito em julgado","Encerrada a fase de conhecimento","b-neu"]]},
-  {cnj:"0203344-19.2025.5.02.0044",liminar:"deferida",destino:"suspensa",sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Suspensa","b-susp"],ms:{cnj:"1020011-88.2025.5.02.0000",impetrante:"Banco",status:"Pendente · liminar suspendeu"},origem:"Liminar no MS (efeito suspensivo)",
-   tl:[["05/05/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["09/05/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["02/06/2025","MS impetrado pelo Banco","Contra a liminar deferida","b-ms",true],["28/06/2025","Liminar no MS (TRT)","Deferida — suspende reintegração","b-susp",true],["—","Mérito do MS","Pendente de julgamento","b-pend",true]]},
-  {cnj:"0177654-23.2025.5.15.0102",liminar:"deferida",destino:"suspensa",sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Suspensa","b-susp"],ms:{cnj:"1014477-52.2025.5.15.0000",impetrante:"Banco",status:"Pendente · liminar suspendeu"},origem:"Liminar no MS (efeito suspensivo)",
-   tl:[["18/04/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["23/04/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["15/05/2025","MS impetrado pelo Banco","Contra a liminar deferida","b-ms",true],["10/06/2025","Liminar no MS (TRT)","Deferida — suspende reintegração","b-susp",true],["—","Mérito do MS","Pendente de julgamento","b-pend",true]]},
-  {cnj:"0210987-45.2025.5.01.0055",liminar:"deferida",destino:"cassada",sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Cassada (via MS)","b-cass"],ms:{cnj:"1030022-66.2025.5.01.0000",impetrante:"Banco",status:"Concedido"},origem:"Mérito do MS (TRT)",
-   tl:[["02/03/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["06/03/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["25/03/2025","MS impetrado pelo Banco","Contra a liminar deferida","b-ms",true],["20/04/2025","Liminar no MS (TRT)","Deferida — suspende reintegração","b-susp",true],["12/08/2025","Mérito do MS (TRT)","Concedido — liminar cassada","b-cass",true]]},
-  {cnj:"0198765-30.2025.5.03.0077",liminar:"deferida",destino:"cassada",sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Cassada (via MS)","b-cass"],ms:{cnj:"1027733-19.2025.5.03.0000",impetrante:"Banco",status:"Concedido"},origem:"Mérito do MS (TRT)",
-   tl:[["14/02/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["19/02/2025","Liminar (1º grau)","Deferida — reintegração concedida","b-def"],["10/03/2025","MS impetrado pelo Banco","Contra a liminar deferida","b-ms",true],["28/07/2025","Mérito do MS (TRT)","Concedido — liminar cassada","b-cass",true]]},
-  {cnj:"0231122-77.2025.5.09.0033",liminar:"indeferida",destino:null,sentenca:null,acordao:null,tst:null,fase:"sentenca",reintStatus:["Aguardando sentença","b-pend"],ms:null,origem:"Liminar indeferida (1º grau)",
-   tl:[["12/05/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["16/05/2025","Liminar (1º grau)","Indeferida — urgência negada (favorável ao banco)","b-ind"],["—","Sentença (1º grau)","Aguardando julgamento do mérito","b-pend"]]},
-  {cnj:"0224556-61.2025.5.06.0019",liminar:"indeferida",destino:null,sentenca:"banco",acordao:null,tst:null,fase:"acordao",reintStatus:["Negada em sentença","b-ind"],ms:null,origem:"Sentença improcedente (1º grau)",
-   tl:[["20/01/2025","Distribuição","Petição inicial com pedido de liminar","b-neu"],["24/01/2025","Liminar (1º grau)","Indeferida — urgência negada (favorável ao banco)","b-ind"],["18/05/2025","Sentença (1º grau)","Improcedente — reintegração negada (favorável ao banco)","b-ind"],["—","Acórdão (TRT)","Aguardando recurso ordinário do reclamante","b-pend"]]}
+const MAXV=505;
+const GATES=[
+ {key:'liminar',n:'Liminar',ph:'tutela de urgência',vol:398,banco:148,recl:250,pct:37},
+ {key:'sentenca',n:'Sentença',ph:'1ª instância',vol:505,banco:290,recl:215,pct:57},
+ {key:'acordao',n:'2ª Instância',ph:'TRT · acórdão',vol:290,banco:178,recl:112,pct:61},
+ {key:'tst',n:'TST',ph:'instância superior',vol:98,banco:64,recl:34,pct:65}
+];
+const ORIGEM={
+ sentenca:[['Liminar favorável ao banco',120,'#2B3A91','#fff'],['Liminar favorável ao reclamante',214,'#CC092F','#fff'],['Sem pedido de liminar',171,'#AEB6C2','#3c4250']],
+ acordao:[['Sentença favorável ao banco',168,'#2B3A91','#fff'],['Sentença favorável ao reclamante',122,'#CC092F','#fff']],
+ tst:[['Acórdão favorável ao banco',58,'#2B3A91','#fff'],['Acórdão favorável ao reclamante',40,'#CC092F','#fff']]
+};
+const TRANS={
+ sentenca:{from:'Liminar',src:398,manteve:216,reformou:118,semProx:64,semLabel:'ainda sem sentença',toBanco:84,toRecl:34},
+ acordao:{from:'Sentença',src:505,manteve:192,reformou:98,semProx:215,semLabel:'sem 2ª instância',toBanco:58,toRecl:40},
+ tst:{from:'Acórdão',src:290,manteve:76,reformou:22,semProx:192,semLabel:'sem TST',toBanco:14,toRecl:8}
+};
+const POOL=[
+ {cnj:'0010234-55.2024.5.01.0067',polo:'Maria S. Oliveira',uf:'RJ',traj:[['Liminar','def',''],['Sentença','def','manteve'],['Acórdão','ind','reformou'],['TST','ind','manteve']]},
+ {cnj:'0100876-12.2023.5.02.0311',polo:'João P. Almeida',uf:'SP',traj:[['Liminar','ind',''],['Sentença','ind','manteve'],['Acórdão','def','reformou']]},
+ {cnj:'0008451-77.2024.5.04.0022',polo:'Carla M. Souza',uf:'RS',traj:[['Sentença','ind',''],['Acórdão','ind','manteve']]},
+ {cnj:'0021190-08.2023.5.15.0099',polo:'Roberto T. Lima',uf:'SP',traj:[['Liminar','def',''],['Sentença','ind','reformou']]},
+ {cnj:'0034567-90.2025.5.01.0045',polo:'Ana B. Ferreira',uf:'RJ',traj:[['Liminar','def','']]},
+ {cnj:'0005678-33.2024.5.03.0014',polo:'Pedro H. Costa',uf:'MG',traj:[['Sentença','def',''],['Acórdão','def','manteve'],['TST','def','manteve']]},
+ {cnj:'0098765-44.2023.5.09.0007',polo:'Lúcia R. Martins',uf:'PR',traj:[['Liminar','ind',''],['Sentença','def','reformou'],['Acórdão','def','manteve']]}
 ];
 
-const FUNIL_F={todos:_=>true,deferida:m=>m.liminar==="deferida",indeferida:m=>m.liminar==="indeferida",pendente:m=>m.liminar==="pendente",mantida:m=>m.destino==="mantida",suspensa:m=>m.destino==="suspensa",cassada:m=>m.destino==="cassada"};
-const FUNIL_LBL={todos:"Liminar — todas",deferida:"Liminares deferidas",indeferida:"Liminares indeferidas",pendente:"Liminares pendentes",mantida:"Deferidas mantidas",suspensa:"Deferidas suspensas (MS)",cassada:"Deferidas cassadas"};
-const FUNIL_CT={todos:310,deferida:140,indeferida:140,pendente:30,mantida:108,suspensa:14,cassada:18};
-const FUNIL_KEYS=["todos","deferida","indeferida","pendente","mantida","suspensa","cassada"];
-const FUNIL_SHORT={todos:"Todas",deferida:"Deferidas",indeferida:"Indeferidas",pendente:"Pendentes",mantida:"Mantidas",suspensa:"Suspensas",cassada:"Cassadas"};
-
-const MARCHA_F={sen_banco:m=>m.sentenca==="banco",sen_recl:m=>m.sentenca==="reclamante",aco_banco:m=>m.acordao==="banco",aco_recl:m=>m.acordao==="reclamante",tst_banco:m=>m.tst==="banco",tst_recl:m=>m.tst==="reclamante"};
-const MARCHA_LBL={sen_banco:"Sentença · favorável ao banco",sen_recl:"Sentença · favorável ao reclamante",aco_banco:"Acórdão (TRT) · favorável ao banco",aco_recl:"Acórdão (TRT) · favorável ao reclamante",tst_banco:"TST · favorável ao banco",tst_recl:"TST · favorável ao reclamante"};
-const MARCHA_CT={sen_banco:132,sen_recl:130,aco_banco:101,aco_recl:76,tst_banco:45,tst_recl:24};
-const MARCHA_KEYS=["sen_banco","sen_recl","aco_banco","aco_recl","tst_banco","tst_recl"];
-const MARCHA_SHORT={sen_banco:"Sen·Banco",sen_recl:"Sen·Recl",aco_banco:"Acó·Banco",aco_recl:"Acó·Recl",tst_banco:"TST·Banco",tst_recl:"TST·Recl"};
-
-let curFamily="funil",curKey="todos",curIdx=0;
-function badgeForLim(l){return l==="deferida"?["Liminar Deferida","b-def"]:l==="indeferida"?["Liminar Indeferida","b-ind"]:["Liminar Pendente","b-pend"];}
-function badgeForDest(d){return !d?null:d==="mantida"?["Mantida","b-mant"]:d==="suspensa"?["Suspensa","b-susp"]:["Cassada","b-cass"];}
-function instChips(m){
-  const cell=(label,val)=>{let cls="pend",txt="—";if(val==="banco"){cls="banco";txt="Banco";}else if(val==="reclamante"){cls="recl";txt="Reclamante";}else if(val==="pend"){cls="pend";txt="Pendente";}else if(val==="na"){cls="pend";txt="n/a";}return `<div class="istep2 ${cls}"><div class="il">${label}</div><div class="iv">${txt}</div></div>`;};
-  const lim=m.liminar==="deferida"?"reclamante":m.liminar==="indeferida"?"banco":"pend";
-  const sen=m.sentenca?m.sentenca:(m.fase==="liminar"?"na":"pend");
-  const aco=m.acordao?m.acordao:((m.fase==="tst"||m.fase==="transitado")?"pend":"na");
-  const tst=m.tst?m.tst:(m.fase==="transitado"?"pend":"na");
-  return `<div class="instrip"><div class="istitle">Resultado da reintegração por instância</div><div class="insteps">${cell("Liminar",lim)}<span class="iarrow">›</span>${cell("Sentença",sen)}<span class="iarrow">›</span>${cell("Acórdão TRT",aco)}<span class="iarrow">›</span>${cell("TST",tst)}</div></div>`;
+function row(g,i,last){
+ const wpct=Math.round(g.vol/MAXV*100), dec=g.banco+g.recl;
+ const bpct=Math.round(g.banco/dec*100), rpct=100-bpct;
+ const pillcls=g.pct>=50?'good':'warn';
+ return `<div class="row">
+   <div class="gut"><div class="badge">${i+1}</div>${last?'':'<div class="line"></div>'}</div>
+   <div class="rcard" onclick="openDetail('${g.key}')">
+     <div class="rtop"><div class="rname">${g.n}<small>${g.ph}</small></div>
+       <div class="pill ${pillcls}">${g.pct}% favorável ao banco</div></div>
+     <div class="rmeta"><span><a onclick="event.stopPropagation();openList('${g.key}','all')">${g.vol} decisões</a> · ${wpct}% da base</span><span class="chev">ver detalhe ›</span></div>
+     <div class="track"><div class="fill" style="width:${wpct}%">
+       <div class="seg nv" style="width:${bpct}%" onclick="event.stopPropagation();openList('${g.key}','banco')" title="${g.banco} favoráveis ao banco">${bpct>=12?g.banco:''}</div>
+       <div class="seg rd" style="width:${rpct}%" onclick="event.stopPropagation();openList('${g.key}','recl')" title="${g.recl} favoráveis ao reclamante">${rpct>=12?g.recl:''}</div>
+     </div></div>
+   </div>
+ </div>`;
 }
-function pred(){return curFamily==="funil"?FUNIL_F[curKey]:MARCHA_F[curKey];}
-function rows(){return LIM.map((m,i)=>({m,i})).filter(x=>pred()(x.m));}
-function buildFilter(){
-  const keys=curFamily==="funil"?FUNIL_KEYS:MARCHA_KEYS;
-  const lbl=curFamily==="funil"?FUNIL_SHORT:MARCHA_SHORT;
-  const ct=curFamily==="funil"?FUNIL_CT:MARCHA_CT;
-  document.getElementById("mFilter").innerHTML=keys.map(k=>`<button data-fam="${curFamily}" data-k="${k}" class="${k===curKey?'active':''}">${lbl[k]}<span class="ct">· ${ct[k]}</span></button>`).join("");
-  document.querySelectorAll("#mFilter button").forEach(b=>b.addEventListener("click",()=>openModal(b.dataset.fam,b.dataset.k)));
-}
-function renderList(){
-  const r=rows();
-  const ct=(curFamily==="funil"?FUNIL_CT:MARCHA_CT)[curKey];
-  if(!r.length){document.getElementById("mList").innerHTML=`<div style="padding:24px;text-align:center;color:var(--textMuted);font-size:12px">Sem exemplos neste recorte na amostra<br><span style="font-size:11px">(${ct} processos no total · dados simulados)</span></div>`;document.getElementById("mDetail").innerHTML="";return;}
-  if(!r.find(x=>x.i===curIdx))curIdx=r[0].i;
-  document.getElementById("mList").innerHTML=r.map(({m,i})=>{const lb=badgeForLim(m.liminar),db=badgeForDest(m.destino);return `<div class="li ${i===curIdx?'active':''}" data-i="${i}"><div class="cnj">${m.cnj}</div><div class="meta"><span class="badge ${lb[1]}">${lb[0]}</span>${db?`<span class="badge ${db[1]}">${db[0]}</span>`:''}${m.ms?`<span class="badge b-ms">⇄ MS</span>`:''}</div></div>`;}).join("");
-  document.querySelectorAll(".li").forEach(el=>el.addEventListener("click",()=>{curIdx=+el.dataset.i;renderList();renderDetail();}));
-  renderDetail();
-}
-function renderDetail(){
-  const m=LIM[curIdx];if(!m)return;
-  const lb=badgeForLim(m.liminar),db=badgeForDest(m.destino);
-  let vincHtml=m.ms?`<div class="vinc has-ms"><div class="vside"><small>Reclamatória</small><span class="vcnj">${m.cnj}</span></div><div class="arrow">⇄</div><div class="vside"><small>Mandado de Segurança · ${m.ms.impetrante} impetrou</small><span class="link" data-msnum="${m.ms.cnj}" data-msimp="${m.ms.impetrante}" data-msstatus="${m.ms.status}">${m.ms.cnj}</span></div></div>`:`<div class="vinc no-ms"><div class="vside"><small>Reclamatória</small><span class="vcnj">${m.cnj}</span></div><div class="arrow">⇄</div><div class="vside"><small>Mandado de Segurança</small><span class="vcnj dim2">Nenhum MS vinculado</span></div></div>`;
-  const ev=m.tl.map(e=>{const isMs=e[4]===true;const ac=e[3]==="b-def"?"var(--red)":e[3]==="b-ind"?"var(--navy)":(e[3]==="b-susp"||e[3]==="b-cass")?"var(--amber)":(e[3]==="b-vig"||e[3]==="b-mant")?"var(--green)":e[3]==="b-ms"?"var(--red)":"var(--neutral)";return `<div class="ev" style="--accent:${ac}"><div class="d">${e[0]}</div><div class="t">${e[1]}${isMs&&m.ms?`<span class="ms-tag" data-msnum="${m.ms.cnj}" data-msimp="${m.ms.impetrante}" data-msstatus="${m.ms.status}">⇄ MS</span>`:''}</div><span class="badge ${e[3]}">${e[2]}</span></div>`;}).join("");
-  document.getElementById("mDetail").innerHTML=`<div class="dcnj"><span class="lab">Processo</span> <a class="cnjlink" href="#" data-processo="${m.cnj}">${m.cnj}</a></div><div class="dbadges"><span class="badge ${lb[1]}">${lb[0]}</span>${db?`<span class="badge ${db[1]}">${db[0]}</span>`:''}<span class="badge ${m.reintStatus[1]}">${m.reintStatus[0]}</span></div>${instChips(m)}${vincHtml}<div class="tlh">Histórico processual</div><div class="tl">${ev}</div>`;
-  document.querySelectorAll("[data-msnum]").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();showMsPop(e.clientX,e.clientY,el.dataset.msnum,el.dataset.msimp,el.dataset.msstatus,m);}));
-}
-const pop=document.getElementById("pop");
-function showMsPop(x,y,cnj,imp,status,m){const stColor=status.includes("Concedido")?'var(--red)':status.includes("Denegado")?'var(--green)':'var(--textSec)';pop.innerHTML=`<div class="ph">Mandado de Segurança vinculado</div><div class="pc">${cnj}</div><div class="prow">Impetrante: <b>${imp}</b></div><div class="prow">Status: <b style="color:${stColor}">${status}</b></div><div class="prow">Reclamatória: <b>${m.cnj}</b></div><a href="#">Abrir MS no detalhe →</a>`;pop.classList.add("open");pop.style.left=Math.min(x,window.innerWidth-336)+"px";pop.style.top=Math.min(y+12,window.innerHeight-180)+"px";}
-function showRingPop(e,label,pct,vol,fam,key){
-  e.stopPropagation();
-  const cor=label.includes("banco")?'var(--navy)':'var(--red)';
-  pop.innerHTML=`<div class="ph">Resultado da instância</div><div class="pc" style="color:${cor}">${label}</div><div class="prow"><b>${pct}%</b> das decisões · <b>${vol}</b> processos</div><a href="#" onclick="jOpen('${fam}','${key}');return false;">ver processos →</a>`;
-  pop.classList.add("open");
-  pop.style.left=Math.min(e.clientX,window.innerWidth-336)+"px";
-  pop.style.top=Math.min(e.clientY+12,window.innerHeight-160)+"px";
-}
-function jOpen(fam,key){pop.classList.remove("open");openModal(fam,key);}
-document.addEventListener("click",e=>{if(!e.target.closest("[data-msnum]")&&!e.target.closest("#pop"))pop.classList.remove("open");});
-function showToast(msg){let t=document.getElementById("toast");if(!t){t=document.createElement("div");t.id="toast";t.style.cssText="position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:14px 22px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:100;display:none;align-items:center;gap:10px";document.body.appendChild(t);}t.innerHTML=`<span style="color:#E84667">→</span> ${msg}`;t.style.display="flex";clearTimeout(t._timer);t._timer=setTimeout(()=>t.style.display="none",2200);}
-document.addEventListener("click",e=>{const link=e.target.closest("[data-processo]");if(link){e.preventDefault();e.stopPropagation();showToast(`Abrindo processo ${link.dataset.processo}`);}});
-const ov=document.getElementById("ov");
-function openModal(family,key){curFamily=family;curKey=key;const lbl=(family==="funil"?FUNIL_LBL:MARCHA_LBL)[key];const ct=(family==="funil"?FUNIL_CT:MARCHA_CT)[key];document.getElementById("mTitle").textContent=family==="funil"?"Liminar de Reintegração":"Marcha da Reintegração";document.getElementById("mSub").textContent=`${lbl} · ${ct} processos`;const r=LIM.map((m,i)=>({m,i})).filter(x=>(family==="funil"?FUNIL_F:MARCHA_F)[key](x.m));curIdx=r.length?r[0].i:0;buildFilter();renderList();ov.classList.add("open");}
-function close(){ov.classList.remove("open");pop.classList.remove("open");}
-document.getElementById("mClose").addEventListener("click",close);
-ov.addEventListener("click",e=>{if(e.target===ov)close();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")close();});
-
 function renderInsight(){
-  const dec=MARCHA.map(r=>({inst:r.inst,share:r.banco/(r.banco+r.recl)*100}));
-  const pct=v=>Math.round(v);
-  const first=dec[0],last=dec[dec.length-1];
-  const trend=last.share>first.share+1?"crescente":last.share<first.share-1?"decrescente":"estável";
-  const maj=dec.find(d=>d.share>52)||last;
-  document.getElementById("aiBody").innerHTML=`Nas decisões já proferidas, a parcela favorável ao banco é <b>${trend}</b> ao longo da marcha: <b>${pct(dec[0].share)}%</b> na liminar, <b>${pct(dec[1].share)}%</b> na sentença, <b>${pct(dec[2].share)}%</b> no acórdão (TRT) e <b>${pct(dec[3].share)}%</b> no TST. A maioria das decisões passa a ser favorável ao banco a partir do <b>${maj.inst}</b>.`;
-  document.getElementById("aiPills").innerHTML=`<span class="aipilllab">% favorável ao banco</span>`+dec.map((d,i)=>`<span class="aipill">${MARCHA[i].inst} <b>${pct(d.share)}%</b></span>`).join("");
-  document.getElementById("aiFoot").textContent="Leitura descritiva dos dados observados — recalculada conforme novos julgamentos. Não constitui recomendação.";
+ const f=GATES.map(g=>({n:g.n,pct:g.pct}));
+ const first=f[0], last=f[f.length-1];
+ const virada=GATES.find(g=>g.pct>=50);
+ const low=f.reduce((a,b)=>b.pct<a.pct?b:a);
+ const sobe=last.pct>first.pct;
+ const fcls=v=>v>=50?'fg':'fw';
+ let txt=`Na base filtrada, a favorabilidade ao banco <b class="${fcls(first.pct)}">${sobe?'cresce':'cai'} ao longo da marcha</b>: parte de <b class="${fcls(first.pct)}">${first.pct}%</b> na ${first.n.toLowerCase()} e chega a <b class="${fcls(last.pct)}">${last.pct}%</b> no ${last.n}. `;
+ if(virada) txt+=`A virada acontece na <b>${virada.n.toLowerCase()}</b>, quando o banco passa a ser maioria das decisões. `;
+ txt+=`O ponto de maior exposição é a <b class="fw">${low.n.toLowerCase()} (${low.pct}%)</b> — é onde o banco mais perde decisões iniciais, ainda que a posição se recupere no mérito.`;
+ const pills=f.map(x=>`<span class="aipill">${x.n} <b class="${x.pct>=50?'good':'warn'}">${x.pct}%</b></span>`).join('');
+ document.getElementById('aiInsight').innerHTML=`
+   <div class="aih"><span class="aiic">✦</span><h3>Insight de IA</h3><span class="aitag">lido do cenário atual</span></div>
+   <p class="aitext">${txt}</p>
+   <div class="aipills">${pills}</div>
+   <div class="ainote">Gerado a partir dos dados observados e recalculado a cada novo julgamento · descreve o cenário, não constitui recomendação de conduta.</div>`;
 }
 renderInsight();
+function transHTML(key){
+ const t=TRANS[key];
+ return `<div class="trans"><span class="ico">↕</span> `+
+   `<a onclick="openTrans('${key}','manteve')">${t.manteve} mantiveram</a> · `+
+   `<a onclick="openTrans('${key}','reformou')">${t.reformou} reformaram</a> · `+
+   `<a onclick="openTrans('${key}','semprox')" style="color:var(--textSec)">${t.semProx} ${t.semLabel}</a>`+
+   `<span class="dir" style="margin-left:auto">de ${t.src} em ${t.from}</span></div>`;
+}
+document.getElementById('funil').innerHTML=GATES.map((g,i)=>{
+ let h=row(g,i,i===GATES.length-1);
+ if(i<GATES.length-1) h+=transHTML(GATES[i+1].key);
+ return h;
+}).join('');
+
+function openTrans(key,kind){
+ const g=GATES.find(x=>x.key===key), t=TRANS[key];
+ const cnt=kind==='manteve'?t.manteve:kind==='reformou'?t.reformou:t.semProx;
+ const lbl=kind==='manteve'?`mantiveram o resultado de ${t.from}`:kind==='reformou'?`reformaram ${t.from}`:t.semLabel;
+ document.getElementById('mt').innerHTML=`${g.n} <span class="c">·</span> ${lbl} <span class="c">— ${cnt} processos</span>`;
+ const rows=POOL.map((p,idx)=>{
+   const bdg=idx%2?'<span class="bdg ind">Indeferida</span>':'<span class="bdg def">Deferida</span>';
+   const rfl=kind==='reformou'?'<span class="bdg ref">reformou</span>':kind==='manteve'?'<span class="bdg mant">manteve</span>':'<span class="bdg first">sem próxima</span>';
+   return `<tr><td><a class="cnj" onclick="openDetail2(${idx})">${p.cnj}</a></td><td>${p.polo}</td><td>${p.uf}</td><td>${bdg}</td><td>${rfl}</td><td style="text-align:right"><button class="vd" onclick="openDetail2(${idx})">Ver detalhes</button></td></tr>`;
+ }).join('');
+ document.getElementById('mbody').innerHTML=`<div class="blocklbl">Processos · ${t.from} → ${g.n}</div>
+   <table><thead><tr><th>CNJ</th><th>Polo ativo</th><th>UF</th><th>Resultado</th><th>Transição</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+   <div class="listnote">Mostrando 7 de ${cnt} · dados simulados</div>`;
+ document.getElementById('ov').classList.add('on');
+}
+
+/* ===== Lista ===== */
+const LBL={banco:'favorável ao banco',recl:'favorável ao reclamante',all:'todas as decisões'};
+const FASEMAP={liminar:'Liminar',sentenca:'Sentença',acordao:'Acórdão',tst:'TST'};
+function transBadge(p,key){
+ if(key==='liminar') return '<span class="bdg mant">—</span>';
+ const step=p.traj.find(s=>s[0]===FASEMAP[key]);
+ if(!step) return '<span class="bdg mant">—</span>';
+ if(step[2]==='manteve') return '<span class="bdg mant">manteve</span>';
+ if(step[2]==='reformou') return '<span class="bdg ref">reformou</span>';
+ return '<span class="bdg first">1ª decisão</span>';
+}
+function openList(key,seg){
+ const g=GATES.find(x=>x.key===key), n=seg==='banco'?g.banco:seg==='recl'?g.recl:g.vol;
+ document.getElementById('mt').innerHTML=`${g.n} <span class="c">·</span> ${LBL[seg]} <span class="c">— ${n} processos</span>`;
+ const rows=POOL.map((p,idx)=>{
+   const dec=seg==='banco'?'ind':seg==='recl'?'def':(idx%3===0?'sem':idx%2?'ind':'def');
+   const bdg=dec==='ind'?'<span class="bdg ind">Indeferida</span>':dec==='def'?'<span class="bdg def">Deferida</span>':'<span class="bdg sem">Sem decisão</span>';
+   return `<tr><td><a class="cnj" onclick="openDetail2(${idx})">${p.cnj}</a></td><td>${p.polo}</td><td>${p.uf}</td><td>${bdg}</td><td>${transBadge(p,key)}</td><td style="text-align:right"><button class="vd" onclick="openDetail2(${idx})">Ver detalhes</button></td></tr>`;
+ }).join('');
+ document.getElementById('mbody').innerHTML=`<div class="blocklbl">Processos</div>
+   <table><thead><tr><th>CNJ</th><th>Polo ativo</th><th>UF</th><th>Decisão na instância</th><th>Transição</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+   <div class="listnote">Mostrando 7 de ${n} · dados simulados</div>`;
+ document.getElementById('ov').classList.add('on');
+}
+
+/* ===== Detalhe da fase (origem + lista) ===== */
+function openDetail(key){
+ const g=GATES.find(x=>x.key===key), dec=g.banco+g.recl;
+ document.getElementById('mt').innerHTML=`${g.n} <span class="c">·</span> ${g.vol} decisões <span class="c">— ${Math.round(g.banco/dec*100)}% favorável ao banco</span>`;
+ let origin='';
+ let transBlk='';
+ if(key!=='liminar'){
+   const t=TRANS[key];
+   const pc=v=>Math.round(v/t.src*100);
+   const semCap=t.semLabel.charAt(0).toUpperCase()+t.semLabel.slice(1);
+   transBlk=`<div class="blocklbl">Manteve × reformou — ${t.src} decididos em ${t.from}</div>
+     <div class="reconbar">
+       <div class="rseg mant" style="flex:${t.manteve}" onclick="openTrans('${key}','manteve')">${t.manteve}</div>
+       <div class="rseg ref" style="flex:${t.reformou}" onclick="openTrans('${key}','reformou')">${t.reformou}</div>
+       <div class="rseg sp" style="flex:${t.semProx}" onclick="openTrans('${key}','semprox')">${t.semProx}</div>
+     </div>
+     <div class="reconleg">
+       <span><i class="mant"></i>Mantiveram <b>${t.manteve}</b> · ${pc(t.manteve)}%</span>
+       <span><i class="ref"></i>Reformaram <b>${t.reformou}</b> · ${pc(t.reformou)}%</span>
+       <span><i class="sp"></i>${semCap} <b>${t.semProx}</b> · ${pc(t.semProx)}%</span>
+     </div>
+     <div class="reconsub">Dos que reformaram: <b>${t.toBanco}</b> → favorável ao banco · <b>${t.toRecl}</b> → favorável ao reclamante</div>`;
+ }
+ if(key==='liminar'){
+   origin=`<div class="blocklbl">Como esse grupo começou</div>
+     <div class="entryline">Origem: <b>pedido de tutela de urgência</b> — 398 de 569 processos requereram liminar (171 não pediram).</div>`;
+ }else{
+   const og=ORIGEM[key], tot=og.reduce((s,o)=>s+o[1],0);
+   origin='<div class="blocklbl">Como esse grupo começou (origem)</div><div class="origin">';
+   og.forEach(o=>{const p=Math.round(o[1]/tot*100);origin+=`<div style="flex:${o[1]};background:${o[2]};color:${o[3]}">${p>=10?p+'%':''}</div>`});
+   origin+='</div><div class="olegend">';
+   og.forEach(o=>origin+=`<span><i style="background:${o[2]}"></i>${o[0]} · <b>${o[1]}</b></span>`);
+   origin+='</div>';
+ }
+ const rows=POOL.slice(0,6).map((p,idx)=>{
+   const dec2=idx%2?'ind':'def';
+   const bdg=dec2==='ind'?'<span class="bdg ind">Indeferida</span>':'<span class="bdg def">Deferida</span>';
+   return `<tr><td><a class="cnj" onclick="openDetail2(${idx})">${p.cnj}</a></td><td>${p.polo}</td><td>${p.uf}</td><td>${bdg}</td><td>${transBadge(p,key)}</td><td style="text-align:right"><button class="vd" onclick="openDetail2(${idx})">Ver detalhes</button></td></tr>`;
+ }).join('');
+ document.getElementById('mbody').innerHTML=`${transBlk}${origin}
+   <div class="blocklbl">Processos</div>
+   <table><thead><tr><th>CNJ</th><th>Polo ativo</th><th>UF</th><th>Decisão</th><th>Transição</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+   <div class="listnote">Mostrando 6 de ${g.vol} · dados simulados</div>`;
+ document.getElementById('ov').classList.add('on');
+}
+function openSit(t){
+ const map={disc:['Ainda em discussão',412],trans:['Transitado em julgado',157],all:['Base filtrada',569]};
+ document.getElementById('mt').innerHTML=`${map[t][0]} <span class="c">— ${map[t][1]} processos</span>`;
+ const rows=POOL.map((p,idx)=>{
+   const bdg=idx%2?'<span class="bdg ind">Indeferida</span>':'<span class="bdg def">Deferida</span>';
+   return `<tr><td><a class="cnj" onclick="openDetail2(${idx})">${p.cnj}</a></td><td>${p.polo}</td><td>${p.uf}</td><td>${bdg}</td><td style="text-align:right"><button class="vd" onclick="openDetail2(${idx})">Ver detalhes</button></td></tr>`;
+ }).join('');
+ document.getElementById('mbody').innerHTML=`<div class="blocklbl">Processos</div><table><thead><tr><th>CNJ</th><th>Polo ativo</th><th>UF</th><th>Decisão atual</th><th></th></tr></thead><tbody>${rows}</tbody></table><div class="listnote">Mostrando 7 de ${map[t][1]} · dados simulados</div>`;
+ document.getElementById('ov').classList.add('on');
+}
+
+/* ===== Tela de Detalhes do Processo (existente) + Marcha do Processo (seção nova) ===== */
+const ADVS=['Rhenan Marques Pasqual','Mariana Lopes Andrade','Carlos Eduardo Reis','Patrícia Nunes','André Vasconcelos','Juliana Prado','Marcos Tavares'];
+function openDetail2(idx){
+ const p=POOL[idx];
+ document.getElementById('mt').innerHTML=`<span style="color:var(--red)">▤</span> Detalhes do Processo`;
+ let steps=`<div class="pmarcha"><div class="pstep"><div class="pdot"></div><div class="pl">Distribuição</div><div class="pr">início</div></div>`;
+ p.traj.forEach(s=>{
+   const col=s[1]==='ind'?'nv':'rd', res=s[1]==='ind'?'Indeferida':'Deferida';
+   const rel=s[2]?`<span class="rel ${s[2]}">${s[2]}</span>`:'';
+   steps+=`<div class="parrow">›</div><div class="pstep"><div class="pdot ${col}"></div><div class="pl">${s[0]}</div><div class="pr ${col}">${res}</div>${rel}</div>`;
+ });
+ const last=p.traj[p.traj.length-1];
+ const status=last&&last[0]==='TST'?'Trânsito em julgado':'Em discussão';
+ steps+=`<div class="parrow">›</div><div class="pstep"><div class="pdot"></div><div class="pl">Situação</div><div class="pr">${status}</div></div></div>`;
+
+ document.getElementById('mbody').innerHTML=`
+   <div class="dpgrid">
+     <div class="dpf"><div class="dpl">Polo ativo</div><div class="dpv">${p.polo}</div></div>
+     <div class="dpf"><div class="dpl">Polo passivo</div><div class="dpv">Banco Bradesco S.A</div></div>
+   </div>
+   <div class="dpf" style="margin-bottom:16px"><div class="dpl">Advogado responsável</div><div class="dpv">${ADVS[idx%ADVS.length]}</div></div>
+
+   <div class="seclbl"><span style="color:var(--navy)">⚖</span> Marcha do Processo <span class="newtag">seção nova</span></div>
+   <div class="dpnote">Trajetória do processo entre as instâncias — resultado em cada uma e se manteve ou reformou a anterior. É a marcha da base, vista no processo individual.</div>
+   ${steps}
+
+   <div class="seclbl" style="margin-top:18px"><span style="color:var(--green,#2E7D32)">🕓</span> Cronologia</div>
+   <div class="dpgrid3">
+     <div class="dpf"><div class="dpl">Início</div><div class="dpv">31/01/2026</div></div>
+     <div class="dpf"><div class="dpl">Última decisão</div><div class="dpv">03/03/2026</div></div>
+     <div class="dpf"><div class="dpl">CNJ</div><div class="dpv"><a class="cnj">${p.cnj}</a></div></div>
+   </div>
+
+   <div class="listnote" style="margin-top:14px">Demais blocos da tela existente (Desligamento e Benefício INSS, Decisão e Reintegração, Síntese Executiva) permanecem como hoje. Acima, apenas onde a Marcha entra.</div>`;
+ document.getElementById('ov').classList.add('on');
+}
+function closeM(){document.getElementById('ov').classList.remove('on')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 </script>
-</body></html>
+</body>
+</html>
